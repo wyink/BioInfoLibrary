@@ -1,13 +1,23 @@
 ﻿// BioInfoLibrary.cpp : このファイルには 'main' 関数が含まれています。プログラム実行の開始と終了がそこで行われます。
-//
 
-#include <iostream>
+#pragma once
+#include "Utils.h"
+#include "PajekHelper.h"
+#include <vector>
+#include <string>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+
+using namespace std;
+
+
+
+int main() {
+    string p = "abc";
+    string d = "\t";
+    vector<string> abc =Utils::split(p, d);
+    return 0;
+
 }
-
 // プログラムの実行: Ctrl + F5 または [デバッグ] > [デバッグなしで開始] メニュー
 // プログラムのデバッグ: F5 または [デバッグ] > [デバッグの開始] メニュー
 
