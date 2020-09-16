@@ -1,13 +1,15 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <regex>
 #include <set>
 
+//参照を返しているものを確認->temporary!
 
 class Pajek;
 class PajekParser {
-	const std::string infile;
+	const std::string infile;;
 
 public:
 	PajekParser(const std::string infile) 
@@ -44,18 +46,25 @@ class Node
 {
 	int nodeid;
 	const Label& label;
-	int x;
-	int y;
+	float x;
+	float y;
+	std::string icolor; //空文字列で初期化
+	std::string bcolor; //空文字列で初期化
 
 
 public:
-	//inline Node() {}	//Node[]で使用される
-	Node(const int nodeid,const Label& label,const int x,const int y) :
-		nodeid(nodeid),
-		label(label),
-		x(x),
-		y(y)
-	{}
+	//printoutするときはic,bcをつける必要あり
+	//チェインメソッドでコンストラクタの実現
+	Node(const int nodeid, const Label& label) :
+		nodeid(nodeid),label(label),
+		x(-1),y(-1){}
+	
+	//任意の引数
+	Node& setPosition(const float x, const float y);
+	Node& setInnerColor(const std::string icolor);
+	Node& setBorderColor(const std::string bcolor);
+
+	const std::string& getSingleLine();
 };
 
 
@@ -67,8 +76,9 @@ class Label {
 
 public:
 	inline Label(){}	//VerticesでNodeobj作成時に呼び出される
-	explicit Label(const std::string lavel) :label(label) {}
-	std::string getLabel() const;
+	explicit Label(const std::string label) :label(label) {}
+	std::string getLabel();
+	std::string getOutputLabel();
 	void setLabel(const std::string label) ;
 
 	

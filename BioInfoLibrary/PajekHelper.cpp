@@ -2,7 +2,6 @@
 #include "Utils.h"
 #include <utility>
 
-
 Pajek& PajekParser::load() {
 
 	
@@ -35,9 +34,16 @@ Pajek& PajekParser::load() {
 		oneNode = Utils::split(line, "\t");
 		Label label{ oneNode[1] };
 		const int nodeid = std::stoi(oneNode[0]);
-		int x = std::stoi(oneNode[2]);
-		int y = std::stoi(oneNode[3]);
-		Node node(nodeid, label, x, y);
+		float x = std::stof(oneNode[2]);
+		float y = std::stof(oneNode[3]);
+		std::string icolor = oneNode[4];
+		std::string bcolor = oneNode[5];
+
+		Node node(nodeid, label);
+		node.setPosition(x, y)
+			.setInnerColor(icolor)
+			.setBorderColor(bcolor);
+		
 		nodeElements.emplace_back(node);
 
 	}
@@ -68,12 +74,54 @@ Pajek& PajekParser::load() {
 
 }
 
+Node& Node::setPosition(const float x, const float y){
+	this->x = x;
+	this->y = y;
+	return *this;
+}
+
+Node& Node::setInnerColor(const std::string icolor){
+	this->icolor = icolor;
+	return *this;
+}
+
+Node& Node::setBorderColor(const std::string bcolor){
+	this->bcolor = bcolor;
+	return *this;
+}
+
+const std::string& Node::getSingleLine() {
+	std::stringstream singleLine;
+
+	singleLine << "\t" << nodeid << "\t" << label.getOutputLabel();
+
+	if (x > 0 && y > 0) {
+		singleLine << "\t" << x << "\t" << y;
+	}
+	if (!icolor.empty()) {
+		singleLine << "\tic" << icolor;
+	}
+	if (!bcolor.empty()) {
+		singleLine << "\tbc" << bcolor;
+	}
+
+	singleLine << std::endl;
+	return singleLine.str();
+
+}
+
 Vertices::Vertices(std::vector<Node>& nodeElements):
 	nodeElements(nodeElements){
 }
 
-std::string Label::getLabel() const {
+std::string Label::getLabel() {
 	return label;
+}
+
+std::string Label::getOutputLabel() {
+	std::string outputLabel = '"' + getLabel() + '"';
+	
+	return outputLabel ;
 }
 
 void Label::setLabel(const std::string label) {
