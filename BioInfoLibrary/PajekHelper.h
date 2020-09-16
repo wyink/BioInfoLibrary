@@ -7,8 +7,12 @@
 
 class Pajek;
 class PajekParser {
+	const std::string infile;
 
 public:
+	PajekParser(const std::string infile) 
+		:infile(infile) {}
+
 	Pajek& load(); 
 };
 
@@ -30,6 +34,8 @@ class Vertices
 	std::vector<Node>& nodeElements;
 
 public:
+	// そのLabel持ってる？
+	//すべての色を変更する
 	explicit Vertices(std::vector<Node>& nodeElements);
 };
 
@@ -56,7 +62,6 @@ public:
 /**
 * @brief 一意の文字列ラベル
 */
-
 class Label {
 	std::string label;
 
@@ -74,19 +79,17 @@ public:
 * @brief "project/sample"などの階層ラベルを扱うクラス
 */
 class LabelDouble:Label {
-	const std::string upclass;
-	const std::string lwclass;
+	std::string upLabel;
+	std::string lwLabel;
+	const std::string sep;
 
 public:
 
-	LabelDouble(std::string label, std::string upclass, std::string lwclass) :
-		Label(label),
-		upclass(upclass),
-		lwclass(lwclass)
-	{}
-	void print_upper() const;
-	void print_lower() const;
-	void print_label() const;
+	LabelDouble(std::string label, const std::string sep);
+	std::string getUpLabel() const ;
+	std::string getLwLabel() const ;
+
+
 };
 
 
@@ -103,7 +106,6 @@ public:
 
 	//相関のある2つのノードリストのポインタを受け取る．
 	explicit Edges(std::vector<std::pair<int, int>>& mpair);
-
 
 	//moduleを形成しているかどうか
 	bool isModule(int index);

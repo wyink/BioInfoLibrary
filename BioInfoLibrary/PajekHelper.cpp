@@ -8,7 +8,7 @@ Pajek& PajekParser::load() {
 	
 	//*.netファイルを読み込む
 	//n個のnodeを作成する->Verticesクラス作成
-	std::ifstream in{ "0.00.net" };
+	std::ifstream in{ infile };
 	std::string line;
 
 	//1行目に記載されているNode数を取得 // ex. *Vertices 550
@@ -72,9 +72,6 @@ Vertices::Vertices(std::vector<Node>& nodeElements):
 	nodeElements(nodeElements){
 }
 
-
-
-
 std::string Label::getLabel() const {
 	return label;
 }
@@ -83,16 +80,21 @@ void Label::setLabel(const std::string label) {
 	this->label = label;
 }
 
+LabelDouble::LabelDouble(std::string label, const std::string sep) 
+	: Label(label) ,sep(sep) {
 
-void LabelDouble::print_upper() const {
-	std::cout << upclass << std::endl;
+	//initialize
+	std::vector<std::string> labels = Utils::split(label,sep);
+	upLabel = labels[0];
+	lwLabel = labels[1];
 }
 
-void LabelDouble::print_lower() const {
-	std::cout << lwclass << std::endl;
+std::string LabelDouble::getUpLabel() const {
+	return upLabel;
 }
-void LabelDouble::print_label() const {
-	std::cout << getLabel() << std::endl;
+
+std::string LabelDouble::getLwLabel() const {
+	return lwLabel;
 }
 
 Edges::Edges(std::vector<std::pair<int, int>>& mpair):
