@@ -43,7 +43,7 @@ class Pajek
 
 public:
     /**
-     * @brief Pajekオブジェクトのコンストラクタ
+     * @brief         Pajekオブジェクトのコンストラクタ
      * @param[vt]     全Nodeの定義の集合
      * @param[egs]    相関のある2つのNodeの集合
      * 
@@ -94,7 +94,7 @@ class Node
 
 public:
     /**
-     * @brief Nodeクラスのコンストラクタ
+     * @brief            Nodeクラスのコンストラクタ
      * @param[nodeid]    Nodeの一意のID
      * @param[label]     Nodeが保持するラベル
      */
