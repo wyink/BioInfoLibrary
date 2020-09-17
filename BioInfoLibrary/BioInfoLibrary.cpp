@@ -13,8 +13,8 @@ using namespace std;
 
 int main() {
     string p = "abc";
-    string d = "\t";
-    vector<string> abc =Utils::split(p, d);
+    const char d = '\t';
+    vector<string> abc =Utils::split(p, &d);
     return 0;
 
 }

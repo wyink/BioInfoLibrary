@@ -1,15 +1,33 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
 
-using namespace std;
-
+/**
+* @brief 汎用的に利用できる関数を集めたクラス
+*/
 class Utils
 {
 private:
     inline Utils() {};
 public:
-    static vector<string> split(const string& line, string delimiter);
+    /**
+     * @brief 文字列を分割する
+     * @param[line] 分割対象の文字列
+     * @param[sep]  分割する際に利用するデリミタ
+     * @return      分割した文字列のリスト
+     */
+    static std::vector<std::string> split(
+        const std::string& line, 
+        const char* delimiter
+    );
+
+    /**
+     * @brief   ファイルが存在するかどうか
+     * @note    開けるかどうかも確認される
+     */
+    static bool isExistFile(const std::string& str) ;
 
 };
 
