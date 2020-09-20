@@ -12,17 +12,24 @@ using namespace std;
 
 //test
 int main() {
-    /*
-    string p = "abc";
-    const char d = '\t';
-    vector<string> abc =Utils::split(p, &d);
-    return 0;
-    */
 
     std::string faafile = "G:/perflingens/2_protein/GCA_000009685.1_ASM968v1_protein.faa";
     std::string out = "G:/perflingens/otameshi.fasta";
 
-    Formatter::FaaToFasta(faafile, out);
+    FaaToFasta fta(faafile, out);
+    fta.setIdFilterCall(
+            [](std::string idLine)->bool {
+                std::string::size_type n = idLine.find("(plasmid)");
+                if (n == std::string::npos) {// 核ゲノム
+                    return true;
+                }
+                else {//見つかったー＞プラスミド
+                    return false;
+                }
+            }
+        )
+        .run();
+
 
 
 }
