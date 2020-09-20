@@ -143,12 +143,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BioInfoLibrary.cpp" />
+    <ClCompile Include="BlastParser.cpp" />
     <ClCompile Include="Formatter.cpp" />
     <ClCompile Include="PajekHelper.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BioInfoLibrary.h" />
+    <ClInclude Include="BlastParser.h" />
     <ClInclude Include="Formatter.h" />
     <ClInclude Include="PajekHelper.h" />
     <ClInclude Include="Utils.h" />

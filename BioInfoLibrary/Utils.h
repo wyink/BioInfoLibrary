@@ -16,11 +16,17 @@ public:
      * @brief       文字列を分割する
      * @param[line] 分割対象の文字列
      * @param[sep]  分割する際に利用するデリミタ
-     * @return      分割した文字列のリスト
+     * @return      分割した文字列の配列
      */
     static std::vector<std::string> split(
         const std::string& line, 
         const char* delimiter
+    );
+
+    static std::vector<std::string> split(
+        const std::string& line,
+        const char* delimiter,
+        const int maxSplitCount
     );
 
     /**
