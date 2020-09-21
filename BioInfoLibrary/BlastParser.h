@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <sstream>
 #include <fstream>
 #include <iostream>
 #include <functional>
@@ -12,12 +13,14 @@ private:
 	std::string infile;
 	std::map<std::string, std::string> queRef;
 	std::function<void(std::string&)> convert;
-	std::function<void(std::string&, std::string&)> valueFilter;
+	std::function<std::map<std::string,int>(std::vector<std::string>& )> valueFormatter;
+	std::function<std::string(std::string&, std::map<std::string, int>&)> outformat;
+
 
 public:
-	explicit BlastParser(std::string infile);
+	explicit BlastParser(const std::string infile);
 
-	void setRefConvertMap(const std::map<std::string, std::string> queRef);
+	void setRefConvertMap(const std::map<std::string, std::string>& queRef);
 	
 	/**
 	* @brief  ヒットした参照IDを変換して返却
@@ -28,6 +31,6 @@ public:
 	/**
 	* @brief blast結果ファイルの解析開始
 	*/
-	void run();
+	void run(std::string outfile);
 };
 
