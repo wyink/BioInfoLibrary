@@ -1,7 +1,6 @@
 #pragma once
 #include <map>
 #include <set>
-
 #include <string>
 #include <vector>
 #include <sstream>
@@ -59,46 +58,19 @@ public:
 		:queRef(queRef) {}
 
 
-	const std::string& convert(const std::string& reference) override {
+	inline const std::string& convert(const std::string& reference) override {
 		return queRef[reference];
 	}
 
-	const std::string valueFormatter(const std::string& bquery ,const std::set<std::vector<std::string> >& queryToRefSet) override {
-		std::map<std::string, int> refcounter; /**< keyÇÕéQè∆Çïœä∑å„ÇÃid valÇÕÇªÇÃë∂ç›êî */
-		std::string refid; /**< éQè∆Çïœä∑å„Ç…égópÇ∑ÇÈid*/
+	const std::string valueFormatter(
+		const std::string& bquery, 
+		const std::set<std::vector<std::string> >& queryToRefSet
+	) override;
 
-
-		for(auto ref : queryToRefSet) {
-
-			refid = convert(ref[1]);
-
-			if (refcounter.count(refid) == 1) {
-				//ìoò^çœÇ›
-				refcounter[refid]++;
-			}
-			else {
-				//ñ¢ìoò^
-				refcounter[refid] = 1;
-			}
-		}
-
-		return outformat(bquery, refcounter);
-	}
-
-	const std::string outformat(const std::string& bquery, const std::map<std::string, int>& refcounter) override {
-		std::stringstream outtext;
-		outtext << ">" << bquery << "\t" << refcounter.size() << "\n";
-
-		for (const auto& [ref, counter] : refcounter) {
-			outtext << ref << ":" << counter << ",";
-		}
-
-		std::string ret = outtext.str();
-		ret.pop_back();
-		ret += "\n";
-
-		return ret;
-	}
+	const std::string outformat(
+		const std::string& bquery, 
+		const std::map<std::string, int>& refcounter
+	) override;
 
 };
 
@@ -112,7 +84,7 @@ private:
 public:
 	explicit BlastParser(const std::string& infile, BlastParserHandler& bph);
 
-	void setHandler(BlastParserHandler& bph) {
+	inline void setHandler(BlastParserHandler& bph) {
 		this->bph = bph;
 	}
 
