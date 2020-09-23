@@ -84,14 +84,20 @@ int main() {
 
 /*testCase2 */
     
+    const fs::path indir = "D:/perflingens/4_blast/analyzedAgain";
+
+    if(!fs::exists(indir)){
+        std::cout << "No such Directory!"<< std::endl;
+        exit(1);
+    }
+
     std::string line;
-    std::map<std::string, std::map<std::string, int> > map;//strainID->strainID:counter;
-    std::vector<std::string> allStCount;//(strain:count,...)
-    std::vector<std::string> stCount;//要素数2
-    
-    for (const fs::directory_entry& x : fs::directory_iterator("D:/perflingens/4_blast/analyzedAgain")){
-        fs::path ps = x.path();
-        std::ifstream in{ std::move(ps) };
+    std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[idA]={idA:count,idB:count,...} */
+    std::vector<std::string> idCountPairVec;  /**< (id:counter),(id:counter),... */
+    std::vector<std::string> idCountVec;      /**< id:counter */
+    for (const fs::directory_entry& x : fs::directory_iterator(indir)){
+        fs::path path = x.path();
+        std::ifstream in{ path };
 
 
         //一行目でファイル自身のidを取得
@@ -101,38 +107,39 @@ int main() {
         int i = 1;
         while (std::getline(in, line)) {
             ++i;
-            if (i % 2 == 0) {//>から始まる行
-                //今回は利用しない
+            if (i % 2 == 0) { //start with '>';
+                // Not used;
                 continue;
             }
             else {
-                allStCount = Utils::split(line, ",");
-                for (const auto& e : allStCount) {
-                    stCount = Utils::split(e, ":");
+                idCountPairVec = Utils::split(line, ",");
+                for (const auto& idCountPair_ : idCountPairVec) {
+                    idCountVec = Utils::split(idCountPair_, ":");
 
-                    /* 複数個所ヒットした配列を総合する
-                   　いわゆるmaximumに対応する場合
+                    /* 
+                       複数個所ヒットした配列を総合する，
+                   　  いわゆるmaximumに対応する場合
                     */
-                    //map[selfid][stCount[0]] += std::stoi(stCount[1]);
+                    //idCounterMap[selfid][idCountVec[0]] += std::stoi(idCountVec[1]);
 
                     /*各配列ヒットしたかどうかを判定(ヒットで1）*/
                     //今回の場合はno-hitの場合はstrainに登録されない．
-                    map[selfid][stCount[0]] += 1;
+                    idCounterMap[selfid][idCountVec[0]] += 1;
                 }
                 
             }
         }
     }
 
-    //fmeasure
+    //fmeasureの計算
     std::set<std::string> memo;
     int denominator = 0;
     int fraction = 0;
     int hit  =0;
     float fmeasure = 0.00f;
     std::map<std::string, float> fmeasureMap;
-    for (const auto& [selfidA, stCountA] :  map) {
-        for (const auto& [selfidB, stCountB] : map) {
+    for (const auto& [selfidA, stCountA] :  idCounterMap) {
+        for (const auto& [selfidB, stCountB] : idCounterMap) {
             //cal
             if (selfidA == selfidB) {
                 continue;
@@ -142,17 +149,11 @@ int main() {
                 continue;
             }
             else {
-                //分母
-                denominator = int(map[selfidA][selfidA]) + int(map[selfidB][selfidB]);
-                //分子
-                hit = map[selfidA][selfidB]+map[selfidB][selfidA];
-
+                denominator = int(stCountA.at(selfidA)) + int(stCountB.at(selfidB));
+                hit = stCountA.at(selfidB) + stCountB.at(selfidA);
                 fmeasure = (float) hit / denominator ;
-
                 fmeasureMap[selfidA +"\t"+ selfidB] = fmeasure;
-
                 memo.insert(selfidA +"\t"+ selfidB);
-                 
             }
         }
     }
