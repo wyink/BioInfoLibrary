@@ -91,6 +91,6 @@ public:
 	/**
 	* @brief blast結果ファイルの解析開始
 	*/
-	void run(const std::string& outfile);
+	void run(const std::string& outfile, const std::string& header);
 };
 

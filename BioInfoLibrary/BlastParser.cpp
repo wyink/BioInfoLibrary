@@ -5,7 +5,7 @@ BlastParser::BlastParser(const std::string& infile, BlastParserHandler& bph) :
 	infile(infile), bph(bph){}
 
 
-void BlastParser::run(const std::string& outfile) {
+void BlastParser::run(const std::string& outfile, const std::string& header) {
 
 	std::ifstream in{ infile };
 	if (!in.is_open()) {
@@ -27,6 +27,7 @@ void BlastParser::run(const std::string& outfile) {
 	
 	//2s–ÚˆÈ~‚Ås‚¤ˆ—
 	std::ofstream out(outfile);
+	out << header << "\n";
 	while (std::getline(in, line)) {
 		vec = Utils::split(line, "\t");
 		query = vec[0];
@@ -60,7 +61,7 @@ void BlastParser::run(const std::string& outfile) {
 
 }
 
-
+//map.count‚Ìˆ—‚ªO(n)
 const std::string BlastParserPt1Imple::valueFormatter(const std::string& bquery, const std::set<std::vector<std::string> >& queryToRefSet) {
 	std::map<std::string, int> refcounter; /**< key‚ÍQÆ‚ğ•ÏŠ·Œã‚Ìid val‚Í‚»‚Ì‘¶İ” */
 	std::string refid; /**< QÆ‚ğ•ÏŠ·Œã‚Ég—p‚·‚éid*/
@@ -69,15 +70,8 @@ const std::string BlastParserPt1Imple::valueFormatter(const std::string& bquery,
 	for (auto ref : queryToRefSet) {
 
 		refid = convert(ref[1]);
+		refcounter[refid]++;
 
-		if (refcounter.count(refid) == 1) {
-			//“o˜^Ï‚İ
-			refcounter[refid]++;
-		}
-		else {
-			//–¢“o˜^
-			refcounter[refid] = 1;
-		}
 	}
 
 	return outformat(bquery, refcounter);
