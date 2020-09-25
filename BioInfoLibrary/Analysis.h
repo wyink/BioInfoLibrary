@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 
 
 /*
-* @detail fmeasureを計算するクラスのインタフェース
+* @detail fmeasureを計算するクラスの入出力を規定するインタフェース
 *         
 */
 class FmeasureHandler {
@@ -25,10 +25,10 @@ public:
 	* @brief 入力ファイルに依存する処理
 	*        map[idA]={idA:count,idB:count,...} の形式に
 	*        変換する
-	* @param[infile] 入力ファイル
+	* @param[path] 入力ファイル/入力ディレクトリ
 	*/
 	virtual std::map<std::string, std::map<std::string, int> > 
-		strategy(const fs::path& indir) = 0;
+		informat(const fs::path& path) = 0;
 
 	/*
 	* @brief 出力に利用するフォーマット部分を規定
@@ -51,6 +51,7 @@ public:
 * 
 *        出力ファイル形式例 : strainA\tstrainB f-measure value
 */
+
 class FmeasurePt1 :public FmeasureHandler{
 public:
 	/*
@@ -78,17 +79,17 @@ public:
 	*       strainA-strainC 1  //1+0
 	*       strainA-strainD 2  //1+1
 	*/
-	enum CountUpWay {
-		Amount = 0, //存在量をそのまま積算
-		Exist = 1  //存在量は1or0で積算
+	enum class CountUpWay{
+		Amount, //存在量をそのまま積算
+		Exist   //存在量は1or0で積算
 	};
 
 	/**
 	* @param[cuway] 集計方法をオブジェクト生成時に選択
 	*/
-	inline FmeasurePt1(
+	FmeasurePt1(
 		const CountUpWay cuway
-	):cuway(cuway){}
+	) :cuway(cuway){}
 
 	/**
 	* @detail 入力ファイルが以下の時に対応
@@ -96,25 +97,32 @@ public:
 	*  ・それぞれのファイルがidに対応しており1行目にそのid名の記述あり
 	*  ・該当ファイルのidと他のidに対する値の記述が一行ごとに以下のよう
 	*    にフォーマットされて出力されている．
-	*         
+	*  
+	*  fileA ------------------------------------
 	*  id_A
-	*  >abc123.1 strainA:1,strainD:3,strainC:2 
-	*  >abc123.1 strainA:1,strainC:3
+	*  >abc123.1 id_A:1,id_D:3,id_C:2 
+	*  >abc123.1 id_A:1,id_C:3
 	*  ...
+	*  EOF
 	* 
+	*  fileB------------------------------------
 	*  id_B
-	*  >abc123.1 strainA:1,strainD:3,strainC:2
-	*  ....
+	*  >abc123.1 id_A:1,id_D:3,id_C:2
+	*  ...
+	*  EOF
+	* 
+	* id_C,id_Dも同様
 	*  -----------------------------------------
 	* 
-	* @param[indir] 
-	* @return 
+	* @param[indir] 全てのidのファイル(id_A~id_D)が存在するディレクトリ
+	* @return {id_A:{id_A:fma,~id_D:fmd},...id_D:{id_A:fma,~id_D:fmd}}
 	*/
 	std::map<std::string, std::map<std::string, int> > 
 		informat(const fs::path& indir) override;
 
 	/**
 	* @brief idA\tidB f-measure valueで出力
+	* 
 	*/
 	void outformat(
 		const std::map<std::string,float>& fmeasureMap,
@@ -129,20 +137,28 @@ private:
 
 class Fmeasure {
 private:
-	const fs::path& indir	;
-	const fs::path& outfile;
+	const fs::path indir;
+	const fs::path outfile;
 	FmeasureHandler& fh;
+
+	/**
+	 * @brief f-measureの計算を行う（run関数で実行される）
+	 */
+	const std::map<std::string, float> calcFmeasure(
+		const std::map<std::string, std::map<std::string, int> >& idCounterMap
+	);
 
 public:
 	explicit inline Fmeasure(
 		const fs::path indir,
 		const fs::path outfile,
 		FmeasureHandler& fh
-	) :indir(indir),outfile(outfile),fh(fh) {}
+	) :indir(indir), outfile(outfile), fh(fh){}
 
 	void setHandler(FmeasureHandler& fh) {
 		this->fh = fh;
 	}
 
 	void run();
+
 };

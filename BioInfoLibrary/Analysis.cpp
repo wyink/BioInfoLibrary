@@ -4,15 +4,25 @@
 void Fmeasure::run(){
 
     if (!fs::exists(indir)) {
+        std::cout << indir << std::endl;
         std::cout << "No such Directory!" << std::endl;
         exit(1);
     }
     
-    std::string line;
-    std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[idA]={idA:count,idB:count,...} */
-    fh.strategy(indir);
+    // ＜入力＞
+    std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[id_A]={id_A:fma,id_B:fmb,...} */
+    idCounterMap = fh.informat(indir);
     
-    //fmeasureの計算
+    // f-measureの計算
+    std::map<std::string, float> fmeasureMap = calcFmeasure(idCounterMap);
+
+    // ＜出力＞
+    fh.outformat(fmeasureMap,outfile);
+    
+}
+
+//private-method 
+const std::map<std::string, float> Fmeasure::calcFmeasure(const std::map<std::string, std::map<std::string, int> >& idCounterMap) {
     std::set<std::string> memo;
     int denominator = 0;
     int fraction = 0;
@@ -21,7 +31,7 @@ void Fmeasure::run(){
     std::map<std::string, float> fmeasureMap;
     for (const auto& [selfidA, stCountA] : idCounterMap) {
         for (const auto& [selfidB, stCountB] : idCounterMap) {
-            //cal
+
             if (selfidA == selfidB) {
                 continue;
             }
@@ -38,10 +48,7 @@ void Fmeasure::run(){
             }
         }
     }
-    
-    //format
-    fh.outformat(fmeasureMap,outfile);
-    
+    return fmeasureMap;
 }
 
 std::map<std::string, std::map<std::string,int> > FmeasurePt1::informat(const fs::path& indir) {
@@ -71,11 +78,12 @@ std::map<std::string, std::map<std::string,int> > FmeasurePt1::informat(const fs
                     idCountVec = Utils::split(idCountPair_, ":");
 
                     switch (cuway) {
-                    case Exist :
+                    case FmeasurePt1::CountUpWay::Exist:
                         idCounterMap[selfid][idCountVec[0]] += 1;
                         break;
-                    case Amount:
+                    case FmeasurePt1::CountUpWay::Amount :
                         idCounterMap[selfid][idCountVec[0]] += std::stoi(idCountVec[1]);
+                        break;
                     default:
                         std::cout << "Parameter is invalid" << std::endl;
                         exit(1);
@@ -84,6 +92,7 @@ std::map<std::string, std::map<std::string,int> > FmeasurePt1::informat(const fs
             }
         }
     }
+    return idCounterMap;
 }
 
 void FmeasurePt1::outformat(const std::map<std::string,float>& fmeasureMap, const fs::path outfile) {
@@ -93,25 +102,3 @@ void FmeasurePt1::outformat(const std::map<std::string,float>& fmeasureMap, cons
     }
 }
 
-/*
-class BlastParser
-{
-private:
-    const std::string infile;
-    BlastParserHandler& bph;
-
-public:
-    explicit BlastParser(const std::string& infile, BlastParserHandler& bph);
-
-    inline void setHandler(BlastParserHandler& bph) {
-        this->bph = bph;
-    }
-
-    /**
-    * @brief blast結果ファイルの解析開始
-    
-void run(const std::string& outfile, const std::string& header);
-};
-
-
-*/
