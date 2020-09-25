@@ -1,15 +1,6 @@
 #include "Analysis.h"
 #include "Utils.h"
 
-/*
-
-    const fs::path indir = "D:/perflingens/4_blast/analyzedAgain";
-    const fs::path out = "out.txt";
-    Fmeasure fm(indir, out);
-    fm.run();
-*/
-
-
 void Fmeasure::run(){
 
     if (!fs::exists(indir)) {
@@ -19,43 +10,7 @@ void Fmeasure::run(){
     
     std::string line;
     std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[idA]={idA:count,idB:count,...} */
-    std::vector<std::string> idCountPairVec;  /**< (id:counter),(id:counter),... */
-    std::vector<std::string> idCountVec;      /**< id:counter */
-    for (const fs::directory_entry& x : fs::directory_iterator(indir)) {
-        fs::path path = x.path();
-        std::ifstream in{ path };
-    
-    
-        //一行目でファイル自身のidを取得
-        std::getline(in, line);
-        std::string selfid = line;
-    
-        int i = 1;
-        while (std::getline(in, line)) {
-            ++i;
-            if (i % 2 == 0) { //start with '>';
-                // Not used;
-                continue;
-            }
-            else {
-                idCountPairVec = Utils::split(line, ",");
-                for (const auto& idCountPair_ : idCountPairVec) {
-                    idCountVec = Utils::split(idCountPair_, ":");
-    
-                    /*
-                       複数個所ヒットした配列を総合する，
-                   　  いわゆるmaximumに対応する場合
-                    */
-                    //idCounterMap[selfid][idCountVec[0]] += std::stoi(idCountVec[1]);
-    
-                    /*各配列ヒットしたかどうかを判定(ヒットで1）*/
-                    //今回の場合はno-hitの場合はstrainに登録されない．
-                    idCounterMap[selfid][idCountVec[0]] += 1;
-                }
-    
-            }
-        }
-    }
+    fh.strategy(indir);
     
     //fmeasureの計算
     std::set<std::string> memo;
@@ -85,9 +40,78 @@ void Fmeasure::run(){
     }
     
     //format
-    std::ofstream out{outfile};
+    fh.outformat(fmeasureMap,outfile);
+    
+}
+
+std::map<std::string, std::map<std::string,int> > FmeasurePt1::informat(const fs::path& indir) {
+    std::string line;
+    std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[idA]={idA:count,idB:count,...} */
+    std::vector<std::string> idCountPairVec;  /**< (id:counter),(id:counter),... */
+    std::vector<std::string> idCountVec;      /**< id:counter */
+    fs::path infile; /**< 入力ファイル */
+    for (const fs::directory_entry& x : fs::directory_iterator(indir)) {
+
+        //自身のidを取得（ヘッダー処理）
+        infile = x.path();
+        std::ifstream in{ infile };
+        std::getline(in, line);
+        std::string selfid = line;
+
+        int i = 1;
+        while (std::getline(in, line)) {
+            ++i;
+            if (i % 2 == 0) { //start with '>';
+                // Not used;
+                continue;
+            }
+            else {
+                idCountPairVec = Utils::split(line, ",");
+                for (const auto& idCountPair_ : idCountPairVec) {
+                    idCountVec = Utils::split(idCountPair_, ":");
+
+                    switch (cuway) {
+                    case Exist :
+                        idCounterMap[selfid][idCountVec[0]] += 1;
+                        break;
+                    case Amount:
+                        idCounterMap[selfid][idCountVec[0]] += std::stoi(idCountVec[1]);
+                    default:
+                        std::cout << "Parameter is invalid" << std::endl;
+                        exit(1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void FmeasurePt1::outformat(const std::map<std::string,float>& fmeasureMap, const fs::path outfile) {
+    std::ofstream out{ outfile };
     for (const auto& [conbi, fmeasure] : fmeasureMap) {
         out << conbi << "\t" << fmeasure << "\n";
     }
-    
 }
+
+/*
+class BlastParser
+{
+private:
+    const std::string infile;
+    BlastParserHandler& bph;
+
+public:
+    explicit BlastParser(const std::string& infile, BlastParserHandler& bph);
+
+    inline void setHandler(BlastParserHandler& bph) {
+        this->bph = bph;
+    }
+
+    /**
+    * @brief blast結果ファイルの解析開始
+    
+void run(const std::string& outfile, const std::string& header);
+};
+
+
+*/
