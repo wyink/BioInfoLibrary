@@ -2,8 +2,8 @@
 #include "Utils.h"
 #include <utility>
 
-PajekParser::PajekParser(const std::string infile) :
-    infile(infile) {
+PajekParser::PajekParser(const std::string infile, LabelInterface& ilabel) :
+    infile(infile),ilabel(ilabel){
 
     if (!Utils::isExistFile(infile)) {
         throw "No such File.";
@@ -40,14 +40,15 @@ Pajek PajekParser::load() {
         oneNode[1].erase(0,1);
         oneNode[1].pop_back();
 
+
         //!Todo パラメータを持たないフォーマット対応
         //Nodeオブジェクト構築に必要なパラメータ
-        const int nodeid = std::stoi(oneNode[0]);   /**< 各Nodeの一意のID    */
-        Label label{ oneNode[1] };                  /**< 各Nodeのラベル　    */
-        float x = std::stof(oneNode[2]);            /**< 各Nodeのx座標       */
-        float y = std::stof(oneNode[3]);            /**< 各Nodeのy座標       */
-        std::string icolor = oneNode[4];            /**< 各Nodeの内側の色    */
-        std::string bcolor = oneNode[5];            /**< 各Nodeの境界線の色  */
+        const int nodeid = std::stoi(oneNode[0]);         /**< 各Nodeの一意のID    */
+        LabelInterface* label = ilabel.clone(oneNode[1]); /**< 各Nodeのラベル　    */
+        float x = std::stof(oneNode[2]);                  /**< 各Nodeのx座標       */
+        float y = std::stof(oneNode[3]);                  /**< 各Nodeのy座標       */
+        std::string icolor = oneNode[4];                  /**< 各Nodeの内側の色    */
+        std::string bcolor = oneNode[5];                  /**< 各Nodeの境界線の色  */
 
         Node node(nodeid, label);
         node.setPosition(x, y)
@@ -112,7 +113,7 @@ Node& Node::setBorderColor(const std::string& bcolor){
 const std::string Node::getSingleLine() {
     std::stringstream singleLine;
 
-    singleLine << "\t" << nodeid << "\t" << label.getOutputLabel();
+    singleLine << "\t" << nodeid << "\t" << label->getOutputLabel();
 
     if (x > 0 && y > 0) {
         singleLine << "\t" << x << "\t" << y;
@@ -134,44 +135,52 @@ Vertices::Vertices(std::vector<Node>& nodeElements):
 }
 
 
-std::string Label::getLabel() {
+const std::string LabelSingle::getLabel() {
     return label;
 }
 
 
-std::string Label::getOutputLabel() {
-    std::string outputLabel = '"' + getLabel() + '"';
-    
-    return outputLabel ;
+const std::string LabelSingle::getOutputLabel() {
+    return '"' + this->getLabel() + '"';
 }
 
 
-void Label::setLabel(const std::string label) {
+void LabelSingle::setLabel(const std::string label) {
     this->label = label;
 }
 
 
-LabelDouble::LabelDouble(std::string label, const char* sep) 
-    : Label(label) ,sep(sep) {
+LabelDouble::LabelDouble(std::string label) 
+    : label(label){
 
     //initialize
-    std::vector<std::string> labels = Utils::split(label,sep);
+    std::vector<std::string> labels = Utils::split(label,"/");
     upLabel = labels[0];
     lwLabel = labels[1];
 }
 
+const std::string LabelDouble::getLabel() {
+    return this->label;
+}
 
-std::string LabelDouble::getUpLabel(){
+const std::string LabelDouble::getUpLabel(){
     return upLabel;
 }
 
 
-std::string LabelDouble::getLwLabel(){
+const std::string LabelDouble::getLwLabel(){
     return lwLabel;
 }
 
+const std::string LabelDouble::getOutputLabel() {
+    return '"' + this->getLabel() + '"';
+}
 
-Edges::Edges(std::vector<std::pair<int, int>>& mpair):
+void LabelDouble::setLabel(const std::string label) {
+    this->label = label;
+}
+
+Edges::Edges(const std::vector<std::pair<int, int>>& mpair):
     mpair(mpair) {
 
     //initialize
@@ -193,3 +202,72 @@ bool Edges::isModule(int index)
     }
 }
 
+const std::vector<Pajek> CreateFromText::run() {
+    std::ifstream in{ infile };
+    std::string line;
+    std::vector<std::string> vec;
+    std::string id_A;
+    std::string id_B;
+    float value;
+    std::map<float,std::vector<std::pair<int, int > > > valComSet;
+    std::set<std::string> allIdSet;
+    while (std::getline(in, line)) {
+        //id_A id_B value(int)
+        vec = Utils::split(line, "\t");
+        id_A = std::stoi(vec[0]);
+        id_B = std::stoi(vec[1]);
+        value = std::stof(vec[2]);
+        allIdSet.insert(id_A);
+        allIdSet.insert(id_B);
+        valComSet[value].emplace_back(std::make_pair(id_A, id_B) );
+    }
+
+
+    //Nodeオブジェクトの構築
+    int nodeid = 0;
+    std::vector<Node> nodeElements;
+    LabelInterface* ilabel;
+    for (const auto& id : allIdSet) {
+        ilabel = m_ilabel->clone(id);
+        Node node(nodeid, ilabel);
+        node = addproperty(node);
+        nodeElements.emplace_back(node);
+        ++nodeid;
+    }
+
+    //Verticesオブジェクトの構築
+    Vertices vertices(nodeElements);
+
+    //Edgesオブジェクトの構築
+    //value(1.00-0.00)まで変動する
+    std::vector<Pajek> pajekArray;
+    for (const auto& [value, idPairVec] : valComSet) {
+        //value ...ex. f-measure,相関係数
+        //vecにはidの組み合わせが格納されている．
+        Edges edges(idPairVec);
+        pajekArray.emplace_back(Pajek(vertices, edges));
+    }
+   
+    return pajekArray;
+}
+
+
+
+//example 
+//3番目の引数は中身を指定しない場合は以下のようにする
+/*
+ [](Node& node)->Node& {
+    return node;
+ }
+
+*/
+fs::path infile = "temp.txt";
+LabelDouble* ilabel;
+CreateFromText cft(
+    infile,
+    ilabel,
+    [](Node& node)->Node& {
+        node.setPosition(0.500, 0.500);
+        return node;
+    }
+);

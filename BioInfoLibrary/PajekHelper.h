@@ -1,9 +1,12 @@
 #pragma once
 #include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <functional>
 #include <regex>
 #include <set>
+#include <map>
 
 /**
  * @brief     Pajekアプリケーションで利用するファイルの解析
@@ -13,8 +16,10 @@
  *            オブジェクトに変換する．
  */
 class Pajek;
+class LabelInterface;
 class PajekParser {
     const std::string infile;
+    LabelInterface& ilabel;
 
 public:
     /**
@@ -22,7 +27,10 @@ public:
      * @param[infile]    読み込むファイル（拡張子.net)
      * @detail           読み込みたい.netファイルのパスをセット
      */
-    PajekParser(const std::string infile);
+    PajekParser(
+        const std::string infile,
+        LabelInterface& ilabel
+    );
 
     /**
      * @brief    .netファイルをロード
@@ -81,11 +89,11 @@ public:
 /**
 * @brief 
 */
-class Label;
+class LabelInterface;
 class Node
 {
     int nodeid;
-    Label& label;
+    LabelInterface* label;
     float x;
     float y;
     std::string icolor; //空文字列で初期化
@@ -98,10 +106,14 @@ public:
      * @param[nodeid]    Nodeの一意のID
      * @param[label]     Nodeが保持するラベル
      */
-    Node(const int nodeid, Label& label) :
+    Node(const int nodeid, LabelInterface* label) :
         nodeid(nodeid),label(label),
         x(-1),y(-1){}
     
+    inline ~Node() {
+        delete label;
+    }
+
     /**
      * @brief       各Nodeの座標をセット
      * @param[x]    各Nodeのx座標
@@ -133,49 +145,69 @@ public:
 
 
 /**
-* @brief 一意の文字列ラベル
+* @brief 一意の文字列ラベルを示すインタフェース
 */
-class Label {
-    std::string label;
-
+class LabelInterface {
 public:
 
-    /**
-     * @brief           Labelクラスのコンストラクタ
-     * @param[label]    ラベルで使用するラベル用の文字列
-     */
-    explicit Label(const std::string label) :
-        label(label) {}
+    LabelInterface() = default;
 
     /**
      * @brief     label文字列を取得
      * @return    ラベルに利用している文字列('"'を含まない）
      */
-    std::string getLabel();
+    virtual const std::string getLabel() = 0;
 
     /**
      * @brief　  出力に使用するlabel文字列
      * @return   ラベルに利用している文字列（'"'を含む）
      */
-    std::string getOutputLabel();
+    virtual const std::string getOutputLabel() = 0 ;
 
     /**
      * @brief           label文字列をセット
      * @param[label]    更新したいラベル文字列
      */
-    void setLabel(const std::string label) ;
+    virtual void setLabel(const std::string label) = 0;
 
-    
+    virtual ~LabelInterface() = default;
+
+    /**
+     * @brief オブジェクトのコピーを作成
+     *        メモリを動的に確保している．
+     */
+    virtual LabelInterface* clone(const std::string label) = 0;
+
 };
 
 
+class LabelSingle :public LabelInterface {
+private:
+    std::string label;
+
+public:
+    /**
+     * @brief           Labelクラスのコンストラクタ
+     * @param[label]    ラベルで使用するラベル用の文字列
+     */
+    explicit inline LabelSingle (const std::string label) :
+        label(label) {}
+
+    const std::string getLabel() override;
+    const std::string getOutputLabel() override;
+    void setLabel(const std::string label) override;
+    inline LabelSingle* clone(const std::string label) override {
+        return new LabelSingle(label);
+    }
+};
+
 /**
-* @brief "project/sample"などの階層ラベルを扱うクラス
-*/
-class LabelDouble:Label {
+ * @brief "project/sample"などの階層ラベルを扱うクラス
+ */
+class LabelDouble:public LabelInterface {
+    std::string label;
     std::string upLabel;
     std::string lwLabel;
-    const std::string sep;
 
 public:
 
@@ -185,19 +217,27 @@ public:
      * @param[sep]        階層ラベルを分割するデリミタ
      * @detail            階層ラベルの作成
      */
-    LabelDouble(std::string label, const char* sep);
+    explicit inline LabelDouble(std::string label);
+
+    const std::string getLabel() override;
 
     /**
      * @brief     上階層のラベルを取得
      * @return    上階層のラベル文字列
      */
-    std::string getUpLabel();
+    const std::string getUpLabel();
 
     /**
      * @brief     下階層のラベルを取得
      * @return    下階層のラベル文字列
      */
-    std::string getLwLabel();
+    const std::string getLwLabel();
+
+    const std::string getOutputLabel() override;
+    void setLabel(const std::string label) override;
+    inline LabelDouble* clone(const std::string label) override {
+        return new LabelDouble(label);
+    }
 
 };
 
@@ -208,7 +248,7 @@ public:
 */
 class Edges
 {
-    std::vector<std::pair<int, int>>& mpair;
+    const std::vector<std::pair<int, int>>& mpair;
     std::set<int> mnodeset;
 
 public:
@@ -217,7 +257,7 @@ public:
      * @brief     Edgesクラスのコンストラクタ
      * @detail    .netファイルにおけるNodeの繋がりを示す領域部分
      */
-    explicit Edges(std::vector<std::pair<int, int>>& mpair);
+    explicit Edges(const std::vector<std::pair<int, int>>& mpair);
 
     /**
      * @brief  該当Nodeがモジュールを形成しているかどうか
@@ -226,6 +266,30 @@ public:
      */
     bool isModule(int index);
 
+};
+
+/**
+ * @detail 拡張子.net以外のファイルからPajekファイル（.net)
+ *         を作成するクラス
+ */
+namespace fs = std::filesystem;
+class CreateFromText {
+private:
+    const fs::path infile; //.net以外の入力ファイル
+    LabelInterface* m_ilabel; //Label文字列のふるまいを規定
+    std::function<Node&(Node&)> addproperty; //Nodeクラスのカスタマイズ
+
+public:
+    explicit inline CreateFromText(
+        const fs::path infile,
+        LabelInterface* ilabel,
+        std::function<Node&(Node&)> addproperty
+    ):infile(infile),m_ilabel(m_ilabel),addproperty(addproperty) {};
+
+    //informat
+    //Nodeのふるまい（ilabel)
+    //outformatはPajekクラスオブジェクトにかく
+    const std::vector<Pajek> run();
 };
 
 

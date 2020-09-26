@@ -13,7 +13,6 @@ int main() {
     namespace fs = std::filesystem;
 
 /* testCase 1
-----------------------------------------------------------------------------------------------
     std::string faafile = "D:/perflingens/2_protein/GCA_000009685.1_ASM968v1_protein.faa";
     std::string out = "D:/perflingens/otameshi.fasta";
 
@@ -30,12 +29,10 @@ int main() {
             }
         )
         .run();
-----------------------------------------------------------------------------------------------
  */
 
 /*textCase2 */
     /*
-----------------------------------------------------------------------------------------------
     //reference_idの変換用
     std::ifstream in{ "D:/perflingens/new_resources/5_prid_strain.txt" };
     std::string line;
@@ -86,13 +83,15 @@ int main() {
   */
 
 /*testCase3 */
-    
+    /*
     const fs::path indir = "G:/perflingens/4_blast/analyzedAgain";
     const fs::path out = "G:/perflingens/out.txt";
 
     FmeasurePt1 fh(FmeasurePt1::CountUpWay::Exist);
     Fmeasure fm(indir,out,fh);
     fm.run();
+    */
+
 
 }
 

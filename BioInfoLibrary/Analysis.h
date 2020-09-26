@@ -135,6 +135,10 @@ private:
 
 };
 
+/**
+ * @brief f-measureの計算結果を送出するクラス
+ *        入力，出力のフォーマットはFmeasureHandlerで規定
+ */
 class Fmeasure {
 private:
 	const fs::path indir;
@@ -162,3 +166,5 @@ public:
 	void run();
 
 };
+
+
