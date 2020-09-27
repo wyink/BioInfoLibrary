@@ -8,6 +8,8 @@
 #include <set>
 #include <map>
 
+namespace fs = std::filesystem;
+
 /**
  * @brief     Pajekアプリケーションで利用するファイルの解析
  * 
@@ -110,9 +112,7 @@ public:
         nodeid(nodeid),label(label),
         x(-1),y(-1){}
     
-    inline ~Node() {
-        delete label;
-    }
+    inline ~Node() {}
 
     /**
      * @brief       各Nodeの座標をセット
@@ -184,6 +184,8 @@ public:
 class LabelSingle :public LabelInterface {
 private:
     std::string label;
+    LabelSingle(const LabelSingle& ld) {}//コピーコンストラクタ
+    LabelSingle operator=(const LabelSingle& ld) {}
 
 public:
     /**
@@ -192,7 +194,6 @@ public:
      */
     explicit inline LabelSingle (const std::string label) :
         label(label) {}
-
     const std::string getLabel() override;
     const std::string getOutputLabel() override;
     void setLabel(const std::string label) override;
@@ -205,20 +206,21 @@ public:
  * @brief "project/sample"などの階層ラベルを扱うクラス
  */
 class LabelDouble:public LabelInterface {
+private:
     std::string label;
     std::string upLabel;
     std::string lwLabel;
+    LabelDouble(const LabelDouble& ld) {}//コピーコンストラクタ
+    LabelDouble& operator=(const LabelDouble& ld) {}
 
 public:
 
     /**
      * @brief             LabelDoubleのコンストラクタ
      * @param[label]      初期化するためのラベル文字列
-     * @param[sep]        階層ラベルを分割するデリミタ
      * @detail            階層ラベルの作成
      */
-    explicit inline LabelDouble(std::string label);
-
+    explicit LabelDouble(std::string label);
     const std::string getLabel() override;
 
     /**
@@ -268,11 +270,12 @@ public:
 
 };
 
+
+
 /**
  * @detail 拡張子.net以外のファイルからPajekファイル（.net)
  *         を作成するクラス
  */
-namespace fs = std::filesystem;
 class CreateFromText {
 private:
     const fs::path infile; //.net以外の入力ファイル
@@ -282,7 +285,7 @@ private:
 public:
     explicit inline CreateFromText(
         const fs::path infile,
-        LabelInterface* ilabel,
+        LabelInterface* m_ilabel,
         std::function<Node&(Node&)> addproperty
     ):infile(infile),m_ilabel(m_ilabel),addproperty(addproperty) {};
 

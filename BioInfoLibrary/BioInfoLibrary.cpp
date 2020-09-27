@@ -92,6 +92,18 @@ int main() {
     fm.run();
     */
 
+    fs::path infile = "G:/perflingens/out.txt";/**< 入力ファイル */
+    LabelSingle ilabel("Label");
+    
+    CreateFromText cft(
+        infile,
+        &ilabel,
+        [](Node& node)->Node& {
+            return node.setPosition(0.500, 0.500);
+        }
+    );
+    
+    cft.run();
 
 }
 

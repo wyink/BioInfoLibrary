@@ -209,29 +209,37 @@ const std::vector<Pajek> CreateFromText::run() {
     std::string id_A;
     std::string id_B;
     float value;
-    std::map<float,std::vector<std::pair<int, int > > > valComSet;
+    std::map<float,std::vector<std::pair<std::string,std::string > > > valComSet;
     std::set<std::string> allIdSet;
     while (std::getline(in, line)) {
-        //id_A id_B value(int)
         vec = Utils::split(line, "\t");
-        id_A = std::stoi(vec[0]);
-        id_B = std::stoi(vec[1]);
+        id_A = vec[0];
+        id_B = vec[1];
         value = std::stof(vec[2]);
         allIdSet.insert(id_A);
         allIdSet.insert(id_B);
-        valComSet[value].emplace_back(std::make_pair(id_A, id_B) );
+        if (valComSet.count(value) == 1) {
+            valComSet.at(value).emplace_back(std::make_pair(id_A, id_B));
+        }
+        else
+        {
+            std::vector<std::pair<std::string,std::string>> v{ std::make_pair(id_A,id_B) };
+            valComSet[value] = v;
+        }
+        
     }
 
 
     //Nodeオブジェクトの構築
     int nodeid = 0;
     std::vector<Node> nodeElements;
-    LabelInterface* ilabel;
+    std::map<std::string, int> idLabelMap;
     for (const auto& id : allIdSet) {
-        ilabel = m_ilabel->clone(id);
+        LabelInterface* ilabel = m_ilabel->clone(id);
         Node node(nodeid, ilabel);
         node = addproperty(node);
         nodeElements.emplace_back(node);
+        idLabelMap[id] = nodeid;
         ++nodeid;
     }
 
@@ -244,30 +252,20 @@ const std::vector<Pajek> CreateFromText::run() {
     for (const auto& [value, idPairVec] : valComSet) {
         //value ...ex. f-measure,相関係数
         //vecにはidの組み合わせが格納されている．
-        Edges edges(idPairVec);
+        //id->nodeid
+        std::vector<std::pair<int, int> > idPairVec_; /**< 関係性のあるnodeidの組合せ */
+        int nid_1 = 0; /**< 一つ目のnodeid */
+        int nid_2 = 0; /**< 二つ目のnodeid */
+        for (const auto& idpair : idPairVec) {
+            nid_1 = idLabelMap.at(idpair.first);
+            nid_2 = idLabelMap.at(idpair.second);
+            idPairVec_.emplace_back(std::make_pair(nid_1, nid_2));
+        }
+
+        Edges edges(idPairVec_);
         pajekArray.emplace_back(Pajek(vertices, edges));
     }
    
     return pajekArray;
 }
 
-
-
-//example 
-//3番目の引数は中身を指定しない場合は以下のようにする
-/*
- [](Node& node)->Node& {
-    return node;
- }
-
-*/
-fs::path infile = "temp.txt";
-LabelDouble* ilabel;
-CreateFromText cft(
-    infile,
-    ilabel,
-    [](Node& node)->Node& {
-        node.setPosition(0.500, 0.500);
-        return node;
-    }
-);
