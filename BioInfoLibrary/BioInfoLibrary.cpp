@@ -103,7 +103,7 @@ int main() {
         }
     );
     
-    cft.run();
+    std::vector<Pajek> pvec = cft.run();
 
 }
 

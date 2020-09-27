@@ -41,66 +41,58 @@ public:
     Pajek load(); 
 };
 
-/**
- * @brief    Pajekファイルの要素(Vertices,Edges)を保持するオブジェクト
- */
-class Vertices;
-class Edges;
-class Pajek
-{
-    Vertices& vt;
-    Edges& egs;
-
-public:
-    /**
-     * @brief         Pajekオブジェクトのコンストラクタ
-     * @param[vt]     全Nodeの定義の集合
-     * @param[egs]    相関のある2つのNodeの集合
-     * 
-     */
-    inline Pajek(
-        Vertices& vt,
-        Edges& egs
-    ):vt(vt),egs(egs){}
-};
 
 /**
-* @brief Pajekの.netファイルを構成する各Nodeの定義
+* @brief 一意の文字列ラベルを示すインタフェース
 */
-class Node;
-class Vertices
-{
-    std::vector<Node>& nodeElements;
-
+class LabelInterface {
 public:
 
-    /**
-　　 * @brief     Verticesクラスのコンストラクタ
-　　 * @detail    .netファイルにおける各Nodeの定義部分
-　　 */
-    explicit Vertices(std::vector<Node>& nodeElements);
+    LabelInterface() = default;
 
     /**
-     * @brief           任意の色でVerticesオブジェクトのNodeの色を更新
-     * @param[color]    全てのNodeを更新する色(ex. RGB(0,0,0) )
+     * @brief     label文字列を取得
+     * @return    ラベルに利用している文字列('"'を含まない）
      */
-    void setColor(const std::string& color);
+    virtual const std::string getLabel() = 0;
+
+    /**
+     * @brief　  出力に使用するlabel文字列
+     * @return   ラベルに利用している文字列（'"'を含む）
+     */
+    virtual const std::string getOutputLabel() = 0;
+
+    /**
+     * @brief           label文字列をセット
+     * @param[label]    更新したいラベル文字列
+     */
+    virtual void setLabel(const std::string label) = 0;
+
+    virtual ~LabelInterface() = default;
+
+    /**
+     * @brief オブジェクトのコピーを作成
+     *        メモリを動的に確保している．
+     */
+    virtual LabelInterface* clone(const std::string label) = 0;
+
 };
 
 
+
 /**
-* @brief 
+* @brief
+* @note *1 ... 動的確保したポインタが存在するため値渡しを行わせない．
 */
-class LabelInterface;
 class Node
 {
+private:
     int nodeid;
-    LabelInterface* label;
+    LabelInterface* ilabel;
     float x;
     float y;
     std::string icolor; //空文字列で初期化
     std::string bcolor; //空文字列で初期化
-
 
 public:
     /**
@@ -108,11 +100,25 @@ public:
      * @param[nodeid]    Nodeの一意のID
      * @param[label]     Nodeが保持するラベル
      */
-    Node(const int nodeid, LabelInterface* label) :
-        nodeid(nodeid),label(label),
-        x(-1),y(-1){}
-    
-    inline ~Node() {}
+    Node(const int nodeid, LabelInterface* ilabel) :
+        nodeid(nodeid), ilabel(ilabel),
+        x(-1), y(-1) {}
+
+    //実行時の型(LabelSingle,LabelDouble)と同じ型のラベルを取得
+    Node(const Node& node)
+        :nodeid(node.nodeid),
+        ilabel((node.ilabel)->clone(node.ilabel->getLabel())),
+        x(node.x), y(node.y),
+        icolor(node.icolor), bcolor(node.bcolor) {}
+            
+
+    inline LabelInterface* getLabelptr() const {
+        return ilabel;
+    }
+
+    inline ~Node() {
+        delete ilabel;
+    }
 
     /**
      * @brief       各Nodeの座標をセット
@@ -120,7 +126,7 @@ public:
      * @param[y]    各Nodeのy座標
      */
     Node& setPosition(
-        const float x, 
+        const float x,
         const float y
     );
 
@@ -144,42 +150,37 @@ public:
 };
 
 
+
 /**
-* @brief 一意の文字列ラベルを示すインタフェース
+* @brief Pajekの.netファイルを構成する各Nodeの定義
 */
-class LabelInterface {
+class Vertices
+{
+    std::vector<Node> nodeElements;
+
 public:
 
-    LabelInterface() = default;
+    /**
+　　 * @brief     Verticesクラスのコンストラクタ
+　　 * @detail    .netファイルにおける各Nodeの定義部分
+　　 */
+    explicit Vertices(std::vector<Node>& nodeElements);
+
+    Vertices(const Vertices& vertices) {
+        if (this != &vertices) {
+            for (const auto& node : vertices.nodeElements) {
+                Node node_ = node;//コピーコンストラクタ呼び出し（資源再確保）
+                nodeElements.emplace_back(node_);
+            }
+        }
+    }
 
     /**
-     * @brief     label文字列を取得
-     * @return    ラベルに利用している文字列('"'を含まない）
+     * @brief           任意の色でVerticesオブジェクトのNodeの色を更新
+     * @param[color]    全てのNodeを更新する色(ex. RGB(0,0,0) )
      */
-    virtual const std::string getLabel() = 0;
-
-    /**
-     * @brief　  出力に使用するlabel文字列
-     * @return   ラベルに利用している文字列（'"'を含む）
-     */
-    virtual const std::string getOutputLabel() = 0 ;
-
-    /**
-     * @brief           label文字列をセット
-     * @param[label]    更新したいラベル文字列
-     */
-    virtual void setLabel(const std::string label) = 0;
-
-    virtual ~LabelInterface() = default;
-
-    /**
-     * @brief オブジェクトのコピーを作成
-     *        メモリを動的に確保している．
-     */
-    virtual LabelInterface* clone(const std::string label) = 0;
-
+    void setColor(const std::string& color);
 };
-
 
 class LabelSingle :public LabelInterface {
 private:
@@ -194,6 +195,7 @@ public:
      */
     explicit inline LabelSingle (const std::string label) :
         label(label) {}
+    ~LabelSingle() {}
     const std::string getLabel() override;
     const std::string getOutputLabel() override;
     void setLabel(const std::string label) override;
@@ -221,6 +223,7 @@ public:
      * @detail            階層ラベルの作成
      */
     explicit LabelDouble(std::string label);
+    ~LabelDouble() {}
     const std::string getLabel() override;
 
     /**
@@ -295,4 +298,30 @@ public:
     const std::vector<Pajek> run();
 };
 
+/**
+ * @brief    Pajekファイルの要素(Vertices,Edges)を保持するオブジェクト
+ * @note     部分オブジェクトに動的確保したメモリが存在するのでコピーコンストラクタ
+ *           を利用して新たにメモリを動的に確保する必要がある。従って
+ *           コンストラクタでは値渡しで受け取る．//明示的にコピーコンストラクタを
+ *           呼び出して資源を確保する．（Verticesオブジェクトを複製して利用するため）
+ *           
+ */
+class Pajek
+{
+    Vertices vt;
+    Edges& egs;
 
+public:
+    /**
+     * @brief         Pajekオブジェクトのコンストラクタ
+     * @param[vt]     全Nodeの定義の集合
+     * @param[egs]    相関のある2つのNodeの集合
+     *
+     */
+    inline Pajek(
+        Vertices vt,
+        Edges& egs
+    ) :vt(vt), egs(egs) {}
+
+
+};

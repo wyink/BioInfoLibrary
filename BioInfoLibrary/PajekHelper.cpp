@@ -113,7 +113,7 @@ Node& Node::setBorderColor(const std::string& bcolor){
 const std::string Node::getSingleLine() {
     std::stringstream singleLine;
 
-    singleLine << "\t" << nodeid << "\t" << label->getOutputLabel();
+    singleLine << "\t" << nodeid << "\t" << ilabel->getOutputLabel();
 
     if (x > 0 && y > 0) {
         singleLine << "\t" << x << "\t" << y;
@@ -236,7 +236,7 @@ const std::vector<Pajek> CreateFromText::run() {
     std::map<std::string, int> idLabelMap;
     for (const auto& id : allIdSet) {
         LabelInterface* ilabel = m_ilabel->clone(id);
-        Node node(nodeid, ilabel);
+        Node node(nodeid, std::move(ilabel));
         node = addproperty(node);
         nodeElements.emplace_back(node);
         idLabelMap[id] = nodeid;
@@ -246,8 +246,8 @@ const std::vector<Pajek> CreateFromText::run() {
     //Verticesオブジェクトの構築
     Vertices vertices(nodeElements);
 
-    //Edgesオブジェクトの構築
-    //value(1.00-0.00)まで変動する
+    // Edgesオブジェクトの構築
+    // value(1.00-0.00)まで変動する
     std::vector<Pajek> pajekArray;
     for (const auto& [value, idPairVec] : valComSet) {
         //value ...ex. f-measure,相関係数
@@ -263,7 +263,7 @@ const std::vector<Pajek> CreateFromText::run() {
         }
 
         Edges edges(idPairVec_);
-        pajekArray.emplace_back(Pajek(vertices, edges));
+        pajekArray.emplace_back(Pajek(vertices, edges)); //Verticesのptrは再確保される．
     }
    
     return pajekArray;
