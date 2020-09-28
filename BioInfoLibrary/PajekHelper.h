@@ -20,7 +20,7 @@ namespace fs = std::filesystem;
 class Pajek;
 class LabelInterface;
 class PajekParser {
-    const std::string infile;
+    const fs::path infile;
     LabelInterface& ilabel;
 
 public:
@@ -30,7 +30,7 @@ public:
      * @detail           読み込みたい.netファイルのパスをセット
      */
     PajekParser(
-        const std::string infile,
+        const fs::path infile,
         LabelInterface& ilabel
     );
 
@@ -39,6 +39,7 @@ public:
      * @return    入力ファイルの情報を保持したPajekオブジェクト
      */
     Pajek load(); 
+    
 };
 
 
@@ -105,6 +106,7 @@ public:
         x(-1), y(-1) {}
 
     //実行時の型(LabelSingle,LabelDouble)と同じ型のラベルを取得
+    //コピーコンストラクタ
     Node(const Node& node)
         :nodeid(node.nodeid),
         ilabel((node.ilabel)->clone(node.ilabel->getLabel())),
@@ -147,6 +149,7 @@ public:
      * @return    .netでの出力に利用する文字列（改行含む）
      */
     const std::string getSingleLine();
+    const std::string getSingleLine() const;
 };
 
 
@@ -174,6 +177,23 @@ public:
             }
         }
     }
+
+    /**
+     * @brief 部分オブジェクトのnodeElementsの要素数を返す．
+     */
+    inline const int size() const {
+        return nodeElements.size();
+    }
+
+    /**
+    * @detail 部分オブジェクトnodeElemensの参照を返す．
+    *         ただし、変更不可とする．変更はこのオブジェクトの
+    *         メンバ関数で行うこととする．
+    */
+    inline const std::vector<Node>& getNodeElements() const {
+        return nodeElements;
+    }
+
 
     /**
      * @brief           任意の色でVerticesオブジェクトのNodeの色を更新
@@ -271,6 +291,23 @@ public:
      */
     bool isModule(int index);
 
+    /**
+     * @brief メンバ変数mpairを返却
+     */
+    inline const std::vector<std::pair<int, int>>& getMpair() const {
+        return mpair;
+    }
+
+    inline const std::string getOutput()const {
+        std::stringstream output;
+        for (const auto& [node_1, node_2] : mpair) {
+            output << "\t" << node_1;
+            output << "\t" << node_2 << "1\n";
+        }
+
+        return output.str();
+
+    }
 };
 
 
@@ -308,8 +345,8 @@ public:
  */
 class Pajek
 {
-    Vertices vt;
-    Edges& egs;
+    const Vertices vt;
+    const Edges& egs;
 
 public:
     /**
@@ -322,6 +359,12 @@ public:
         Vertices vt,
         Edges& egs
     ) :vt(vt), egs(egs) {}
+
+    /**
+     *  @brief Pajekオブジェクトをnetファイルに書き出す
+     *  @param[outfile] 出力ファイル名
+     */
+    void output(fs::path outfile);
 
 
 };

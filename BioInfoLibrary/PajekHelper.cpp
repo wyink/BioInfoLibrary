@@ -2,11 +2,10 @@
 #include "Utils.h"
 #include <utility>
 
-PajekParser::PajekParser(const std::string infile, LabelInterface& ilabel) :
+PajekParser::PajekParser(const fs::path infile, LabelInterface& ilabel) :
     infile(infile),ilabel(ilabel){
-
-    if (!Utils::isExistFile(infile)) {
-        throw "No such File.";
+    if (!fs::exists(infile)) {
+        throw "No such file!\n";
     }
 }
 
@@ -111,6 +110,10 @@ Node& Node::setBorderColor(const std::string& bcolor){
 
 
 const std::string Node::getSingleLine() {
+    return static_cast<const Node*>(this)->getSingleLine();
+}
+
+const std::string Node::getSingleLine() const {
     std::stringstream singleLine;
 
     singleLine << "\t" << nodeid << "\t" << ilabel->getOutputLabel();
@@ -128,6 +131,8 @@ const std::string Node::getSingleLine() {
     singleLine << std::endl;
     return singleLine.str();
 }
+
+
 
 
 Vertices::Vertices(std::vector<Node>& nodeElements):
@@ -267,5 +272,31 @@ const std::vector<Pajek> CreateFromText::run() {
     }
    
     return pajekArray;
+}
+
+
+void Pajek::output(fs::path outfile) {
+
+    std::stringstream output;
+    output << "*Vertices" << vt.size() << "\n";
+
+    //各ノード
+    std::string outputNode;
+    const std::vector<Node> nodeElements = vt.getNodeElements();
+    for (const auto& node : nodeElements) {
+        outputNode += node.getSingleLine();
+    }
+
+    output << outputNode;
+    output << "*Arcs" << "\n";
+    output << "*Edges" << "\n";
+
+    //各ノードの関係性
+    output << egs.getOutput();
+    
+    //出力ファイルに書き込み
+    std::ofstream out{ outfile };
+    out << output.str();
+    out.close();
 }
 
