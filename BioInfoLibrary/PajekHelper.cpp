@@ -78,7 +78,10 @@ Pajek PajekParser::load() {
     }
 
     Edges egs(mpair);
-    Pajek pajek(vertices, egs);
+
+    //pajekLabel（pajekオブジェクトの特定id）
+    //ここではファイル名（拡張子抜き)をpajekLabelに指定する。
+    Pajek pajek(infile.stem().string<char>(),vertices, egs);
 
     return pajek ;
 
@@ -139,13 +142,12 @@ Vertices::Vertices(std::vector<Node>& nodeElements):
     nodeElements(nodeElements){
 }
 
-
-const std::string LabelSingle::getLabel() {
+std::string LabelSingle::getLabel() {
     return label;
 }
 
 
-const std::string LabelSingle::getOutputLabel() {
+std::string LabelSingle::getOutputLabel() {
     return '"' + this->getLabel() + '"';
 }
 
@@ -164,20 +166,20 @@ LabelDouble::LabelDouble(std::string label)
     lwLabel = labels[1];
 }
 
-const std::string LabelDouble::getLabel() {
+std::string LabelDouble::getLabel() {
     return this->label;
 }
 
-const std::string LabelDouble::getUpLabel(){
+std::string LabelDouble::getUpLabel(){
     return upLabel;
 }
 
 
-const std::string LabelDouble::getLwLabel(){
+std::string LabelDouble::getLwLabel(){
     return lwLabel;
 }
 
-const std::string LabelDouble::getOutputLabel() {
+std::string LabelDouble::getOutputLabel() {
     return '"' + this->getLabel() + '"';
 }
 
@@ -185,7 +187,7 @@ void LabelDouble::setLabel(const std::string label) {
     this->label = label;
 }
 
-Edges::Edges(const std::vector<std::pair<int, int>>& mpair):
+Edges::Edges(const std::vector<std::pair<int, int>> mpair):
     mpair(mpair) {
 
     //initialize
@@ -205,6 +207,16 @@ bool Edges::isModule(int index)
     }else {
         return false;
     }
+}
+
+std::string Edges::getOutput() const {
+    std::stringstream output;
+    for (size_t i = 0; i < mpair.size(); ++i) {
+        output << "\t" << mpair[i].first;
+        output << "\t" << mpair[i].second << "1\n";
+    }
+
+    return output.str();
 }
 
 const std::vector<Pajek> CreateFromText::run() {
@@ -254,28 +266,30 @@ const std::vector<Pajek> CreateFromText::run() {
     // Edgesオブジェクトの構築
     // value(1.00-0.00)まで変動する
     std::vector<Pajek> pajekArray;
-    for (const auto& [value, idPairVec] : valComSet) {
+    std::string pajekLabel;
+    for(const auto& valCom :valComSet){
         //value ...ex. f-measure,相関係数
         //vecにはidの組み合わせが格納されている．
         //id->nodeid
         std::vector<std::pair<int, int> > idPairVec_; /**< 関係性のあるnodeidの組合せ */
         int nid_1 = 0; /**< 一つ目のnodeid */
         int nid_2 = 0; /**< 二つ目のnodeid */
-        for (const auto& idpair : idPairVec) {
+        for (const auto& idpair : valCom.second) {
             nid_1 = idLabelMap.at(idpair.first);
             nid_2 = idLabelMap.at(idpair.second);
             idPairVec_.emplace_back(std::make_pair(nid_1, nid_2));
         }
 
-        Edges edges(idPairVec_);
-        pajekArray.emplace_back(Pajek(vertices, edges)); //Verticesのptrは再確保される．
+        Edges edges(std::move(idPairVec_));
+        pajekLabel = std::to_string(valCom.first);
+        pajekArray.emplace_back(Pajek(pajekLabel,vertices, edges)); //Verticesのptrは再確保される．
     }
    
     return pajekArray;
 }
 
 
-void Pajek::output(fs::path outfile) {
+void Pajek::output(fs::path outfile) const {
 
     std::stringstream output;
     output << "*Vertices" << vt.size() << "\n";

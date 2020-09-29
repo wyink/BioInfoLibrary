@@ -55,13 +55,13 @@ public:
      * @brief     label文字列を取得
      * @return    ラベルに利用している文字列('"'を含まない）
      */
-    virtual const std::string getLabel() = 0;
+    virtual std::string getLabel() = 0;
 
     /**
      * @brief　  出力に使用するlabel文字列
      * @return   ラベルに利用している文字列（'"'を含む）
      */
-    virtual const std::string getOutputLabel() = 0;
+    virtual std::string getOutputLabel() = 0;
 
     /**
      * @brief           label文字列をセット
@@ -181,7 +181,7 @@ public:
     /**
      * @brief 部分オブジェクトのnodeElementsの要素数を返す．
      */
-    inline const int size() const {
+    inline const size_t size() const {
         return nodeElements.size();
     }
 
@@ -216,8 +216,8 @@ public:
     explicit inline LabelSingle (const std::string label) :
         label(label) {}
     ~LabelSingle() {}
-    const std::string getLabel() override;
-    const std::string getOutputLabel() override;
+    std::string getLabel() override;
+    std::string getOutputLabel() override;
     void setLabel(const std::string label) override;
     inline LabelSingle* clone(const std::string label) override {
         return new LabelSingle(label);
@@ -244,21 +244,21 @@ public:
      */
     explicit LabelDouble(std::string label);
     ~LabelDouble() {}
-    const std::string getLabel() override;
+    std::string getLabel() override;
 
     /**
      * @brief     上階層のラベルを取得
      * @return    上階層のラベル文字列
      */
-    const std::string getUpLabel();
+    std::string getUpLabel();
 
     /**
      * @brief     下階層のラベルを取得
      * @return    下階層のラベル文字列
      */
-    const std::string getLwLabel();
+    std::string getLwLabel();
 
-    const std::string getOutputLabel() override;
+    std::string getOutputLabel() override;
     void setLabel(const std::string label) override;
     inline LabelDouble* clone(const std::string label) override {
         return new LabelDouble(label);
@@ -273,7 +273,7 @@ public:
 */
 class Edges
 {
-    const std::vector<std::pair<int, int>>& mpair;
+    const std::vector<std::pair<int, int>> mpair;
     std::set<int> mnodeset;
 
 public:
@@ -282,7 +282,7 @@ public:
      * @brief     Edgesクラスのコンストラクタ
      * @detail    .netファイルにおけるNodeの繋がりを示す領域部分
      */
-    explicit Edges(const std::vector<std::pair<int, int>>& mpair);
+    explicit Edges(const std::vector<std::pair<int, int>> mpair);
 
     /**
      * @brief  該当Nodeがモジュールを形成しているかどうか
@@ -298,16 +298,11 @@ public:
         return mpair;
     }
 
-    inline const std::string getOutput()const {
-        std::stringstream output;
-        for (const auto& [node_1, node_2] : mpair) {
-            output << "\t" << node_1;
-            output << "\t" << node_2 << "1\n";
-        }
+    std::string getOutput()const ;
 
-        return output.str();
-
-    }
+    /**
+     * @brief copy constructor;
+     */
 };
 
 
@@ -345,26 +340,31 @@ public:
  */
 class Pajek
 {
+    const std::string pajekLabel; /**< このオブジェクトの識別id ex.相関0.98の時の.netなど*/
     const Vertices vt;
-    const Edges& egs;
+    const Edges egs;
 
 public:
     /**
      * @brief         Pajekオブジェクトのコンストラクタ
      * @param[vt]     全Nodeの定義の集合
      * @param[egs]    相関のある2つのNodeの集合
-     *
      */
     inline Pajek(
+        std::string pajekLabel,
         Vertices vt,
-        Edges& egs
-    ) :vt(vt), egs(egs) {}
+        Edges egs
+    ): pajekLabel(pajekLabel),vt(vt), egs(egs){}
+
+    inline std::string getPajekLbel() const {
+        return pajekLabel;
+    }
 
     /**
      *  @brief Pajekオブジェクトをnetファイルに書き出す
      *  @param[outfile] 出力ファイル名
      */
-    void output(fs::path outfile);
+    void output(fs::path outfile) const ;
 
 
 };

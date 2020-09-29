@@ -92,7 +92,8 @@ int main() {
     fm.run();
     */
 
-    fs::path infile = "G:/perflingens/out.txt";/**< 入力ファイル */
+    fs::path dir = "D:/perflingens";
+    fs::path infile = dir / "out.txt"; /**< 入力ファイル */
     LabelSingle ilabel("Label");
     
     CreateFromText cft(
@@ -104,6 +105,11 @@ int main() {
     );
     
     std::vector<Pajek> pvec = cft.run();
+    for (const auto& pajek : pvec) {
+        fs::path infile = dir;
+        infile /= pajek.getPajekLbel() + ".txt"; //string to fs::path
+        pajek.output(infile);
+    }
 
 }
 
