@@ -92,7 +92,7 @@ int main() {
     fm.run();
     */
 
-    fs::path dir = "D:/perflingens";
+    fs::path dir = "G:/perflingens";
     fs::path infile = dir / "out.txt"; /**< 入力ファイル */
     
     CreateFromText cft(
@@ -104,11 +104,11 @@ int main() {
         }
     );
     
-    std::vector<Pajek*> pvec = cft.run();
-    for (const auto* pajekptr : pvec) {
+    std::vector<std::unique_ptr<Pajek> >  pvec = cft.run();
+    for(auto iter=pvec.begin();iter != pvec.end();++iter){
         fs::path infile = dir;
-        infile /= pajekptr->getPajekLbel() + ".txt"; //string to fs::path
-        pajekptr->output(infile);
+        infile /= (*iter)->getPajekLbel() + ".txt"; //string to fs::path
+        (*iter)->output(infile);
     }
 
 }

@@ -153,7 +153,7 @@ public:
 */
 class Vertices
 {
-    std::shared_ptr<std::vector<Node*> > nodeElements;
+    std::shared_ptr<std::vector<std::shared_ptr<Node> > > nodeElements;
     Vertices(const Vertices& vt) = delete;
 
 public:
@@ -162,7 +162,7 @@ public:
 　　 * @brief     Verticesクラスのコンストラクタ
 　　 * @detail    .netファイルにおける各Nodeの定義部分
 　　 */
-    explicit Vertices(std::shared_ptr<std::vector<Node*> > nodeElements);
+    explicit Vertices(std::shared_ptr<std::vector<std::shared_ptr<Node> > > nodeElements);
 
 
     /**
@@ -177,7 +177,7 @@ public:
     *         ただし、変更不可とする．変更はこのオブジェクトの
     *         メンバ関数で行うこととする．
     */
-    inline const std::shared_ptr<std::vector<Node*> > getNodeElements() const {
+    inline const std::shared_ptr<std::vector<std::shared_ptr<Node> > > getNodeElements() const {
         return nodeElements;
     }
 
@@ -331,7 +331,7 @@ public:
     //informat
     //Nodeのふるまい（ilabel)
     //outformatはPajekクラスオブジェクトにかく
-    const std::vector<Pajek*> run();
+    const std::vector<std::unique_ptr<Pajek> > run();
 };
 
 /**

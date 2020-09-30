@@ -22,7 +22,7 @@ Pajek PajekParser::load() {
     int nodeCount = std::stoi(nodeCount_s);
 
     //Verticesオブジェクトの作成
-    std::shared_ptr<std::vector<Node*> > nodeElements;       /**< 各nodeの情報を保持する．            */
+    std::shared_ptr<std::vector<std::shared_ptr<Node> > > nodeElements;       /**< 各nodeの情報を保持する．            */
     std::vector<std::string>oneNode;       /**< 一時的に一つのnodeの情報を保持する．*/
     while (std::getline(in, line)) {
         if (line[0] == '*') {              // *Archsについては現在取り扱わない
@@ -43,14 +43,13 @@ Pajek PajekParser::load() {
         //!Todo パラメータを持たないフォーマット対応
         //Nodeオブジェクト構築に必要なパラメータ
         const int nodeid = std::stoi(oneNode[0]);         /**< 各Nodeの一意のID    */
-        std::shared_ptr<LabelInterface> label
-            = std::make_unique<LabelInterface>(ilabelptr->clone(oneNode[1])); /**< 各Nodeのラベル　    */
+        LabelInterface* ilabel_ = ilabelptr->clone(oneNode[1]);
+        std::shared_ptr<LabelInterface> label(ilabel_);    /**< 各Nodeのラベル　    */
         float x = std::stof(oneNode[2]);                  /**< 各Nodeのx座標       */
         float y = std::stof(oneNode[3]);                  /**< 各Nodeのy座標       */
         std::string icolor = oneNode[4];                  /**< 各Nodeの内側の色    */
         std::string bcolor = oneNode[5];                  /**< 各Nodeの境界線の色  */
 
-        //Node* nodeptr = new Node(nodeid, label);
         std::shared_ptr<Node> nodeptr = std::make_shared<Node>(nodeid, label);
 
         nodeptr->setPosition(x, y)->setInnerColor(icolor)->setBorderColor(bcolor);
@@ -140,7 +139,7 @@ const std::string Node::getSingleLine() const {
 
 
 
-Vertices::Vertices(std::shared_ptr<std::vector<Node*> > nodeElements):
+Vertices::Vertices(std::shared_ptr<std::vector<std::shared_ptr<Node> > > nodeElements):
     nodeElements(nodeElements){
 }
 
@@ -222,7 +221,7 @@ std::string Edges::getOutput() const {
 }
 
 
-const std::vector<Pajek*> CreateFromText::run() {
+const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
     std::ifstream in{ infile };
 
     /* id id value で一行が構成されたテキストからvalueをキーとしたmapを構成 */
@@ -258,18 +257,18 @@ const std::vector<Pajek*> CreateFromText::run() {
 
     //Nodeオブジェクトの構築
     int nodeid = 0;
-    std::shared_ptr<std::vector<Node> > nodeElements;
+    std::shared_ptr<std::vector<std::shared_ptr<Node> > > nodeElements
+        = std::make_shared<std::vector<std::shared_ptr<Node> > >();
     std::map<std::string, int> idLabelMap;
-    Node* nodeptr;
     for (const auto& id : allIdSet) {
-        std::shared_ptr<LabelInterface> ilabelptr
-            = std::make_shared<LabelInterface>(m_ilabel->clone(id));
+        ++nodeid;
+        LabelInterface* ilabelptr_ = m_ilabel->clone(id);
+        std::shared_ptr<LabelInterface> ilabelptr(ilabelptr_);
         std::shared_ptr<Node> nodeptr = std::make_shared<Node>(nodeid, ilabelptr);
         nodeptr = addproperty(std::move(nodeptr));
 
         nodeElements->emplace_back(nodeptr);
         idLabelMap[id] = nodeid;
-        ++nodeid;
     }
 
     //Verticesオブジェクトの構築
@@ -277,7 +276,7 @@ const std::vector<Pajek*> CreateFromText::run() {
 
     // Edgesオブジェクトの構築
     // value(1.00-0.00)まで変動する
-    std::vector<Pajek*> pajekArray;
+    std::vector<std::unique_ptr<Pajek> > pajekArray;
     std::string pajekLabel;
     for(const auto& valCom :valComSet){
         //value ...ex. f-measure,相関係数
@@ -298,7 +297,7 @@ const std::vector<Pajek*> CreateFromText::run() {
         pajekLabel = std::to_string(valCom.first);
         std::unique_ptr<Pajek> pajek
             = std::make_unique<Pajek>(pajekLabel, vertices, std::move(edges));
-        pajekArray.emplace_back(pajek); //Verticesのptrは再確保される．
+        pajekArray.emplace_back(std::move(pajek)); 
     }
    
     return pajekArray;
@@ -312,7 +311,7 @@ void Pajek::output(fs::path outfile) const {
 
     //各ノード
     std::string outputNode;
-    const std::shared_ptr<std::vector<Node*>> nodeElements = vtptr->getNodeElements();
+    const std::shared_ptr<std::vector<std::shared_ptr<Node> > > nodeElements = vtptr->getNodeElements();
 
     //for (const auto& node : nodeElements) {
     for(auto iter = nodeElements->begin();iter != nodeElements->end();++iter){
