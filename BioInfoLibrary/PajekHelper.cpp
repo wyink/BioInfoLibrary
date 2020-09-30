@@ -2,8 +2,8 @@
 #include "Utils.h"
 #include <utility>
 
-PajekParser::PajekParser(const fs::path infile, LabelInterface& ilabel) :
-    infile(infile),ilabel(ilabel){
+PajekParser::PajekParser(const fs::path infile, std::unique_ptr<LabelInterface> ilabelptr) :
+    infile(infile),ilabelptr(std::move(ilabelptr)){
     if (!fs::exists(infile)) {
         throw "No such file!\n";
     }
@@ -22,7 +22,7 @@ Pajek PajekParser::load() {
     int nodeCount = std::stoi(nodeCount_s);
 
     //Verticesオブジェクトの作成
-    std::vector<Node> nodeElements;        /**< 各nodeの情報を保持する．            */
+    std::shared_ptr<std::vector<Node*> > nodeElements;       /**< 各nodeの情報を保持する．            */
     std::vector<std::string>oneNode;       /**< 一時的に一つのnodeの情報を保持する．*/
     while (std::getline(in, line)) {
         if (line[0] == '*') {              // *Archsについては現在取り扱わない
@@ -43,22 +43,23 @@ Pajek PajekParser::load() {
         //!Todo パラメータを持たないフォーマット対応
         //Nodeオブジェクト構築に必要なパラメータ
         const int nodeid = std::stoi(oneNode[0]);         /**< 各Nodeの一意のID    */
-        LabelInterface* label = ilabel.clone(oneNode[1]); /**< 各Nodeのラベル　    */
+        std::shared_ptr<LabelInterface> label
+            = std::make_unique<LabelInterface>(ilabelptr->clone(oneNode[1])); /**< 各Nodeのラベル　    */
         float x = std::stof(oneNode[2]);                  /**< 各Nodeのx座標       */
         float y = std::stof(oneNode[3]);                  /**< 各Nodeのy座標       */
         std::string icolor = oneNode[4];                  /**< 各Nodeの内側の色    */
         std::string bcolor = oneNode[5];                  /**< 各Nodeの境界線の色  */
 
-        Node node(nodeid, label);
-        node.setPosition(x, y)
-            .setInnerColor(icolor)
-            .setBorderColor(bcolor);
+        //Node* nodeptr = new Node(nodeid, label);
+        std::shared_ptr<Node> nodeptr = std::make_shared<Node>(nodeid, label);
+
+        nodeptr->setPosition(x, y)->setInnerColor(icolor)->setBorderColor(bcolor);
         
-        nodeElements.emplace_back(node);
+        nodeElements->emplace_back(nodeptr);
 
     }
 
-    Vertices vertices(nodeElements);
+    std::shared_ptr<Vertices> vertices = std::make_shared<Vertices>(nodeElements);
 
     //Edgesオブジェクトの作成
     oneNode.clear();
@@ -77,38 +78,39 @@ Pajek PajekParser::load() {
         index++;
     }
 
-    Edges egs(mpair);
+    std::unique_ptr<Edges> egs = std::make_unique<Edges>(mpair);
 
     //pajekLabel（pajekオブジェクトの特定id）
     //ここではファイル名（拡張子抜き)をpajekLabelに指定する。
-    Pajek pajek(infile.stem().string<char>(),vertices, egs);
+    std::string pajekLabel = infile.stem().string<char>();
+    Pajek pajek(pajekLabel,vertices, std::move(egs));
 
     return pajek ;
 
 }
 
 void Vertices::setColor(const std::string& color) {
-    for (size_t i = 0; i < nodeElements.size(); ++i) {
-        nodeElements[i].setInnerColor(color);
-        nodeElements[i].setBorderColor(color);
+    for(auto iter = nodeElements->begin() ;iter != nodeElements->end() ; ++iter){
+        (*iter)->setInnerColor(color);
+        (*iter)->setBorderColor(color);
     }
 }
 
-Node& Node::setPosition(const float x, const float y){
+Node* Node::setPosition(const float x, const float y){
     this->x = x;
     this->y = y;
-    return *this;
+    return this;
 }
 
-Node& Node::setInnerColor(const std::string& icolor){
+Node* Node::setInnerColor(const std::string& icolor){
     this->icolor = icolor;
-    return *this;
+    return this;
 }
 
 
-Node& Node::setBorderColor(const std::string& bcolor){
+Node* Node::setBorderColor(const std::string& bcolor){
     this->bcolor = bcolor;
-    return *this;
+    return this;
 }
 
 
@@ -138,7 +140,7 @@ const std::string Node::getSingleLine() const {
 
 
 
-Vertices::Vertices(std::vector<Node>& nodeElements):
+Vertices::Vertices(std::shared_ptr<std::vector<Node*> > nodeElements):
     nodeElements(nodeElements){
 }
 
@@ -219,22 +221,30 @@ std::string Edges::getOutput() const {
     return output.str();
 }
 
-const std::vector<Pajek> CreateFromText::run() {
+
+const std::vector<Pajek*> CreateFromText::run() {
     std::ifstream in{ infile };
+
+    /* id id value で一行が構成されたテキストからvalueをキーとしたmapを構成 */
+    std::map<float,std::vector<std::pair<std::string,std::string > > > valComSet;
+    std::set<std::string> allIdSet; /*< このテキストに含まれるすべてのidset */
     std::string line;
     std::vector<std::string> vec;
     std::string id_A;
     std::string id_B;
     float value;
-    std::map<float,std::vector<std::pair<std::string,std::string > > > valComSet;
-    std::set<std::string> allIdSet;
+
     while (std::getline(in, line)) {
         vec = Utils::split(line, "\t");
-        id_A = vec[0];
-        id_B = vec[1];
-        value = std::stof(vec[2]);
+
+        id_A = vec[0];              /*< id_Aとつながるid */
+        id_B = vec[1];              /*< id_Bとつながるid */
+        value = std::stof(vec[2]);  /*< id_Aとid_Bの関連を示す値 */
+
         allIdSet.insert(id_A);
         allIdSet.insert(id_B);
+
+        //valueをキーとして同程度のつながりを持つidペアをvalComSetで管理する
         if (valComSet.count(value) == 1) {
             valComSet.at(value).emplace_back(std::make_pair(id_A, id_B));
         }
@@ -243,29 +253,31 @@ const std::vector<Pajek> CreateFromText::run() {
             std::vector<std::pair<std::string,std::string>> v{ std::make_pair(id_A,id_B) };
             valComSet[value] = v;
         }
-        
     }
 
 
     //Nodeオブジェクトの構築
     int nodeid = 0;
-    std::vector<Node> nodeElements;
+    std::shared_ptr<std::vector<Node> > nodeElements;
     std::map<std::string, int> idLabelMap;
+    Node* nodeptr;
     for (const auto& id : allIdSet) {
-        LabelInterface* ilabel = m_ilabel->clone(id);
-        Node node(nodeid, std::move(ilabel));
-        node = addproperty(node);
-        nodeElements.emplace_back(node);
+        std::shared_ptr<LabelInterface> ilabelptr
+            = std::make_shared<LabelInterface>(m_ilabel->clone(id));
+        std::shared_ptr<Node> nodeptr = std::make_shared<Node>(nodeid, ilabelptr);
+        nodeptr = addproperty(std::move(nodeptr));
+
+        nodeElements->emplace_back(nodeptr);
         idLabelMap[id] = nodeid;
         ++nodeid;
     }
 
     //Verticesオブジェクトの構築
-    Vertices vertices(nodeElements);
+    std::shared_ptr<Vertices> vertices = std::make_shared<Vertices>(nodeElements);
 
     // Edgesオブジェクトの構築
     // value(1.00-0.00)まで変動する
-    std::vector<Pajek> pajekArray;
+    std::vector<Pajek*> pajekArray;
     std::string pajekLabel;
     for(const auto& valCom :valComSet){
         //value ...ex. f-measure,相関係数
@@ -280,9 +292,13 @@ const std::vector<Pajek> CreateFromText::run() {
             idPairVec_.emplace_back(std::make_pair(nid_1, nid_2));
         }
 
-        Edges edges(std::move(idPairVec_));
+        std::unique_ptr<Edges> edges 
+            = std::make_unique<Edges>(idPairVec_);
+
         pajekLabel = std::to_string(valCom.first);
-        pajekArray.emplace_back(Pajek(pajekLabel,vertices, edges)); //Verticesのptrは再確保される．
+        std::unique_ptr<Pajek> pajek
+            = std::make_unique<Pajek>(pajekLabel, vertices, std::move(edges));
+        pajekArray.emplace_back(pajek); //Verticesのptrは再確保される．
     }
    
     return pajekArray;
@@ -292,13 +308,15 @@ const std::vector<Pajek> CreateFromText::run() {
 void Pajek::output(fs::path outfile) const {
 
     std::stringstream output;
-    output << "*Vertices" << vt.size() << "\n";
+    output << "*Vertices" << vtptr->size() << "\n";
 
     //各ノード
     std::string outputNode;
-    const std::vector<Node> nodeElements = vt.getNodeElements();
-    for (const auto& node : nodeElements) {
-        outputNode += node.getSingleLine();
+    const std::shared_ptr<std::vector<Node*>> nodeElements = vtptr->getNodeElements();
+
+    //for (const auto& node : nodeElements) {
+    for(auto iter = nodeElements->begin();iter != nodeElements->end();++iter){
+        outputNode += (*iter)->getSingleLine();
     }
 
     output << outputNode;
@@ -306,7 +324,7 @@ void Pajek::output(fs::path outfile) const {
     output << "*Edges" << "\n";
 
     //各ノードの関係性
-    output << egs.getOutput();
+    output << egsptr->getOutput();
     
     //出力ファイルに書き込み
     std::ofstream out{ outfile };

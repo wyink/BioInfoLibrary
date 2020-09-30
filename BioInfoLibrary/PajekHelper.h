@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <functional>
+#include <memory>
 #include <regex>
 #include <set>
 #include <map>
@@ -21,7 +22,7 @@ class Pajek;
 class LabelInterface;
 class PajekParser {
     const fs::path infile;
-    LabelInterface& ilabel;
+    std::unique_ptr<LabelInterface> ilabelptr;
 
 public:
     /**
@@ -31,7 +32,7 @@ public:
      */
     PajekParser(
         const fs::path infile,
-        LabelInterface& ilabel
+        std::unique_ptr<LabelInterface> ilabelptr
     );
 
     /**
@@ -82,14 +83,18 @@ public:
 
 
 /**
-* @brief
-* @note *1 ... 動的確保したポインタが存在するため値渡しを行わせない．
+* @brief Verticesの一行分を構成するNodeに関するクラス
+* @note 各NodeはPajekオブジェクトの部分オブジェクトを
+*       構成する．各NodeはPajekオブジェクトでポインタ
+*       として保持され，また複数のPajekオブジェクトで
+*       共有される．したがってメンバ変数のilabelは
+*       shared_ptrで管理している．
 */
 class Node
 {
 private:
     int nodeid;
-    LabelInterface* ilabel;
+    std::shared_ptr<LabelInterface> ilabel;
     float x;
     float y;
     std::string icolor; //空文字列で初期化
@@ -99,35 +104,24 @@ public:
     /**
      * @brief            Nodeクラスのコンストラクタ
      * @param[nodeid]    Nodeの一意のID
-     * @param[label]     Nodeが保持するラベル
+     * @param[ilabel]     Nodeが保持するラベル
      */
-    Node(const int nodeid, LabelInterface* ilabel) :
+    Node(const int nodeid, std::shared_ptr<LabelInterface> ilabel) :
         nodeid(nodeid), ilabel(ilabel),
         x(-1), y(-1) {}
-
-    //実行時の型(LabelSingle,LabelDouble)と同じ型のラベルを取得
-    //コピーコンストラクタ
-    Node(const Node& node)
-        :nodeid(node.nodeid),
-        ilabel((node.ilabel)->clone(node.ilabel->getLabel())),
-        x(node.x), y(node.y),
-        icolor(node.icolor), bcolor(node.bcolor) {}
             
 
-    inline LabelInterface* getLabelptr() const {
+    inline const std::shared_ptr<LabelInterface> getLabelptr() const {
         return ilabel;
     }
 
-    inline ~Node() {
-        delete ilabel;
-    }
 
     /**
      * @brief       各Nodeの座標をセット
      * @param[x]    各Nodeのx座標
      * @param[y]    各Nodeのy座標
      */
-    Node& setPosition(
+    Node* setPosition(
         const float x,
         const float y
     );
@@ -136,13 +130,13 @@ public:
      * @brief            各Nodeの内側の色をセット
      * @param[icolor]    各Nodeを更新する内側の色
      */
-    Node& setInnerColor(const std::string& icolor);
+    Node* setInnerColor(const std::string& icolor);
 
     /**
      * @brief            各Nodeの境界線の色をセット
      * @param[bcolor]    各Nodeを更新する境界線の色
      */
-    Node& setBorderColor(const std::string& bcolor);
+    Node* setBorderColor(const std::string& bcolor);
 
     /**
      * @brief    出力に使用するフォーマット文字列を取得
@@ -159,7 +153,8 @@ public:
 */
 class Vertices
 {
-    std::vector<Node> nodeElements;
+    std::shared_ptr<std::vector<Node*> > nodeElements;
+    Vertices(const Vertices& vt) = delete;
 
 public:
 
@@ -167,22 +162,14 @@ public:
 　　 * @brief     Verticesクラスのコンストラクタ
 　　 * @detail    .netファイルにおける各Nodeの定義部分
 　　 */
-    explicit Vertices(std::vector<Node>& nodeElements);
+    explicit Vertices(std::shared_ptr<std::vector<Node*> > nodeElements);
 
-    Vertices(const Vertices& vertices) {
-        if (this != &vertices) {
-            for (const auto& node : vertices.nodeElements) {
-                Node node_ = node;//コピーコンストラクタ呼び出し（資源再確保）
-                nodeElements.emplace_back(node_);
-            }
-        }
-    }
 
     /**
      * @brief 部分オブジェクトのnodeElementsの要素数を返す．
      */
     inline const size_t size() const {
-        return nodeElements.size();
+        return nodeElements->size();
     }
 
     /**
@@ -190,7 +177,7 @@ public:
     *         ただし、変更不可とする．変更はこのオブジェクトの
     *         メンバ関数で行うこととする．
     */
-    inline const std::vector<Node>& getNodeElements() const {
+    inline const std::shared_ptr<std::vector<Node*> > getNodeElements() const {
         return nodeElements;
     }
 
@@ -310,24 +297,41 @@ public:
 /**
  * @detail 拡張子.net以外のファイルからPajekファイル（.net)
  *         を作成するクラス
+ * @note   このオブジェクトを作成する際の第二引数は動的確保した
+ *         pointerを渡すこと。
  */
 class CreateFromText {
 private:
     const fs::path infile; //.net以外の入力ファイル
-    LabelInterface* m_ilabel; //Label文字列のふるまいを規定
-    std::function<Node&(Node&)> addproperty; //Nodeクラスのカスタマイズ
+    std::unique_ptr<LabelInterface> m_ilabel; //Label文字列のふるまいを規定
+    std::function<std::shared_ptr<Node>(std::shared_ptr<Node>)> addproperty; //Nodeクラスのカスタマイズ
+
+    /**
+     * @brief コピーコンストラクタ
+     *        メンバ変数にポインタが含まれており、また、複製に
+     *        意味がないため禁止
+     */
+    CreateFromText(const CreateFromText& cft) = delete;
 
 public:
+    /**
+     * @brief コンストラクタ
+     * @param[infile] 入力ファイル名（パス）
+     * @param[m_ilabel] Label文字列オブジェクト（必ず動的確保したリソースを受け取る）
+     * @param[addproperty] Nodeオブジェクトに追加するプロパティ
+     *                     追加しない場合はそのままのreturnで返す．
+     */
     explicit inline CreateFromText(
         const fs::path infile,
-        LabelInterface* m_ilabel,
-        std::function<Node&(Node&)> addproperty
-    ):infile(infile),m_ilabel(m_ilabel),addproperty(addproperty) {};
+        std::unique_ptr<LabelInterface> m_ilabel,
+        std::function<std::shared_ptr<Node>(std::shared_ptr<Node>)> addproperty
+    ):infile(infile),m_ilabel(std::move(m_ilabel)),addproperty(addproperty) {};
+
 
     //informat
     //Nodeのふるまい（ilabel)
     //outformatはPajekクラスオブジェクトにかく
-    const std::vector<Pajek> run();
+    const std::vector<Pajek*> run();
 };
 
 /**
@@ -341,8 +345,8 @@ public:
 class Pajek
 {
     const std::string pajekLabel; /**< このオブジェクトの識別id ex.相関0.98の時の.netなど*/
-    const Vertices vt;
-    const Edges egs;
+    std::shared_ptr<Vertices> vtptr;
+    std::unique_ptr<Edges> egsptr;
 
 public:
     /**
@@ -352,9 +356,9 @@ public:
      */
     inline Pajek(
         std::string pajekLabel,
-        Vertices vt,
-        Edges egs
-    ): pajekLabel(pajekLabel),vt(vt), egs(egs){}
+        std::shared_ptr<Vertices> vtptr,
+        std::unique_ptr<Edges> egsptr
+    ): pajekLabel(pajekLabel),vtptr(vtptr), egsptr(std::move(egsptr)){}
 
     inline std::string getPajekLbel() const {
         return pajekLabel;

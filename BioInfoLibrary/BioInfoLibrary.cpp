@@ -94,21 +94,21 @@ int main() {
 
     fs::path dir = "D:/perflingens";
     fs::path infile = dir / "out.txt"; /**< 入力ファイル */
-    LabelSingle ilabel("Label");
     
     CreateFromText cft(
         infile,
-        &ilabel,
-        [](Node& node)->Node& {
-            return node.setPosition(0.500, 0.500);
+        std::make_unique<LabelSingle>("Label"),
+        [](std::shared_ptr<Node> node)->std::shared_ptr<Node> {
+            node->setPosition(0.500, 0.500);
+            return node;
         }
     );
     
-    std::vector<Pajek> pvec = cft.run();
-    for (const auto& pajek : pvec) {
+    std::vector<Pajek*> pvec = cft.run();
+    for (const auto* pajekptr : pvec) {
         fs::path infile = dir;
-        infile /= pajek.getPajekLbel() + ".txt"; //string to fs::path
-        pajek.output(infile);
+        infile /= pajekptr->getPajekLbel() + ".txt"; //string to fs::path
+        pajekptr->output(infile);
     }
 
 }
