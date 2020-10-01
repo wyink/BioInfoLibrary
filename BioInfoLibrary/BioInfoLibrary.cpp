@@ -12,7 +12,11 @@
 int main() {
     namespace fs = std::filesystem;
 
-/* testCase 1
+    /* Case1
+    * Faa形式のファイルをFasta形式に変換
+    * 必要なIDの塩基配列のみを抽出
+    */
+    /*
     std::string faafile = "D:/perflingens/2_protein/GCA_000009685.1_ASM968v1_protein.faa";
     std::string out = "D:/perflingens/otameshi.fasta";
 
@@ -29,9 +33,13 @@ int main() {
             }
         )
         .run();
- */
+    */
 
-/*textCase2 */
+    /* Case2
+    * Blastの結果から配列IDの情報を種情報に変換してフォーマットを
+    * 整理して出力する
+    */
+
     /*
     //reference_idの変換用
     std::ifstream in{ "D:/perflingens/new_resources/5_prid_strain.txt" };
@@ -82,7 +90,10 @@ int main() {
     }
   */
 
-/*testCase3 */
+    /* Case3 
+    * F-measureを計算して指定のフォーマットで出力
+    */
+
     /*
     const fs::path indir = "G:/perflingens/4_blast/analyzedAgain";
     const fs::path out = "G:/perflingens/out.txt";
@@ -92,6 +103,9 @@ int main() {
     fm.run();
     */
 
+    /*
+    * F-measureの結果からPajek形式のファイルを作成
+    */
     fs::path dir = "G:/perflingens";
     fs::path infile = dir / "out.txt"; /**< 入力ファイル */
     
