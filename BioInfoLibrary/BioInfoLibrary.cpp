@@ -39,7 +39,6 @@ int main() {
     * Blastの結果から配列IDの情報を種情報に変換してフォーマットを
     * 整理して出力する
     */
-
     /*
     //reference_idの変換用
     std::ifstream in{ "D:/perflingens/new_resources/5_prid_strain.txt" };
@@ -71,7 +70,6 @@ int main() {
     std::string headert;
     std::regex re{ "(.+).fasta_re.txt$" };
     std::smatch sm;
-
 
     // dir_aディレクトリ直下に含まれる全ファイルを出力
     for (const fs::directory_entry& x : fs::directory_iterator("D:/perflingens/4_blast/result/")) {
@@ -120,9 +118,9 @@ int main() {
     
     std::vector<std::unique_ptr<Pajek> >  pvec = cft.run();
     for(auto iter=pvec.begin();iter != pvec.end();++iter){
-        fs::path infile = dir;
-        infile /= (*iter)->getPajekLbel() + ".txt"; //string to fs::path
-        (*iter)->output(infile);
+        fs::path outfile = dir / "9_pajek_new" ;
+        outfile /= (*iter)->getPajekLbel() + ".net"; //string to fs::path
+        (*iter)->output(outfile);
     }
 
 }

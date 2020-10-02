@@ -214,7 +214,8 @@ std::string Edges::getOutput() const {
     std::stringstream output;
     for (size_t i = 0; i < mpair.size(); ++i) {
         output << "\t" << mpair[i].first;
-        output << "\t" << mpair[i].second << "1\n";
+        output << "\t" << mpair[i].second;
+        output << "\t1\n";
     }
 
     return output.str();
@@ -240,6 +241,11 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
         id_B = vec[1];              /*< id_B‚Æ‚Â‚È‚ª‚éid */
         value = std::stof(vec[2]);  /*< id_A‚Æid_B‚ÌŠÖ˜A‚ðŽ¦‚·’l */
 
+        //value‚ð¬”‘æŽOˆÊ‚Ü‚Å‚Ì¸“x‚É•ÏŠ·
+        value *= 1000;
+        value = round(value);
+        value /= 1000;
+
         allIdSet.insert(id_A);
         allIdSet.insert(id_B);
 
@@ -249,7 +255,7 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
         }
         else
         {
-            std::vector<std::pair<std::string,std::string>> v{ std::make_pair(id_A,id_B) };
+            std::vector<std::pair<std::string,std::string> > v{ std::make_pair(id_A,id_B) };
             valComSet[value] = v;
         }
     }
@@ -278,11 +284,11 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
     // value(1.00-0.00)‚Ü‚Å•Ï“®‚·‚é
     std::vector<std::unique_ptr<Pajek> > pajekArray;
     std::string pajekLabel;
+    std::vector<std::pair<int, int> > idPairVec_; /**< ŠÖŒW«‚Ì‚ ‚énodeid‚Ì‘g‡‚¹ */
     for(const auto& valCom :valComSet){
         //value ...ex. f-measure,‘ŠŠÖŒW”
         //vec‚É‚Íid‚Ì‘g‚Ý‡‚í‚¹‚ªŠi”[‚³‚ê‚Ä‚¢‚éD
         //id->nodeid
-        std::vector<std::pair<int, int> > idPairVec_; /**< ŠÖŒW«‚Ì‚ ‚énodeid‚Ì‘g‡‚¹ */
         int nid_1 = 0; /**< ˆê‚Â–Ú‚Ìnodeid */
         int nid_2 = 0; /**< “ñ‚Â–Ú‚Ìnodeid */
         for (const auto& idpair : valCom.second) {
@@ -294,7 +300,8 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
         std::unique_ptr<Edges> edges 
             = std::make_unique<Edges>(idPairVec_);
 
-        pajekLabel = std::to_string(valCom.first);
+        pajekLabel = std::to_string(valCom.first).substr(0,5) ;//ex. 0.967000->0.967
+
         std::unique_ptr<Pajek> pajek
             = std::make_unique<Pajek>(pajekLabel, vertices, std::move(edges));
         pajekArray.emplace_back(std::move(pajek)); 
@@ -307,7 +314,7 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
 void Pajek::output(fs::path outfile) const {
 
     std::stringstream output;
-    output << "*Vertices" << vtptr->size() << "\n";
+    output << "*Vertices\t" << vtptr->size() << "\n";
 
     //Šeƒm[ƒh
     std::string outputNode;

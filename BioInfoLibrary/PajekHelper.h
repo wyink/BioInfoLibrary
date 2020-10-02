@@ -344,7 +344,7 @@ public:
  */
 class Pajek
 {
-    const std::string pajekLabel; /**< このオブジェクトの識別id ex.相関0.98の時の.netなど*/
+    const std::string pajekLabel; /**< このオブジェクトの識別id ex.相関0.980の時の.netなど*/
     std::shared_ptr<Vertices> vtptr;
     std::unique_ptr<Edges> egsptr;
 
