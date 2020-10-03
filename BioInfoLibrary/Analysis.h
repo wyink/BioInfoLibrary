@@ -144,7 +144,7 @@ class Fmeasure {
 private:
 	const fs::path indir;
 	const fs::path outfile;
-	FmeasureHandler& fh;
+	std::unique_ptr<FmeasureHandler> fh;
 
 	/**
 	 * @brief f-measureの計算を行う（run関数で実行される）
@@ -157,11 +157,11 @@ public:
 	explicit inline Fmeasure(
 		const fs::path indir,
 		const fs::path outfile,
-		FmeasureHandler& fh
-	) :indir(indir), outfile(outfile), fh(fh){}
+		std::unique_ptr<FmeasureHandler> fh
+	) :indir(indir), outfile(outfile), fh(std::move(fh)){}
 
-	void setHandler(FmeasureHandler& fh) {
-		this->fh = fh;
+	void setHandler(std::unique_ptr<FmeasureHandler> fh) {
+		this->fh = std::move(fh);
 	}
 
 	void run();

@@ -11,13 +11,13 @@ void Fmeasure::run(){
     
     // ƒ“ü—Í„
     std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[id_A]={id_A:fma,id_B:fmb,...} */
-    idCounterMap = fh.informat(indir);
+    idCounterMap = fh->informat(indir);
     
     // f-measure‚ÌŒvZ
     std::map<std::string, float> fmeasureMap = calcFmeasure(idCounterMap);
 
     // ƒo—Í„
-    fh.outformat(fmeasureMap,outfile);
+    fh->outformat(fmeasureMap,outfile);
     
 }
 
