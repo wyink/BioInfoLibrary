@@ -1,11 +1,11 @@
 #include "BlastParser.h"
 #include "Utils.h"
 
-BlastParser::BlastParser(const std::string& infile, BlastParserHandler& bph) :
-	infile(infile), bph(bph){}
+BlastParser::BlastParser(const fs::path& infile, std::shared_ptr<BlastParserHandler> bph) :
+	infile(infile), bph(std::move(bph)){}
 
 
-void BlastParser::run(const std::string& outfile, const std::string& header) {
+void BlastParser::run(const fs::path& outfile, const std::string& header) {
 
 	std::ifstream in{ infile };
 	if (!in.is_open()) {
@@ -41,7 +41,7 @@ void BlastParser::run(const std::string& outfile, const std::string& header) {
 		}
 		else {//(A,a)->(B,b)
 			//これまでの行で読み込んだクエリー (A) の書き出し
-			out << bph.valueFormatter(bquery, queryToRefSet);
+			out << bph->valueFormatter(bquery, queryToRefSet);
 			queryToRefSet.clear();
 
 			bquery = query;//queryを(b)に再登録
@@ -54,7 +54,7 @@ void BlastParser::run(const std::string& outfile, const std::string& header) {
 	}
 
 	//EOFで行う処理
-	out << bph.valueFormatter(bquery, queryToRefSet);
+	out << bph->valueFormatter(bquery, queryToRefSet);
 
 	in.close();
 	out.close();

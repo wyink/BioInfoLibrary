@@ -36,57 +36,53 @@ int main() {
     */
 
     /* Case2
-    * Blastの結果から配列IDの情報を種情報に変換してフォーマットを
+    * Blastの結果からAccessionIDの情報を種情報に変換してフォーマットを
     * 整理して出力する
     */
-    /*
-    //reference_idの変換用
-    std::ifstream in{ "D:/perflingens/new_resources/5_prid_strain.txt" };
-    std::string line;
-    std::vector<std::string> vec;
-    std::map<std::string, std::string> map;
-    while (std::getline(in, line) ){
-        vec = Utils::split(line, "\t");
-        map[vec[0].substr(1)] = vec[1];
-    }
-    in.close();
-
-    //header用（各入力ファイルの属するid）
-    std::vector<std::string> genFtpPath;
-    std::map<std::string, std::string> header; //filename->strain
-    std::ifstream in2{ "D:/perflingens/resources/prokaryotes_changed.txt" };
-    std::getline(in2, line); //skip header
-    while (std::getline(in2, line)) {
-        vec = Utils::split(line, "\t");
-        genFtpPath = Utils::split(vec[14], "/");
-        header[genFtpPath.back()] = vec[2];//strain
-    }
-    in2.close();
     
-    BlastParserPt1Imple bp1(map);
+    //各fastaファイルのAccessionIDとstrainIDの対応mapの作成
+    std::map<std::string,std::string> ac_st_map = Utils::keyValMakeFromFile(
+        "D:/perflingens/new_resources/5_prid_strain.txt",/**< 入力ファイル */
+        "\t",                                            /**< 入力ファイルに使用されているデリミタ */
+        [](std::vector<std::string>& vec)->std::vector<std::string>& {
+            vec[0] = vec[0].substr(1);/** 先頭文字の'>'は省く。vec[1]（値）は変更しない */
+            return vec;
+        }
+    ) ;
 
-    std::string infile;
-    std::string outfile;
-    std::string headert;
+    //ファイル名（パス）とstrainIDの対応mapの作成
+    std::map<std::string, std::string> fpath_stid_map = Utils::keyValMakeFromFile(
+        "D:/perflingens/resources/prokaryotes_changed.txt", /**< 入力ファイル */
+        "\t",                                               /**< 入力ファイルに使用されているデリミタ */
+        [](std::vector<std::string>& vec)->std::vector<std::string>& {
+            vec[0] = Utils::split(vec[14], "/").back(); /**< ファイル名（パス）*/
+            vec[1] = vec[2];                            /**< strainID */
+            return vec;
+        }
+    );
+    
+    //各AccessionIDに対してヒットしたAccessionIDをstrainIDに変換し、再集計したのちに出力
+    //各ファイルの1行目にはそのファイルが所属するstrainIDを出力
+    fs::path outfile;
+    std::string filename;
+    std::string header;
     std::regex re{ "(.+).fasta_re.txt$" };
     std::smatch sm;
-
-    // dir_aディレクトリ直下に含まれる全ファイルを出力
+    std::shared_ptr<BlastParserPt1Imple> bpi = std::make_shared<BlastParserPt1Imple>(ac_st_map);
     for (const fs::directory_entry& x : fs::directory_iterator("D:/perflingens/4_blast/result/")) {
-
-        infile = x.path().string();
-        BlastParser bp(infile, bp1);
-
-        outfile =  "D:/perflingens/4_blast/analyzedAgain/" + x.path().filename().string();
+        //BlastParser bp(x.path(), bpi);
+        outfile =  "D:/perflingens/4_blast/analyzedAgain" / x.path().filename();
         std::cout << outfile << "\n" ;
 
-        //header用
-        headert = x.path().filename().string();
-        regex_match(headert, sm, re);
-        std::cout << header[sm.str(1)] << std::endl;
-        bp.run(outfile,header[sm.str(1)]);
+        //入力ファイル名をstrainIDに変換して出力ファイルのheaderとして出力
+        filename = x.path().filename().string();
+        regex_match(filename, sm, re);
+        header = fpath_stid_map[sm.str(1)];
+        std::cout << header << std::endl;
+        std::make_unique<BlastParser>(x.path(), bpi)->run(outfile, header);
+        exit(0);
     }
-  */
+  
 
     /* Case3 
     * F-measureを計算して指定のフォーマットで出力
@@ -104,9 +100,10 @@ int main() {
     /*
     * F-measureの結果からPajek形式のファイルを作成
     */
+    /*
     fs::path dir = "G:/perflingens";
     fs::path infile = dir / "out.txt"; /**< 入力ファイル */
-    
+    /*
     CreateFromText cft(
         infile,
         std::make_unique<LabelSingle>("Label"),
@@ -122,6 +119,7 @@ int main() {
         outfile /= (*iter)->getPajekLbel() + ".net"; //string to fs::path
         (*iter)->output(outfile);
     }
+    */
 
 }
 

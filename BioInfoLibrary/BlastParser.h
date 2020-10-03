@@ -3,11 +3,15 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <memory>
 #include <sstream>
 #include <fstream>
 #include <iostream>
 #include <functional>
+#include <filesystem>
 #include "Utils.h"
+
+namespace fs = std::filesystem;
 
 class BlastParserHandler {
 
@@ -78,19 +82,19 @@ public:
 class BlastParser
 {
 private:
-	const std::string infile;
-	BlastParserHandler& bph;
+	const fs::path infile;
+	std::shared_ptr<BlastParserHandler> bph;
 
 public:
-	explicit BlastParser(const std::string& infile, BlastParserHandler& bph);
+	explicit BlastParser(const fs::path& infile, std::shared_ptr<BlastParserHandler> bph);
 
-	inline void setHandler(BlastParserHandler& bph) {
-		this->bph = bph;
+	inline void setHandler(std::shared_ptr<BlastParserHandler> bph) {
+		this->bph = std::move(bph);
 	}
 
 	/**
 	* @brief blast結果ファイルの解析開始
 	*/
-	void run(const std::string& outfile, const std::string& header);
+	void run(const fs::path& outfile, const std::string& header);
 };
 

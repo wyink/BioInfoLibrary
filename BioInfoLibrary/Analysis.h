@@ -4,6 +4,7 @@
 #include <fstream>
 #include <functional>
 #include <vector>
+#include <memory>
 #include <string>
 #include <set>
 #include <map>
