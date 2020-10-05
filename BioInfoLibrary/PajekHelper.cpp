@@ -226,7 +226,7 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
     std::ifstream in{ infile };
 
     /* id id value で一行が構成されたテキストからvalueをキーとしたmapを構成 */
-    std::map<float,std::vector<std::pair<std::string,std::string > > > valComSet;
+    std::map<float,std::vector<std::pair<std::string,std::string > >,std::greater<float> > valComSet;
     std::set<std::string> allIdSet; /*< このテキストに含まれるすべてのidset */
     std::string line;
     std::vector<std::string> vec;

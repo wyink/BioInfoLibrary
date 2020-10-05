@@ -113,7 +113,7 @@ void main3() {
 
 void main4() {
     fs::path dir = "D:/perflingens";
-    fs::path infile = dir / "out.txt"; /**< 入力ファイル */
+    fs::path infile = dir / "new_resources/f-measure.txt"; /**< 入力ファイル */
 
     CreateFromText cft(
         infile,
