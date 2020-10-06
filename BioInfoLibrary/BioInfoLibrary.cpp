@@ -1,11 +1,9 @@
-﻿
-#pragma once
-#include "Utils.h"
+﻿#include "Utils.h"
 #include "Analysis.h"
 #include "Formatter.h"
 #include "PajekHelper.h"
 #include "BlastParser.h"
-#include <filesystem>
+
 namespace fs = std::filesystem;
 
 /* TestCase1

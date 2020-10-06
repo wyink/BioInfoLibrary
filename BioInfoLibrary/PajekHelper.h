@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PAJEKHELPER_H_
+#define PAJEKHELPER_H_
+
 #include <iostream>
 #include <filesystem>
 #include <fstream>
@@ -193,7 +195,7 @@ class LabelSingle :public LabelInterface {
 private:
     std::string label;
     LabelSingle(const LabelSingle& ld) {}//コピーコンストラクタ
-    LabelSingle operator=(const LabelSingle& ld) {}
+    LabelSingle operator=(const LabelSingle& ld) = delete;
 
 public:
     /**
@@ -220,7 +222,7 @@ private:
     std::string upLabel;
     std::string lwLabel;
     LabelDouble(const LabelDouble& ld) {}//コピーコンストラクタ
-    LabelDouble& operator=(const LabelDouble& ld) {}
+    LabelDouble& operator=(const LabelDouble& ld) = delete;
 
 public:
 
@@ -372,3 +374,5 @@ public:
 
 
 };
+
+#endif // !PAJEKHELPER_H_

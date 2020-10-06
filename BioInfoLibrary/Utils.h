@@ -1,4 +1,7 @@
-#pragma once
+#ifndef UTILS_H_
+#define UTILS_H_
+
+
 #include <vector>
 #include <string>
 #include <fstream>
@@ -73,3 +76,5 @@ public:
     static bool isExistFile(const std::string& str) ;
 
 };
+
+#endif // !UTILS_H_

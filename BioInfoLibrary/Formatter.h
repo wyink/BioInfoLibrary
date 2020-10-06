@@ -1,4 +1,6 @@
-#pragma once
+#ifndef FORMATTER_H_
+#define FORMATTER_H_
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -54,3 +56,4 @@ public:
 
 };
 
+#endif // !FORMATTER_H_

@@ -1,0 +1,4 @@
+#ifndef BIOINFOLIBRARY_H_
+#define BIOINFOLIBRARY_H_
+
+#endif // !BIOINFOLIBRARY_H_

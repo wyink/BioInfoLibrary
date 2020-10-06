@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ANALYSIS_H_
+#define ANALYSIS_H_
+
 #include <filesystem>
 #include <iostream>
 #include <fstream>
@@ -168,4 +170,4 @@ public:
 
 };
 
-
+#endif // !ANALYSIS_H_

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef BLASTPARSER_H_
+#define BLASTPARSER_H_
+
 #include <map>
 #include <set>
 #include <string>
@@ -98,3 +100,4 @@ public:
 	void run(const fs::path& outfile, const std::string& header);
 };
 
+#endif
