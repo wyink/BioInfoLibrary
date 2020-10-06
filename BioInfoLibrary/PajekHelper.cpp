@@ -243,7 +243,7 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
 
         //value‚ğ¬”‘æOˆÊ‚Ü‚Å‚Ì¸“x‚É•ÏŠ·
         value *= 1000;
-        value = round(value);
+        value = std::floor(value);
         value /= 1000;
 
         allIdSet.insert(id_A);

@@ -3,6 +3,7 @@
 #include "Formatter.h"
 #include "PajekHelper.h"
 #include "BlastParser.h"
+#include "BioInfoLibrary.h"
 
 namespace fs = std::filesystem;
 

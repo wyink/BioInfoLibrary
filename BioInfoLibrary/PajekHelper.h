@@ -8,6 +8,7 @@
 #include <functional>
 #include <memory>
 #include <regex>
+#include <cmath>
 #include <set>
 #include <map>
 
