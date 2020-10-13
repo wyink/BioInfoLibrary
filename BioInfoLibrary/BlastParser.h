@@ -25,7 +25,7 @@ public:
 
 	virtual const std::string valueFormatter(
 		const std::string& bquery, 
-		const std::set<std::vector<std::string> >& queryToRefSet
+		const std::vector<std::vector<std::string> >& queryToRefVec
 	) = 0;
 
 	virtual const std::string outformat(
@@ -70,7 +70,7 @@ public:
 
 	const std::string valueFormatter(
 		const std::string& bquery, 
-		const std::set<std::vector<std::string> >& queryToRefSet
+		const std::vector<std::vector<std::string> >& queryToRefVec
 	) override;
 
 	const std::string outformat(
@@ -78,6 +78,39 @@ public:
 		const std::map<std::string, int>& refcounter
 	) override;
 
+};
+
+/**
+* @detail 同一クエリに対し、referenceが同一である場合に参照の配列
+*         のヒット領域が重ならない場合、スコアを加算する。
+*         また、それぞのスコアを一定値で区切り、それをクエリごと
+*         に出力する
+* 　　　　ex. 
+* 　　　　query1 reference1 
+*/
+class BlastParserPt2Imple : public BlastParserHandler {
+private :
+	std::map<std::string, std::string> queRef;
+
+public:
+	explicit BlastParserPt2Imple(const std::map<std::string, std::string>& queRef)
+		:queRef(queRef) {}
+
+	inline const std::string& convert(const std::string& reference) override {
+		return queRef[reference];
+	}
+
+	const std::string valueFormatter(
+		const std::string& bquery,
+		const std::vector<std::vector<std::string> >& queryToRefVec
+	) override;
+
+	const std::string outformat(
+		const std::string& bquery,
+		const std::map<std::string, int>& refcounter
+	) override;
+
+	
 };
 
 
