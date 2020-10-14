@@ -6,11 +6,14 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <utility>
 #include <sstream>
 #include <fstream>
 #include <iostream>
 #include <functional>
 #include <filesystem>
+#include <algorithm>
+#include <unordered_map>
 #include "Utils.h"
 
 namespace fs = std::filesystem;
@@ -30,7 +33,12 @@ public:
 
 	virtual const std::string outformat(
 		const std::string& bquery, 
-		const std::map<std::string, int>& refcounter
+		const std::unordered_map<std::string, int>& refcounter
+	) = 0;
+
+	virtual const std::string outformat(
+		const std::string& bquery,
+		const std::unordered_map<std::string, float>& refcounter
 	) = 0;
 
 };
@@ -75,8 +83,14 @@ public:
 
 	const std::string outformat(
 		const std::string& bquery, 
-		const std::map<std::string, int>& refcounter
+		const std::unordered_map<std::string, int>& refcounter
 	) override;
+
+	const std::string outformat(
+		const std::string& bquery,
+		const std::unordered_map<std::string, float>& refcounter
+	) override {}
+
 
 };
 
@@ -107,7 +121,12 @@ public:
 
 	const std::string outformat(
 		const std::string& bquery,
-		const std::map<std::string, int>& refcounter
+		const std::unordered_map<std::string, int>& refcounter
+	) override {}
+
+	const std::string outformat(
+		const std::string& bquery,
+		const std::unordered_map<std::string, float>& refcounter
 	) override;
 
 	
