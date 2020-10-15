@@ -177,7 +177,6 @@ const std::unordered_map<std::string, float>& BlastParserPt2Imple::refAlignDup3M
 const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery, const std::vector<std::vector<std::string> >& queryToRefVec) {
 	
 	std::unordered_map<std::string, float> scoreMap;
-	std::vector<std::vector<std::string> > requireRescore;
 
     //最初の要素のみ
 	std::vector<std::string> blastLine = queryToRefVec[0];
@@ -194,7 +193,12 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 
 	scoreMap[bref] = score;
 	std::pair<int,int> range = std::make_pair(startBase, endBase);
-	
+
+	bool align_sec_flag = false;       /**< 参照のアライメント箇所が2か所あるときに真 */
+	bool align_sec_again_flag = false; /**< 参照のアライメント箇所が3か所以上あるときに真^(1) */
+	std::vector<std::vector<std::string> > requireRescore; /**< 参照の末端箇所を単純比較できない参照^(1)を含むblastLine */
+	int  skip_count = 0; /**< iterを正常に戻すための変数で、参照配列が重複した場合に積算 */
+
 	for (auto iter = (queryToRefVec.begin())+1;iter != queryToRefVec.end();++iter){
 		blastLine = *iter;
 
@@ -208,8 +212,6 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 		}
 
 		//同じ参照に複数回ヒットするかの判断
-		bool align_sec_flag = false; /**< 参照のアライメント箇所が2か所あるときにtrue. */
-		bool align_sec_again_flag = false; /**< 参照のアライメント箇所が3か所以上あるときに真 */
 		if (ref == bref) {
 			//前の行とアライメントが重複しない場合はスコアを加算
 			if (range.second < startBase || range.first > endBase) {
@@ -221,23 +223,27 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 						requireRescore.emplace_back(blastLine);
 					}//重複しないアライメント箇所が3か所目
 					else {
-						align_sec_again_flag = true;
 
 						//3ヶ所以上アライメント箇所が存在する場合はこの方法では正確に判断できない
 						//ため、別のアルゴリズムで再処理を行う。従ってこの参照に対するスコアは初期化する。
+						align_sec_again_flag = true;
 						scoreMap[bref] = 0;
 
-						//再処理を行うため、当該行を除いて2つ前の行の要素を渡す
-						--iter;
-						std::vector<std::string> tmpBlastLine = (*iter);
-						requireRescore.emplace_back(tmpBlastLine);
+						//再処理を行うため、当該行とその前の2行分の要素を取得する
+						//skipした場合、その分も戻して代入する
+						int back_from_now = 2 + skip_count;
+						iter -= back_from_now ;
 
-						--iter;
+						std::vector<std::string> tmpBlastLine;
+						for (int i = 0; i < back_from_now; ++i) {
+							tmpBlastLine = (*iter);
+							requireRescore.emplace_back(tmpBlastLine);
+							++iter;
+						}
+
+						//現在の行
 						tmpBlastLine = (*iter);
 						requireRescore.emplace_back(tmpBlastLine);
-
-						//元に戻す
-						iter += 2;
 
 					}
 				}//重複しないアライメント箇所が当該参照に対して2か所目
@@ -249,6 +255,7 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 			}
 			else{
 				//アライメント部分が前の行と重複するためスキップ
+				++skip_count;
 				continue;
 			}
 
@@ -259,6 +266,7 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 			range = std::make_pair(startBase, endBase);
 			bref = blastLine[REFERENCE_ID];
 
+			skip_count = 0;
 			if (align_sec_flag) {
 				align_sec_flag = false;
 				align_sec_again_flag = false;

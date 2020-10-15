@@ -145,7 +145,7 @@ void main5() {
         std::make_pair("reference", "no-change")
     };
 
-    const fs::path infile = "G:/perflingens/temp.txt";
+    const fs::path infile = "G:/perflingens/test2.txt";
     BlastParser bp(infile, std::make_shared<BlastParserPt2Imple>(queref));
     bp.run("G:/perflingens/output.txt", "histgram");
 
