@@ -18,6 +18,27 @@
 
 namespace fs = std::filesystem;
 
+/**
+* @brief BLAST application から出力されるタブ区切りのファイルの
+*        それぞれのカラム
+*/
+enum BlastResultParam {
+	QUERY_ID,
+	REFERENCE_ID,
+	IDENTITY,
+	ALIGHN_LEN,
+	MIS_MATCH_COUNT,
+	GAP_COUNT,
+	QUERY_START,
+	QUERY_END,
+	REF_START,
+	REF_END,
+	E_VALUE,
+	SCORE,
+	QUERY_LEN,
+	REF_LEN
+};
+
 class BlastParserHandler {
 
 public:
@@ -89,7 +110,9 @@ public:
 	const std::string outformat(
 		const std::string& bquery,
 		const std::unordered_map<std::string, float>& refcounter
-	) override {}
+	) override {
+		return "";
+	}
 
 
 };
@@ -105,6 +128,11 @@ public:
 class BlastParserPt2Imple : public BlastParserHandler {
 private :
 	std::map<std::string, std::string> queRef;
+
+	const std::unordered_map<std::string, float>& refAlignDup3More(
+		std::unordered_map<std::string, float>& scoreMap,
+		std::vector<std::vector<std::string> > requireRescore
+	);
 
 public:
 	explicit BlastParserPt2Imple(const std::map<std::string, std::string>& queRef)
@@ -122,7 +150,9 @@ public:
 	const std::string outformat(
 		const std::string& bquery,
 		const std::unordered_map<std::string, int>& refcounter
-	) override {}
+	) override {
+		return "";
+	}
 
 	const std::string outformat(
 		const std::string& bquery,

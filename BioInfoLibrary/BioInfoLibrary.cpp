@@ -29,9 +29,17 @@ void main3();
 */
 void main4();
 
+/* TestCase5
+* blast結果ファイルからスコアを100刻みでヒストグラム化する
+* また、結果ファイルのアライメント箇所は重複しない場合には加算
+* 
+*/
+void main5();
+
 int main() {
 
-    main4();
+    //main4();
+    main5();
 
 }
 
@@ -129,4 +137,17 @@ void main4() {
         outfile /= (*iter)->getPajekLbel() + ".net"; //string to fs::path
         (*iter)->output(outfile);
     }
+}
+
+void main5() {
+    //referenceIDの変換は今回行わない。
+    std::map<std::string, std::string> queref{
+        std::make_pair("reference", "no-change")
+    };
+
+    const fs::path infile = "G:/perflingens/temp.txt";
+    BlastParserPt2Imple bp2(queref);
+    BlastParser bp(infile, std::make_shared<BlastParserPt2Imple>(bp2));
+    bp.run("output.txt", "histgram");
+
 }

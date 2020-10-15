@@ -1,12 +1,12 @@
 #include "BlastParser.h"
 #include "Utils.h"
 
+
 BlastParser::BlastParser(const fs::path& infile, std::shared_ptr<BlastParserHandler> bph) :
 	infile(infile), bph(std::move(bph)){}
 
 
 void BlastParser::run(const fs::path& outfile, const std::string& header) {
-
 	std::ifstream in{ infile };
 	if (!in.is_open()) {
 		std::cout << "Can't open the file!" << std::endl;
@@ -91,6 +91,89 @@ const std::string BlastParserPt1Imple::outformat(const std::string& bquery, cons
 }
 
 
+const std::unordered_map<std::string, float>& BlastParserPt2Imple::refAlignDup3More(
+	std::unordered_map<std::string, float>& scoreMap, std::vector<std::vector<std::string> > requireRescore){
+		
+
+		//最初の要素（行）の処理
+		std::vector<std::string> blastLine = requireRescore[0];
+		std::string brf                    = blastLine[REFERENCE_ID];
+		std::string reference              = blastLine[REFERENCE_ID]; 
+		int startBase                      = std::stoi(blastLine[REF_START]);
+		int endBase                        = std::stoi(blastLine[REF_END]);
+		float score                        = std::stof(blastLine[SCORE]);
+
+		std::vector<int> hitBaseLoc; /**< アライメントした参照側の配列の場所 */
+		scoreMap[reference] = score;
+
+		//クエリと参照が逆向きにアライメントした場合.
+		if (endBase < startBase) {
+			std::swap(startBase, endBase);
+		}
+
+		for (int i = startBase; i <= endBase; ++i) {
+			hitBaseLoc.push_back(i);
+		}
+
+		//２つめの要素（２行目）以降の処理
+		for (auto iter = requireRescore.begin() + 1; iter != requireRescore.end(); ++iter) {
+
+			blastLine = (*iter);
+			reference = blastLine[REFERENCE_ID];
+			startBase = std::stoi(blastLine[REF_START]);
+			endBase   = std::stoi(blastLine[REF_END]);
+			score     = std::stof(blastLine[SCORE]);
+
+			//クエリと参照が逆向きにアライメントした場合.
+			if (endBase < startBase) {
+				std::swap(startBase, endBase);
+			}
+
+			
+			if (reference != brf) {
+				hitBaseLoc.clear(); //前行の参照のアライメント箇所は破棄
+
+				scoreMap[reference] = score;
+
+				//参照アライメント箇所の再登録（この行）
+				for (int i = startBase; i <= endBase; ++i) {
+					hitBaseLoc.push_back(i);
+				}
+
+				brf = reference;
+
+			}
+			else {
+				//同一配列の別箇所にアライメントした場合.
+
+				std::unordered_map<int,bool> tmpMap; /**< この行の参照アライメント箇所保持 */
+
+				for (int i = startBase; i <= endBase; ++i) {
+					tmpMap[i] = true;
+				}
+
+				bool flag = false; /**< 参照のアライメント箇所が重複したかどうか */
+				for (const auto& i : hitBaseLoc) {
+					if(tmpMap.count(i)== 1){
+						flag = true;
+						break;
+					}
+				}
+
+				//アライメント領域が重複しない場合 ＝＞histBaseLocに登録
+				if (!flag) {
+					for (int i = startBase; i <= endBase; ++i) {
+						hitBaseLoc.push_back(i);
+					}
+					scoreMap[reference] += score;
+				}
+			}
+
+		}
+
+	return scoreMap;
+}
+
 const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery, const std::vector<std::vector<std::string> >& queryToRefVec) {
 	
 	bool align_sec_flag = false;
@@ -105,32 +188,32 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 
     //最初の要素のみ
 	blastLine = queryToRefVec[0];
-	startBase = std::stoi(blastLine[7]);
-	endBase   = std::stoi(blastLine[8]);
-	score     = std::stof(blastLine[10]);
+	startBase = std::stoi(blastLine[QUERY_START]);
+	endBase   = std::stoi(blastLine[QUERY_END]);
+	score     = std::stof(blastLine[SCORE]);
 
 	//クエリと参照が逆向きにアライメントした場合
 	if (endBase < startBase) {
 		std::swap(startBase, endBase);
 	}
 
-	scoreMap[blastLine[1]] = score;
-	bref = blastLine[2];
+	scoreMap[blastLine[SCORE]] = score;
+	bref = blastLine[REFERENCE_ID];
 	range = std::make_pair(startBase, endBase);
 	
 	for (auto iter = (queryToRefVec.begin())+1;iter != queryToRefVec.end();++iter){
 		blastLine = *iter;
 
-		startBase = std::stoi(blastLine[7]);
-		endBase   = std::stoi(blastLine[8]);
-		score     = std::stof(blastLine[10]);
+		startBase = std::stoi(blastLine[REF_START]);
+		endBase   = std::stoi(blastLine[REF_END]);
+		score     = std::stof(blastLine[SCORE]);
 
 		if (endBase < startBase) {
 			std::swap(startBase, endBase);
 		}
 
 		//同じ参照に複数回ヒットした場合
-		if (blastLine[1] == bref) {
+		if (blastLine[REFERENCE_ID] == bref) {
 			//アライメントが重複しない場合(スコアの加算）
 			if (range.second < startBase || range.first > endBase) {
 
@@ -152,83 +235,19 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 
 		}
 		else { //前の行と異なる参照にヒットした場合
-			scoreMap[blastLine[1]] = score ;
+			scoreMap[blastLine[SCORE]] = score ;
 			align_sec_flag = false;
 		}
 
 		range = std::make_pair(startBase, endBase);
-		bref = blastLine[1];
+		bref = blastLine[REFERENCE_ID];
 	}
 
-    //重複しないアライメント箇所が3か所以上ある可能性がある場合
-	startBase = 0;
-	endBase = 0;
-	score = 0;
-	std::string reference;
 	if (requireRescore.size() > 0) {
-		std::vector<int> hitBaseLoc;
 
-		//firstLblastLine;
-		blastLine = requireRescore[0];
-		reference = blastLine[1];
-		startBase = std::stoi(blastLine[7]);
-		endBase = std::stoi(blastLine[8]);
-		score = std::stof(blastLine[10]);
+		//重複しないアライメント箇所が3か所以上ある可能性がある場合
+		scoreMap = refAlignDup3More(scoreMap,requireRescore); 
 
-		scoreMap[reference] = score ;
-		for (int i = startBase; i <= endBase; ++i) {
-			hitBaseLoc.push_back(i);
-		}
-		std::string brf = blastLine[1];
-
-		for (auto iter = requireRescore.begin() + 1; iter != requireRescore.end();++iter){
-			blastLine = (*iter);
-
-			reference = blastLine[1];
-			startBase = std::stoi(blastLine[7]);
-			endBase   = std::stoi(blastLine[8]);
-			score    = std::stof(blastLine[10]);	
-
-			//クエリと参照が逆向きにアライメントした場合.
-			if (endBase < startBase) {
-				std::swap(startBase, endBase);
-			}
-
-
-			if (reference != brf) {
-				//当該行の処理
-				hitBaseLoc.clear();
-				scoreMap[reference] = score;
-				for (int i = startBase; i <= endBase; ++i) {
-					hitBaseLoc.push_back(i);
-				}
-			}
-			else {
-				//アライメント領域が重複する場合
-				std::vector<int>tmpVec;
-				for (int i = startBase; i <= endBase;++i) {
-					tmpVec.push_back(i);
-				}
-
-				bool flag = false;
-				for (const auto& i : hitBaseLoc) {
-					if (std::find(tmpVec.begin(), tmpVec.end(), i) != tmpVec.end()) {
-						flag = true;
-						break;
-					}
-				}
-
-				//アライメント領域が重複しない場合 ＝＞histBaseLocに登録
-				if (!flag) {
-					for (int i = startBase; i <= endBase; ++i) {
-						hitBaseLoc.push_back(i);
-					}
-					scoreMap[reference] += score;
-				}
-			}
-
-			brf = reference;
-		}
 	}
 
     //outformatして返却
