@@ -53,11 +53,6 @@ public:
 	) = 0;
 
 	virtual const std::string outformat(
-		const std::string& bquery, 
-		const std::unordered_map<std::string, int>& refcounter
-	) = 0;
-
-	virtual const std::string outformat(
 		const std::string& bquery,
 		const std::unordered_map<std::string, float>& refcounter
 	) = 0;
@@ -102,17 +97,11 @@ public:
 		const std::vector<std::vector<std::string> >& queryToRefVec
 	) override;
 
-	const std::string outformat(
-		const std::string& bquery, 
-		const std::unordered_map<std::string, int>& refcounter
-	) override;
 
-	const std::string outformat(
+	 const std::string outformat(
 		const std::string& bquery,
 		const std::unordered_map<std::string, float>& refcounter
-	) override {
-		return "";
-	}
+	) override;
 
 
 };
@@ -147,16 +136,10 @@ public:
 		const std::vector<std::vector<std::string> >& queryToRefVec
 	) override;
 
-	const std::string outformat(
-		const std::string& bquery,
-		const std::unordered_map<std::string, int>& refcounter
-	) override {
-		return "";
-	}
 
 	const std::string outformat(
 		const std::string& bquery,
-		const std::unordered_map<std::string, float>& refcounter
+		const std::unordered_map<std::string, float>& scoreMap
 	) override;
 
 	

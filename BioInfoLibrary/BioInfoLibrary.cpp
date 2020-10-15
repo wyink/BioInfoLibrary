@@ -146,8 +146,7 @@ void main5() {
     };
 
     const fs::path infile = "G:/perflingens/temp.txt";
-    BlastParserPt2Imple bp2(queref);
-    BlastParser bp(infile, std::make_shared<BlastParserPt2Imple>(bp2));
-    bp.run("output.txt", "histgram");
+    BlastParser bp(infile, std::make_shared<BlastParserPt2Imple>(queref));
+    bp.run("G:/perflingens/output.txt", "histgram");
 
 }

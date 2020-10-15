@@ -61,7 +61,7 @@ void BlastParser::run(const fs::path& outfile, const std::string& header) {
 }
 
 const std::string BlastParserPt1Imple::valueFormatter(const std::string& bquery, const std::vector<std::vector<std::string> >& queryToRefVec) {
-	std::unordered_map <std::string, int> refcounter; /**< keyは参照を変換後のid valはその存在数 */
+	std::unordered_map <std::string, float> refcounter; /**< keyは参照を変換後のid valはその存在数 */
 	std::string refid; /**< 参照を変換後に使用するid*/
 
 
@@ -75,12 +75,12 @@ const std::string BlastParserPt1Imple::valueFormatter(const std::string& bquery,
 	return outformat(bquery, refcounter);
 }
 
-const std::string BlastParserPt1Imple::outformat(const std::string& bquery, const std::unordered_map<std::string,int>& refcounter){
+const std::string BlastParserPt1Imple::outformat(const std::string& bquery, const std::unordered_map<std::string,float>& refcounter){
 	std::stringstream outtext;
 	outtext << ">" << bquery << "\t" << refcounter.size() << "\n";
 
-	for (const auto& [ref, counter] : refcounter) {
-		outtext << ref << ":" << counter << ",";
+	for (auto iter = refcounter.begin(); iter != refcounter.end();++iter ) {
+		outtext << iter->first << ":" << static_cast<int>(iter->second)<< ",";
 	}
 
 	std::string ret = outtext.str();
@@ -176,34 +176,29 @@ const std::unordered_map<std::string, float>& BlastParserPt2Imple::refAlignDup3M
 
 const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery, const std::vector<std::vector<std::string> >& queryToRefVec) {
 	
-	bool align_sec_flag = false;
-	float score   = 0.0f ;
-	int startBase = 0 ;
-	int endBase   = 0 ;
-	std::string bref;
-	std::pair<int,int> range;
-	std::vector<std::string> blastLine;
 	std::unordered_map<std::string, float> scoreMap;
 	std::vector<std::vector<std::string> > requireRescore;
 
     //最初の要素のみ
-	blastLine = queryToRefVec[0];
-	startBase = std::stoi(blastLine[QUERY_START]);
-	endBase   = std::stoi(blastLine[QUERY_END]);
-	score     = std::stof(blastLine[SCORE]);
+	std::vector<std::string> blastLine = queryToRefVec[0];
+	std::string ref                    = blastLine[REFERENCE_ID];
+	std::string bref                   = blastLine[REFERENCE_ID];
+	int startBase                      = std::stoi(blastLine[REF_START]);
+	int endBase                        = std::stoi(blastLine[REF_END]);
+	float score                        = std::stof(blastLine[SCORE]);
 
 	//クエリと参照が逆向きにアライメントした場合
 	if (endBase < startBase) {
 		std::swap(startBase, endBase);
 	}
 
-	scoreMap[blastLine[SCORE]] = score;
-	bref = blastLine[REFERENCE_ID];
-	range = std::make_pair(startBase, endBase);
+	scoreMap[bref] = score;
+	std::pair<int,int> range = std::make_pair(startBase, endBase);
 	
 	for (auto iter = (queryToRefVec.begin())+1;iter != queryToRefVec.end();++iter){
 		blastLine = *iter;
 
+		ref       = blastLine[REFERENCE_ID];
 		startBase = std::stoi(blastLine[REF_START]);
 		endBase   = std::stoi(blastLine[REF_END]);
 		score     = std::stof(blastLine[SCORE]);
@@ -212,16 +207,40 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 			std::swap(startBase, endBase);
 		}
 
-		//同じ参照に複数回ヒットした場合
-		if (blastLine[REFERENCE_ID] == bref) {
-			//アライメントが重複しない場合(スコアの加算）
+		//同じ参照に複数回ヒットするかの判断
+		bool align_sec_flag = false; /**< 参照のアライメント箇所が2か所あるときにtrue. */
+		bool align_sec_again_flag = false; /**< 参照のアライメント箇所が3か所以上あるときに真 */
+		if (ref == bref) {
+			//前の行とアライメントが重複しない場合はスコアを加算
 			if (range.second < startBase || range.first > endBase) {
 
-				//アライメント領域を追加（複数ヒット用）
+				//重複しないアライメント箇所が3か所以上の場合
 				if (align_sec_flag) {
-					scoreMap[bref] = 0;
-					requireRescore.emplace_back(blastLine);
-				}
+					//重複しないアライメント箇所が4か所以上
+					if (align_sec_again_flag) {
+						requireRescore.emplace_back(blastLine);
+					}//重複しないアライメント箇所が3か所目
+					else {
+						align_sec_again_flag = true;
+
+						//3ヶ所以上アライメント箇所が存在する場合はこの方法では正確に判断できない
+						//ため、別のアルゴリズムで再処理を行う。従ってこの参照に対するスコアは初期化する。
+						scoreMap[bref] = 0;
+
+						//再処理を行うため、当該行を除いて2つ前の行の要素を渡す
+						--iter;
+						std::vector<std::string> tmpBlastLine = (*iter);
+						requireRescore.emplace_back(tmpBlastLine);
+
+						--iter;
+						tmpBlastLine = (*iter);
+						requireRescore.emplace_back(tmpBlastLine);
+
+						//元に戻す
+						iter += 2;
+
+					}
+				}//重複しないアライメント箇所が当該参照に対して2か所目
 				else {
 					scoreMap[bref] += score;
 					align_sec_flag = true;
@@ -235,62 +254,70 @@ const std::string BlastParserPt2Imple::valueFormatter(const std::string& bquery,
 
 		}
 		else { //前の行と異なる参照にヒットした場合
-			scoreMap[blastLine[SCORE]] = score ;
-			align_sec_flag = false;
+
+			scoreMap[ref] = score ;
+			range = std::make_pair(startBase, endBase);
+			bref = blastLine[REFERENCE_ID];
+
+			if (align_sec_flag) {
+				align_sec_flag = false;
+				align_sec_again_flag = false;
+			}
 		}
 
-		range = std::make_pair(startBase, endBase);
-		bref = blastLine[REFERENCE_ID];
 	}
 
 	if (requireRescore.size() > 0) {
 
 		//重複しないアライメント箇所が3か所以上ある可能性がある場合
-		scoreMap = refAlignDup3More(scoreMap,requireRescore); 
+		scoreMap = this->refAlignDup3More(scoreMap,requireRescore); 
 
 	}
 
     //outformatして返却
-	return outformat(bquery, scoreMap);
+	return this->outformat(bquery, scoreMap);
 
 }
 
-const std::string BlastParserPt2Imple::outformat(const std::string& bquery, const std::unordered_map <std::string, float>& scoreMap) {
+
+/**
+* score  100 200 300 400 500 ... n*100
+* query1   2  20   3  40   2 ...  0 //この関数で返却する行の文字列・例
+*/
+const std::string BlastParserPt2Imple::outformat(const std::string& bquery, const std::unordered_map<std::string, float>& scoreMap) {
 	const int histgramStep = 100; //ヒストグラムで表示する際の１ブロックの刻み幅
-	/**
-	* score  100 200 300 400 500 ... n*100
-	* query1   2  20   3  40   2 ...  0 //この関数で返却する行の文字列・例
-	*/
 
 	//ヒストグラムで描画する際の最大値を確定
+
 	auto max_idx = std::max_element(
-		std::begin(scoreMap),
-		std::end(scoreMap),
+		scoreMap.begin(),
+		scoreMap.end() ,
 		[](const std::pair<std::string, float>& p1, const std::pair<std::string, float >& p2) {
 			return p1.second < p2.second;
 		}
 	);
 
-	std::vector<int> RangeCount; /**< index =ヒストグラムの幅,val = カウント */
+	//ヒストグラムの各要素の初期化
+	std::map<int,int> RangeCount; /**< index =ヒストグラムの幅,val = カウント */
 	for (int i = 0; i <= ((max_idx->second) / histgramStep); ++i) {
 		RangeCount[i] = 0;
 	}
 
 	int idx = 0;
-	for (auto iter = scoreMap.begin(); iter != scoreMap.end();++iter) {
-		idx = int(iter->second/histgramStep);
+	for (auto iter = scoreMap.begin(); iter != scoreMap.end(); ++iter) {
+		idx = static_cast<int>(iter->second) / histgramStep;
 		++RangeCount[idx];
 	}
 
 	//ヒストグラムで描画する際の軸が小さい(idxが小さい）ものから書き出す
 	std::string returnLine = bquery;
 	for (auto iter = RangeCount.begin(); iter != RangeCount.end(); ++iter) {
-		returnLine += "\t" + std::to_string(*iter);
-
+		returnLine += "\t" + std::to_string(iter->second);
 	}
 
 	return (returnLine + "\n");
-
 }
+
+
 
 
