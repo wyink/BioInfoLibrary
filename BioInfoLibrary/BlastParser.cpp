@@ -92,7 +92,7 @@ const std::string BlastParserPt1Imple::outformat(const std::string& bquery, cons
 
 
 const std::unordered_map<std::string, float>& BlastParserPt2Imple::refAlignDup3More(
-	std::unordered_map<std::string, float>& scoreMap, std::vector<std::vector<std::string> > requireRescore){
+	std::unordered_map<std::string, float>& scoreMap, std::vector<std::vector<std::string> >& requireRescore){
 		
 
 		//最初の要素（行）の処理

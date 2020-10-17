@@ -38,9 +38,7 @@ void main5();
 
 int main() {
 
-    //main4();
-    main5();
-
+    main2();
 }
 
 void main1() {
@@ -64,8 +62,8 @@ void main1() {
 
 void main2() {
     //各fastaファイルのAccessionIDとstrainIDの対応mapの作成
-    std::map<std::string, std::string> ac_st_map = Utils::keyValMakeFromFile(
-        "D:/perflingens/new_resources/5_prid_strain.txt",/**< 入力ファイル */
+    std::unordered_map<std::string, std::string> ac_st_map = Utils::keyValMakeFromFile(
+        "G:/perflingens/new_resources/5_prid_strain.txt",/**< 入力ファイル */
         "\t",                                            /**< 入力ファイルに使用されているデリミタ */
         [](std::vector<std::string>& vec)->std::vector<std::string>& {
             vec[0] = vec[0].substr(1);/** 先頭文字の'>'は省く。vec[1]（値）は変更しない */
@@ -74,8 +72,8 @@ void main2() {
     );
 
     //ファイル名（パス）とstrainIDの対応mapの作成
-    std::map<std::string, std::string> fpath_stid_map = Utils::keyValMakeFromFile(
-        "D:/perflingens/resources/prokaryotes_changed.txt", /**< 入力ファイル */
+    std::unordered_map<std::string, std::string> fpath_stid_map = Utils::keyValMakeFromFile(
+        "G:/perflingens/resources/prokaryotes_changed.txt", /**< 入力ファイル */
         "\t",                                               /**< 入力ファイルに使用されているデリミタ */
         [](std::vector<std::string>& vec)->std::vector<std::string>& {
             vec[0] = Utils::split(vec[14], "/").back(); /**< ファイル名（パス）*/
@@ -92,17 +90,16 @@ void main2() {
     std::regex re{ "(.+).fasta_re.txt$" };
     std::smatch sm;
     std::shared_ptr<BlastParserPt1Imple> bpi = std::make_shared<BlastParserPt1Imple>(ac_st_map);
-    for (const fs::directory_entry& x : fs::directory_iterator("D:/perflingens/4_blast/result/")) {
-        outfile = "D:/perflingens/4_blast/analyzedAgain" / x.path().filename();
+    for (const fs::directory_entry& x : fs::directory_iterator("G:/perflingens/4_blast/result/")) {
+        outfile = "G:/perflingens/4_blast/analyzedAgain2" / x.path().filename();
         std::cout << outfile << "\n";
 
         //入力ファイル名をstrainIDに変換して出力ファイルのheaderとして出力
         filename = x.path().filename().string();
         regex_match(filename, sm, re);
-        header = fpath_stid_map[sm.str(1)];
+        header = fpath_stid_map.at(sm.str(1));
         std::cout << header << std::endl;
         std::make_unique<BlastParser>(x.path(), bpi)->run(outfile, header);
-        exit(0);
     }
 
 }
@@ -110,8 +107,8 @@ void main2() {
 void main3() {
 
     Fmeasure fm(
-        "D:/perflingens/4_blast/analyzedAgain", /**< 入力ディレクトリ */
-        "D:/perflingens/out.txt",               /**< 出力ファイル */
+        "G:/perflingens/4_blast/analyzedAgain", /**< 入力ディレクトリ */
+        "G:/perflingens/out.txt",               /**< 出力ファイル */
         std::make_unique<FmeasurePt1>(FmeasurePt1::CountUpWay::Exist)
     );
 

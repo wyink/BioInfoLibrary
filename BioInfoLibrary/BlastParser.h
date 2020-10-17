@@ -2,7 +2,6 @@
 #define BLASTPARSER_H_
 
 #include <map>
-#include <set>
 #include <string>
 #include <vector>
 #include <memory>
@@ -81,15 +80,15 @@ public:
  */
 class BlastParserPt1Imple : public BlastParserHandler {
 private:
-	std::map<std::string, std::string> queRef;
+	std::unordered_map<std::string, std::string> queRef;
 
 public:
-	explicit BlastParserPt1Imple(const std::map<std::string, std::string>& queRef) 
+	explicit BlastParserPt1Imple(const std::unordered_map<std::string, std::string>& queRef) 
 		:queRef(queRef) {}
 
 
 	inline const std::string& convert(const std::string& reference) override {
-		return queRef[reference];
+		return queRef.at(reference);
 	}
 
 	const std::string valueFormatter(
@@ -120,7 +119,7 @@ private :
 
 	const std::unordered_map<std::string, float>& refAlignDup3More(
 		std::unordered_map<std::string, float>& scoreMap,
-		std::vector<std::vector<std::string> > requireRescore
+		std::vector<std::vector<std::string> >& requireRescore
 	);
 
 public:

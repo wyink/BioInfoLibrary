@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <memory>
 #include <string>
@@ -30,7 +32,7 @@ public:
 	*        変換する
 	* @param[path] 入力ファイル/入力ディレクトリ
 	*/
-	virtual std::map<std::string, std::map<std::string, int> > 
+	virtual std::unordered_map<std::string, std::unordered_map<std::string, int> > 
 		informat(const fs::path& path) = 0;
 
 	/*
@@ -120,12 +122,13 @@ public:
 	* @param[indir] 全てのidのファイル(id_A~id_D)が存在するディレクトリ
 	* @return {id_A:{id_A:fma,~id_D:fmd},...id_D:{id_A:fma,~id_D:fmd}}
 	*/
-	std::map<std::string, std::map<std::string, int> > 
+	std::unordered_map<std::string, std::unordered_map<std::string, int> > 
 		informat(const fs::path& indir) override;
 
 	/**
 	* @brief idA\tidB f-measure valueで出力
-	* 
+	* @param[fmeasureMap] タグと対応するf-measure値の連想配列。出力するため、mapを使用
+	* @param[out] 出力ファイルパス
 	*/
 	void outformat(
 		const std::map<std::string,float>& fmeasureMap,
@@ -134,7 +137,6 @@ public:
 
 private:
 	const CountUpWay cuway;
-
 
 };
 
@@ -152,7 +154,7 @@ private:
 	 * @brief f-measureの計算を行う（run関数で実行される）
 	 */
 	const std::map<std::string, float> calcFmeasure(
-		const std::map<std::string, std::map<std::string, int> >& idCounterMap
+		const std::unordered_map<std::string, std::unordered_map<std::string, int> >& idCounterMap
 	);
 
 public:

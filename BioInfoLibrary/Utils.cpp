@@ -55,7 +55,7 @@ std::vector<std::string> Utils::split(const std::string& line, const char* delim
 }
 
 
-std::map<std::string, std::string> Utils::keyValMakeFromFile(
+std::unordered_map<std::string, std::string> Utils::keyValMakeFromFile(
     const fs::path& infile,
     const char* del,
     std::function<std::vector<std::string>&(std::vector<std::string>&)> func) {
@@ -63,7 +63,7 @@ std::map<std::string, std::string> Utils::keyValMakeFromFile(
     std::ifstream in{ infile };
     std::string line;
     std::vector<std::string> vec;
-    std::map<std::string, std::string> keyValMap;
+    std::unordered_map<std::string, std::string> keyValMap;
     while (std::getline(in, line)) {
         vec = Utils::split(line, del);
         vec = func(vec);

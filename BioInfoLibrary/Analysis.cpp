@@ -10,8 +10,7 @@ void Fmeasure::run(){
     }
     
     // ＜入力＞
-    std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[id_A]={id_A:fma,id_B:fmb,...} */
-    idCounterMap = fh->informat(indir);
+    std::unordered_map<std::string, std::unordered_map<std::string, int> > idCounterMap = fh->informat(indir);
     
     // f-measureの計算
     std::map<std::string, float> fmeasureMap = calcFmeasure(idCounterMap);
@@ -22,38 +21,42 @@ void Fmeasure::run(){
 }
 
 //private-method 
-const std::map<std::string, float> Fmeasure::calcFmeasure(const std::map<std::string, std::map<std::string, int> >& idCounterMap) {
-    std::set<std::string> memo;
+const std::map<std::string, float> Fmeasure::calcFmeasure(const std::unordered_map<std::string, std::unordered_map<std::string, int> >& idCounterMap) {
+    std::unordered_set<std::string> memo;
     int denominator = 0;
     int fraction = 0;
     int hit = 0;
     float fmeasure = 0.00f;
-    std::map<std::string, float> fmeasureMap;
-    for (const auto& [selfidA, stCountA] : idCounterMap) {
-        for (const auto& [selfidB, stCountB] : idCounterMap) {
-
-            if (selfidA == selfidB) {
+    std::map<std::string, float> fmeasureMap; //出力するため
+    //for (const auto& [selfidA, stCountA] : idCounterMap) {
+    for (auto iter_A = idCounterMap.begin();iter_A != idCounterMap.end();++iter_A){
+        //for (const auto& [selfidB, stCountB] : idCounterMap) {
+        for(auto iter_B = idCounterMap.begin();iter_B != idCounterMap.end();++iter_B){
+            if (iter_A->first == iter_B->first) {
                 continue;
             }
-            else if (memo.find(selfidB + "\t" + selfidA) != memo.end()) {
+            else if (memo.find(iter_B->first + "\t" + iter_A->first) != memo.end()) {
                 //裏返しはskip
                 continue;
             }
             else {
-                denominator = int(stCountA.at(selfidA)) + int(stCountB.at(selfidB));
-                hit = stCountA.at(selfidB) + stCountB.at(selfidA);
+                denominator = (iter_A->second).at(iter_A->first) + (iter_B->second).at(iter_B->first);
+                //denominator = int(stCountA.at(selfidA)) + int(stCountB.at(selfidB));
+                hit = (iter_A->second).at(iter_B->first) + (iter_B->second).at(iter_A->first);
+                //hit = stCountA.at(selfidB) + stCountB.at(selfidA);
+
                 fmeasure = (float)hit / denominator;
-                fmeasureMap[selfidA + "\t" + selfidB] = fmeasure;
-                memo.insert(selfidA + "\t" + selfidB);
+                fmeasureMap[iter_A->first + "\t" + iter_B->first] = fmeasure;
+                memo.insert(iter_A->first + "\t" + iter_B->first);
             }
         }
     }
     return fmeasureMap;
 }
 
-std::map<std::string, std::map<std::string,int> > FmeasurePt1::informat(const fs::path& indir) {
+std::unordered_map<std::string, std::unordered_map<std::string,int> > FmeasurePt1::informat(const fs::path& indir) {
     std::string line;
-    std::map<std::string, std::map<std::string, int> > idCounterMap; /**< map[idA]={idA:count,idB:count,...} */
+    std::unordered_map<std::string, std::unordered_map<std::string, int> > idCounterMap; /**< map[idA]={idA:count,idB:count,...} */
     std::vector<std::string> idCountPairVec;  /**< (id:counter),(id:counter),... */
     std::vector<std::string> idCountVec;      /**< id:counter */
     fs::path infile; /**< 入力ファイル */

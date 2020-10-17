@@ -8,7 +8,7 @@
 #include <filesystem>
 #include <iostream>
 #include <functional>
-#include <map>
+#include <unordered_map>
 
 namespace fs = std::filesystem;
 
@@ -63,7 +63,7 @@ public:
      * @param[func]   key,value‚ğ©—R‚Éİ’è‚µ‚Ä•Ô‹p‚·‚é‚½‚ß‚ÌŠÖ”
      * @return        ì¬‚³‚ê‚½map
      */
-    static std::map<std::string, std::string> keyValMakeFromFile(
+    static std::unordered_map<std::string, std::string> keyValMakeFromFile(
         const fs::path& infile,
         const char* del,
         std::function<std::vector<std::string>&(std::vector<std::string>&)> func
