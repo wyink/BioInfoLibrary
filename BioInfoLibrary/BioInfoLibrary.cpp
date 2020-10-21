@@ -138,7 +138,7 @@ void main4() {
 
 void main5() {
     //referenceIDの変換は今回行わない。
-    std::map<std::string, std::string> queref{
+    std::unordered_map<std::string, std::string> queref{
         std::make_pair("reference", "no-change")
     };
 

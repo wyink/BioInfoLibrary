@@ -115,7 +115,7 @@ public:
 */
 class BlastParserPt2Imple : public BlastParserHandler {
 private :
-	std::map<std::string, std::string> queRef;
+	std::unordered_map<std::string, std::string> queRef;
 
 	const std::unordered_map<std::string, float>& refAlignDup3More(
 		std::unordered_map<std::string, float>& scoreMap,
@@ -123,11 +123,11 @@ private :
 	);
 
 public:
-	explicit BlastParserPt2Imple(const std::map<std::string, std::string>& queRef)
+	explicit BlastParserPt2Imple(const std::unordered_map<std::string, std::string>& queRef)
 		:queRef(queRef) {}
 
 	inline const std::string& convert(const std::string& reference) override {
-		return queRef[reference];
+		return queRef.at(reference);
 	}
 
 	const std::string valueFormatter(
