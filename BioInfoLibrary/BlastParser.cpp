@@ -2,7 +2,7 @@
 #include "Utils.h"
 
 
-BlastParser::BlastParser(const fs::path& infile, std::shared_ptr<BlastParserHandler> bph) :
+BlastParser::BlastParser(const fs::path& infile, std::shared_ptr<IBlastParser> bph) :
 	infile(infile), bph(std::move(bph)){}
 
 
