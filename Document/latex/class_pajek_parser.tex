@@ -1,0 +1,100 @@
+\hypertarget{class_pajek_parser}{}\doxysection{Pajek\+Parser クラス}
+\label{class_pajek_parser}\index{PajekParser@{PajekParser}}
+
+
+{\ttfamily \#include $<$Pajek\+Helper.\+h$>$}
+
+\doxysubsection*{公開メンバ関数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pajek_parser_aa9ac99d0cf2742699a1184b902fe4b7c}{Pajek\+Parser}} (const fs\+::path infile, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_label_interface}{Label\+Interface}} $>$ ilabelptr)
+\begin{DoxyCompactList}\small\item\em Pajek\+Parserオブジェクトのコンストラクタ \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_pajek}{Pajek}} \mbox{\hyperlink{class_pajek_parser_a1c017dd86b1d6c9e43bf72a133c0bd2b}{load}} ()
+\begin{DoxyCompactList}\small\item\em .netファイルをロード \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{構築子と解体子}
+\mbox{\Hypertarget{class_pajek_parser_aa9ac99d0cf2742699a1184b902fe4b7c}\label{class_pajek_parser_aa9ac99d0cf2742699a1184b902fe4b7c}} 
+\index{PajekParser@{PajekParser}!PajekParser@{PajekParser}}
+\index{PajekParser@{PajekParser}!PajekParser@{PajekParser}}
+\doxysubsubsection{\texorpdfstring{PajekParser()}{PajekParser()}}
+{\footnotesize\ttfamily Pajek\+Parser\+::\+Pajek\+Parser (\begin{DoxyParamCaption}\item[{const fs\+::path}]{infile,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_label_interface}{Label\+Interface}} $>$}]{ilabelptr }\end{DoxyParamCaption})}
+
+
+
+Pajek\+Parserオブジェクトのコンストラクタ 
+
+
+\begin{DoxyParams}{引数}
+{\em \mbox{[}infile\mbox{]}} & 読み込むファイル（拡張子.\+net) \\
+\hline
+{\em \mbox{[}ilabelptr\mbox{]}} & ラベルで使用するハンドラ  読み込みたい.\+netファイルのパスをセット \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{関数詳解}
+\mbox{\Hypertarget{class_pajek_parser_a1c017dd86b1d6c9e43bf72a133c0bd2b}\label{class_pajek_parser_a1c017dd86b1d6c9e43bf72a133c0bd2b}} 
+\index{PajekParser@{PajekParser}!load@{load}}
+\index{load@{load}!PajekParser@{PajekParser}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_pajek}{Pajek}} Pajek\+Parser\+::load (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+.netファイルをロード 
+
+\begin{DoxyReturn}{戻り値}
+入力ファイルの情報を保持した\+Pajekオブジェクト 
+\end{DoxyReturn}
+$<$ 各nodeの情報を保持する． ~\newline
+
+
+$<$ 一時的に一つのnodeの情報を保持する．
+
+一行ずつ以下の文字列からnodeオブジェクトを生成 ex. 533 \char`\"{}\+S\+R\+P076876/\+S\+R\+R3720069\char`\"{} 1.\+033 1.\+033
+
+Todo パラメータを持たないフォーマット対応
+
+$<$ 各\+Nodeの一意の\+ID ~\newline
+
+
+$<$ 各\+Nodeのラベル　 ~\newline
+
+
+$<$ 各\+Nodeのx座標 ~\newline
+
+
+$<$ 各\+Nodeのy座標 ~\newline
+
+
+$<$ 各\+Nodeの内側の色 ~\newline
+
+
+$<$ 各\+Nodeの境界線の色 ~\newline
+
+
+$<$ ペアの一つのnodeid ~\newline
+
+
+$<$ ペアのもう一つのnodeid ~\newline
+
+
+$<$ moduleのペアのvector ~\newline
+
+
+$<$ nodeidの走査に利用する一時変数 ~\newline
+呼び出し関係図\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{class_pajek_parser_a1c017dd86b1d6c9e43bf72a133c0bd2b_cgraph}
+\end{center}
+\end{figure}
+
+
+このクラス詳解は次のファイルから抽出されました\+:\begin{DoxyCompactItemize}
+\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8h}{Pajek\+Helper.\+h}}\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8cpp}{Pajek\+Helper.\+cpp}}\end{DoxyCompactItemize}

@@ -47,10 +47,10 @@ enum BlastResultParam {
 * 2. BLAST結果ファイルの1レコードを利用して行う具体的な処理内容
 * 3. 出力フォーマット
 */
-class IBlastParser{
+class BlastParserHandler {
 public:
-	IBlastParser() = default;
-	virtual ~IBlastParser() = default;
+	BlastParserHandler() = default;
+	virtual ~BlastParserHandler() = default;
 
 	/**
 	* @brief BLAST結果ファイルの2カラム目の参照側IDをそれに紐づく別のIDに変換
@@ -101,7 +101,7 @@ public:
  * 
  * -------------------------------------------
  */
-class BlastParserPt1Imple : public IBlastParser {
+class BlastParserPt1Imple : public BlastParserHandler {
 private:
 	std::unordered_map<std::string, std::string> queRef;
 
@@ -136,7 +136,7 @@ public:
 * 　　　　ex. 
 * 　　　　query1 reference1 
 */
-class BlastParserPt2Imple : public IBlastParser {
+class BlastParserPt2Imple : public BlastParserHandler {
 private :
 	std::unordered_map<std::string, std::string> queRef;
 
@@ -172,12 +172,12 @@ class BlastParser
 {
 private:
 	const fs::path infile;
-	std::shared_ptr<IBlastParser> bph;
+	std::shared_ptr<BlastParserHandler> bph;
 
 public:
-	explicit BlastParser(const fs::path& infile, std::shared_ptr<IBlastParser> bph);
+	explicit BlastParser(const fs::path& infile, std::shared_ptr<BlastParserHandler> bph);
 
-	inline void setHandler(std::shared_ptr<IBlastParser> bph) {
+	inline void setHandler(std::shared_ptr<BlastParserHandler> bph) {
 		this->bph = std::move(bph);
 	}
 

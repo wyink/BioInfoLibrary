@@ -1,0 +1,136 @@
+\hypertarget{_blast_parser_8h}{}\doxysection{Bio\+Info\+Library/\+Blast\+Parser.h ファイル}
+\label{_blast_parser_8h}\index{BioInfoLibrary/BlastParser.h@{BioInfoLibrary/BlastParser.h}}
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+map$>$}\newline
+{\ttfamily \#include \char`\"{}Utils.\+h\char`\"{}}\newline
+Blast\+Parser.\+h の依存先関係図\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_blast_parser_8h__incl}
+\end{center}
+\end{figure}
+被依存関係図\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_blast_parser_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{クラス}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_blast_parser_handler}{Blast\+Parser\+Handler}}
+\begin{DoxyCompactList}\small\item\em B\+L\+A\+S\+T結果ファイルを解析する際に利用できるハンドラ \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_blast_parser_pt1_imple}{Blast\+Parser\+Pt1\+Imple}}
+\begin{DoxyCompactList}\small\item\em blast結果ファイルの参照側を変換してその値をカウントアップして出力 \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_blast_parser_pt2_imple}{Blast\+Parser\+Pt2\+Imple}}
+\item 
+class \mbox{\hyperlink{class_blast_parser}{Blast\+Parser}}
+\end{DoxyCompactItemize}
+\doxysubsection*{列挙型}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476}{Blast\+Result\+Param}} \{ \newline
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476aee6c4a67c9d91144addcc0ea8d789451}{Q\+U\+E\+R\+Y\+\_\+\+ID}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476ac2a164959b4e73f5dddf02f1202cd6c6}{R\+E\+F\+E\+R\+E\+N\+C\+E\+\_\+\+ID}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476af235bf7b95ec64961eab8529ec59311d}{I\+D\+E\+N\+T\+I\+TY}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a69039d247182a319d91c09cc21f938c7}{A\+L\+I\+G\+H\+N\+\_\+\+L\+EN}}, 
+\newline
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a41958ff633e61c2c116535152d30d780}{M\+I\+S\+\_\+\+M\+A\+T\+C\+H\+\_\+\+C\+O\+U\+NT}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a8f6a6ed6146cee63637b594d601862ef}{G\+A\+P\+\_\+\+C\+O\+U\+NT}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476aa41fc1938881480ad33ed265cb9df412}{Q\+U\+E\+R\+Y\+\_\+\+S\+T\+A\+RT}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a9b4a0aa404cc5b8e7cbf94a1ff3f9d43}{Q\+U\+E\+R\+Y\+\_\+\+E\+ND}}, 
+\newline
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a1c3def98743db2f9aebd823a5693f8ab}{R\+E\+F\+\_\+\+S\+T\+A\+RT}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a3eeb244da7795c99c1e4dad48868afd0}{R\+E\+F\+\_\+\+E\+ND}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a0dee119b993099738000a4fb4b2289fb}{E\+\_\+\+V\+A\+L\+UE}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476af57444a2814db96222f09035ff269767}{S\+C\+O\+RE}}, 
+\newline
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a5d13f0395911fea54a066c658ebe6e1b}{Q\+U\+E\+R\+Y\+\_\+\+L\+EN}}, 
+\mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476ad049c24d24e71b29aeede46278eca94d}{R\+E\+F\+\_\+\+L\+EN}}
+ \}
+\begin{DoxyCompactList}\small\item\em B\+L\+A\+ST application から出力されるタブ区切りのファイルの それぞれのカラム \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{列挙型詳解}
+\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476}} 
+\index{BlastParser.h@{BlastParser.h}!BlastResultParam@{BlastResultParam}}
+\index{BlastResultParam@{BlastResultParam}!BlastParser.h@{BlastParser.h}}
+\doxysubsubsection{\texorpdfstring{BlastResultParam}{BlastResultParam}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476}{Blast\+Result\+Param}}}
+
+
+
+B\+L\+A\+ST application から出力されるタブ区切りのファイルの それぞれのカラム 
+
+\begin{DoxyEnumFields}{列挙値}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{QUERY\_ID@{QUERY\_ID}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!QUERY\_ID@{QUERY\_ID}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476aee6c4a67c9d91144addcc0ea8d789451}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476aee6c4a67c9d91144addcc0ea8d789451}} 
+Q\+U\+E\+R\+Y\+\_\+\+ID&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{REFERENCE\_ID@{REFERENCE\_ID}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!REFERENCE\_ID@{REFERENCE\_ID}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476ac2a164959b4e73f5dddf02f1202cd6c6}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476ac2a164959b4e73f5dddf02f1202cd6c6}} 
+R\+E\+F\+E\+R\+E\+N\+C\+E\+\_\+\+ID&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{IDENTITY@{IDENTITY}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!IDENTITY@{IDENTITY}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476af235bf7b95ec64961eab8529ec59311d}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476af235bf7b95ec64961eab8529ec59311d}} 
+I\+D\+E\+N\+T\+I\+TY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALIGHN\_LEN@{ALIGHN\_LEN}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!ALIGHN\_LEN@{ALIGHN\_LEN}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a69039d247182a319d91c09cc21f938c7}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a69039d247182a319d91c09cc21f938c7}} 
+A\+L\+I\+G\+H\+N\+\_\+\+L\+EN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MIS\_MATCH\_COUNT@{MIS\_MATCH\_COUNT}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!MIS\_MATCH\_COUNT@{MIS\_MATCH\_COUNT}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a41958ff633e61c2c116535152d30d780}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a41958ff633e61c2c116535152d30d780}} 
+M\+I\+S\+\_\+\+M\+A\+T\+C\+H\+\_\+\+C\+O\+U\+NT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{GAP\_COUNT@{GAP\_COUNT}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!GAP\_COUNT@{GAP\_COUNT}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a8f6a6ed6146cee63637b594d601862ef}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a8f6a6ed6146cee63637b594d601862ef}} 
+G\+A\+P\+\_\+\+C\+O\+U\+NT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{QUERY\_START@{QUERY\_START}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!QUERY\_START@{QUERY\_START}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476aa41fc1938881480ad33ed265cb9df412}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476aa41fc1938881480ad33ed265cb9df412}} 
+Q\+U\+E\+R\+Y\+\_\+\+S\+T\+A\+RT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{QUERY\_END@{QUERY\_END}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!QUERY\_END@{QUERY\_END}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a9b4a0aa404cc5b8e7cbf94a1ff3f9d43}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a9b4a0aa404cc5b8e7cbf94a1ff3f9d43}} 
+Q\+U\+E\+R\+Y\+\_\+\+E\+ND&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{REF\_START@{REF\_START}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!REF\_START@{REF\_START}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a1c3def98743db2f9aebd823a5693f8ab}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a1c3def98743db2f9aebd823a5693f8ab}} 
+R\+E\+F\+\_\+\+S\+T\+A\+RT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{REF\_END@{REF\_END}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!REF\_END@{REF\_END}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a3eeb244da7795c99c1e4dad48868afd0}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a3eeb244da7795c99c1e4dad48868afd0}} 
+R\+E\+F\+\_\+\+E\+ND&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{E\_VALUE@{E\_VALUE}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!E\_VALUE@{E\_VALUE}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a0dee119b993099738000a4fb4b2289fb}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a0dee119b993099738000a4fb4b2289fb}} 
+E\+\_\+\+V\+A\+L\+UE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SCORE@{SCORE}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!SCORE@{SCORE}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476af57444a2814db96222f09035ff269767}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476af57444a2814db96222f09035ff269767}} 
+S\+C\+O\+RE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{QUERY\_LEN@{QUERY\_LEN}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!QUERY\_LEN@{QUERY\_LEN}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a5d13f0395911fea54a066c658ebe6e1b}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476a5d13f0395911fea54a066c658ebe6e1b}} 
+Q\+U\+E\+R\+Y\+\_\+\+L\+EN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{REF\_LEN@{REF\_LEN}!BlastParser.h@{BlastParser.h}}\index{BlastParser.h@{BlastParser.h}!REF\_LEN@{REF\_LEN}}}\mbox{\Hypertarget{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476ad049c24d24e71b29aeede46278eca94d}\label{_blast_parser_8h_ae8752f2a6f1e6e25d95ff95bada8e476ad049c24d24e71b29aeede46278eca94d}} 
+R\+E\+F\+\_\+\+L\+EN&\\
+\hline
+
+\end{DoxyEnumFields}

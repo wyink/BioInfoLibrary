@@ -1,0 +1,80 @@
+\hypertarget{class_pajek}{}\doxysection{Pajek クラス}
+\label{class_pajek}\index{Pajek@{Pajek}}
+
+
+Pajekファイルの要素(\+Vertices,\+Edges)を保持するオブジェクト  
+
+
+
+
+{\ttfamily \#include $<$Pajek\+Helper.\+h$>$}
+
+\doxysubsection*{公開メンバ関数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pajek_a8ecfb4ef9a4ba186433ae3eb2b9d58cc}{Pajek}} (std\+::string pajek\+Label, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vertices}{Vertices}} $>$ vtptr, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_edges}{Edges}} $>$ egsptr)
+\begin{DoxyCompactList}\small\item\em Pajekオブジェクトのコンストラクタ \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_pajek_a6ece34652019d31f8bcd791977e0195d}{get\+Pajek\+Lbel}} () const
+\item 
+void \mbox{\hyperlink{class_pajek_ae2d902091d2e64fed8d68189b0803e1d}{output}} (fs\+::path outfile) const
+\begin{DoxyCompactList}\small\item\em Pajekオブジェクトをnetファイルに書き出す \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{詳解}
+Pajekファイルの要素(\+Vertices,\+Edges)を保持するオブジェクト 
+
+\begin{DoxyNote}{覚え書き}
+部分オブジェクトに動的確保したメモリが存在するのでコピーコンストラクタ を利用して新たにメモリを動的に確保する必要がある。従って コンストラクタでは値渡しで受け取る．//明示的にコピーコンストラクタを 呼び出して資源を確保する．（\+Verticesオブジェクトを複製して利用するため） 
+\end{DoxyNote}
+
+
+\doxysubsection{構築子と解体子}
+\mbox{\Hypertarget{class_pajek_a8ecfb4ef9a4ba186433ae3eb2b9d58cc}\label{class_pajek_a8ecfb4ef9a4ba186433ae3eb2b9d58cc}} 
+\index{Pajek@{Pajek}!Pajek@{Pajek}}
+\index{Pajek@{Pajek}!Pajek@{Pajek}}
+\doxysubsubsection{\texorpdfstring{Pajek()}{Pajek()}}
+{\footnotesize\ttfamily Pajek\+::\+Pajek (\begin{DoxyParamCaption}\item[{std\+::string}]{pajek\+Label,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_vertices}{Vertices}} $>$}]{vtptr,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_edges}{Edges}} $>$}]{egsptr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Pajekオブジェクトのコンストラクタ 
+
+
+\begin{DoxyParams}{引数}
+{\em \mbox{[}pajek\+Label\mbox{]}} & オブジェクトの識別ラベル \\
+\hline
+{\em \mbox{[}vtptr\mbox{]}} & 全\+Nodeの定義の集合 \\
+\hline
+{\em \mbox{[}egsptr\mbox{]}} & 相関のある2つの\+Nodeの集合 \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{関数詳解}
+\mbox{\Hypertarget{class_pajek_a6ece34652019d31f8bcd791977e0195d}\label{class_pajek_a6ece34652019d31f8bcd791977e0195d}} 
+\index{Pajek@{Pajek}!getPajekLbel@{getPajekLbel}}
+\index{getPajekLbel@{getPajekLbel}!Pajek@{Pajek}}
+\doxysubsubsection{\texorpdfstring{getPajekLbel()}{getPajekLbel()}}
+{\footnotesize\ttfamily std\+::string Pajek\+::get\+Pajek\+Lbel (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_pajek_ae2d902091d2e64fed8d68189b0803e1d}\label{class_pajek_ae2d902091d2e64fed8d68189b0803e1d}} 
+\index{Pajek@{Pajek}!output@{output}}
+\index{output@{output}!Pajek@{Pajek}}
+\doxysubsubsection{\texorpdfstring{output()}{output()}}
+{\footnotesize\ttfamily void Pajek\+::output (\begin{DoxyParamCaption}\item[{fs\+::path}]{outfile }\end{DoxyParamCaption}) const}
+
+
+
+Pajekオブジェクトをnetファイルに書き出す 
+
+
+\begin{DoxyParams}{引数}
+{\em \mbox{[}outfile\mbox{]}} & 出力ファイル名 \\
+\hline
+\end{DoxyParams}
+
+
+このクラス詳解は次のファイルから抽出されました\+:\begin{DoxyCompactItemize}
+\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8h}{Pajek\+Helper.\+h}}\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8cpp}{Pajek\+Helper.\+cpp}}\end{DoxyCompactItemize}

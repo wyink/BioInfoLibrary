@@ -1,0 +1,80 @@
+\hypertarget{class_edges}{}\doxysection{Edges クラス}
+\label{class_edges}\index{Edges@{Edges}}
+
+
+相関のある2つのノードの集合を扱うクラス  
+
+
+
+
+{\ttfamily \#include $<$Pajek\+Helper.\+h$>$}
+
+\doxysubsection*{公開メンバ関数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_edges_a3ed79abfda39ec0a64a319ed2e885754}{Edges}} (const std\+::vector$<$ std\+::pair$<$ int, int $>$$>$ mpair)
+\begin{DoxyCompactList}\small\item\em Edgesクラスのコンストラクタ \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_edges_a654a60e3171df0286923c80208c3de63}{is\+Module}} (int index)
+\begin{DoxyCompactList}\small\item\em 該当\+Nodeがモジュールを形成しているかどうか \end{DoxyCompactList}\item 
+const std\+::vector$<$ std\+::pair$<$ int, int $>$ $>$ \& \mbox{\hyperlink{class_edges_a57dcc1fe630d53b234621f6593997337}{get\+Mpair}} () const
+\begin{DoxyCompactList}\small\item\em メンバ変数mpairを返却 \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_edges_a1c948297ccb73700dc50e615fddc7221}{get\+Output}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{詳解}
+相関のある2つのノードの集合を扱うクラス 
+
+\doxysubsection{構築子と解体子}
+\mbox{\Hypertarget{class_edges_a3ed79abfda39ec0a64a319ed2e885754}\label{class_edges_a3ed79abfda39ec0a64a319ed2e885754}} 
+\index{Edges@{Edges}!Edges@{Edges}}
+\index{Edges@{Edges}!Edges@{Edges}}
+\doxysubsubsection{\texorpdfstring{Edges()}{Edges()}}
+{\footnotesize\ttfamily Edges\+::\+Edges (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::pair$<$ int, int $>$$>$}]{mpair }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Edgesクラスのコンストラクタ 
+
+拡張子netのファイルにおいて\+Nodeの繋がりを示す領域部分 
+
+\doxysubsection{関数詳解}
+\mbox{\Hypertarget{class_edges_a57dcc1fe630d53b234621f6593997337}\label{class_edges_a57dcc1fe630d53b234621f6593997337}} 
+\index{Edges@{Edges}!getMpair@{getMpair}}
+\index{getMpair@{getMpair}!Edges@{Edges}}
+\doxysubsubsection{\texorpdfstring{getMpair()}{getMpair()}}
+{\footnotesize\ttfamily const std\+::vector$<$std\+::pair$<$int, int$>$ $>$\& Edges\+::get\+Mpair (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+メンバ変数mpairを返却 
+
+\mbox{\Hypertarget{class_edges_a1c948297ccb73700dc50e615fddc7221}\label{class_edges_a1c948297ccb73700dc50e615fddc7221}} 
+\index{Edges@{Edges}!getOutput@{getOutput}}
+\index{getOutput@{getOutput}!Edges@{Edges}}
+\doxysubsubsection{\texorpdfstring{getOutput()}{getOutput()}}
+{\footnotesize\ttfamily std\+::string Edges\+::get\+Output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_edges_a654a60e3171df0286923c80208c3de63}\label{class_edges_a654a60e3171df0286923c80208c3de63}} 
+\index{Edges@{Edges}!isModule@{isModule}}
+\index{isModule@{isModule}!Edges@{Edges}}
+\doxysubsubsection{\texorpdfstring{isModule()}{isModule()}}
+{\footnotesize\ttfamily bool Edges\+::is\+Module (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+該当\+Nodeがモジュールを形成しているかどうか 
+
+
+\begin{DoxyRetVals}{戻り値}
+{\em true} & Nodeがモジュールを形成している場合 \\
+\hline
+{\em false} & Nodeがモジュールを形成していない場合 \\
+\hline
+\end{DoxyRetVals}
+
+
+このクラス詳解は次のファイルから抽出されました\+:\begin{DoxyCompactItemize}
+\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8h}{Pajek\+Helper.\+h}}\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8cpp}{Pajek\+Helper.\+cpp}}\end{DoxyCompactItemize}
