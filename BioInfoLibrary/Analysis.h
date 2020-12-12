@@ -20,11 +20,11 @@ namespace fs = std::filesystem;
 * @brief fmeasureを計算するクラスの入出力を規定するインタフェース
 *         
 */
-class FmeasureHandler {
+class IFmeasure {
 public:
 
-	FmeasureHandler() = default;
-	virtual ~FmeasureHandler() = default;
+	IFmeasure() = default;
+	virtual ~IFmeasure() = default;
 
 	/*
 	* @brief 入力ファイルに依存する処理
@@ -58,7 +58,7 @@ public:
 *        出力ファイル形式例 : strainA/strainB f-measure value
 */
 
-class FmeasurePt1 :public FmeasureHandler{
+class FmeasurePt1 :public IFmeasure{
 public:
 	/*
 	* @brief あるidと自身を含むすべてのidとの関連値の集計方法
@@ -144,13 +144,13 @@ private:
 
 /**
  * @brief f-measureの計算結果を送出するクラス
- *        入力，出力のフォーマットはFmeasureHandlerで規定
+ *        入力，出力のフォーマットはIFmeasureで規定
  */
 class Fmeasure {
 private:
 	const fs::path indir;
 	const fs::path outfile;
-	std::unique_ptr<FmeasureHandler> fh;
+	std::unique_ptr<IFmeasure> fh;
 
 	/**
 	 * @brief f-measureの計算を行う（run関数で実行される）
@@ -163,10 +163,10 @@ public:
 	explicit inline Fmeasure(
 		const fs::path indir,
 		const fs::path outfile,
-		std::unique_ptr<FmeasureHandler> fh
+		std::unique_ptr<IFmeasure> fh
 	) :indir(indir), outfile(outfile), fh(std::move(fh)){}
 
-	void setHandler(std::unique_ptr<FmeasureHandler> fh) {
+	void setHandler(std::unique_ptr<IFmeasure> fh) {
 		this->fh = std::move(fh);
 	}
 
