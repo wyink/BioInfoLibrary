@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.20"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BioInfoLibrary: BlastParserHandler クラス</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">BioInfoLibrary
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.20 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_blast_parser_handler.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="class_blast_parser_handler-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">BlastParserHandler クラス<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>BLAST結果ファイルを解析する際に利用できるハンドラ  
+ <a href="class_blast_parser_handler.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="_blast_parser_8h_source.html">BlastParser.h</a>&gt;</code></p>
+<div class="dynheader">
+BlastParserHandler の継承関係図</div>
+<div class="dyncontent">
+<div class="center"><img src="class_blast_parser_handler__inherit__graph.png" border="0" usemap="#a_blast_parser_handler_inherit__map" alt="Inheritance graph"/></div>
+<map name="_blast_parser_handler_inherit__map" id="a_blast_parser_handler_inherit__map">
+<area shape="rect" title="BLAST結果ファイルを解析する際に利用できるハンドラ" alt="" coords="91,5,226,32"/>
+<area shape="rect" href="class_blast_parser_pt1_imple.html" title="blast結果ファイルの参照側を変換してその値をカウントアップして出力" alt="" coords="5,80,147,107"/>
+<area shape="rect" href="class_blast_parser_pt2_imple.html" title=" " alt="" coords="171,80,312,107"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">凡例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a4337f9508bf8d73eca584bdd14d2b521"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blast_parser_handler.html#a4337f9508bf8d73eca584bdd14d2b521">BlastParserHandler</a> ()=default</td></tr>
+<tr class="separator:a4337f9508bf8d73eca584bdd14d2b521"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6418d52a1b4b952fe8b4b1d636b1864"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blast_parser_handler.html#ad6418d52a1b4b952fe8b4b1d636b1864">~BlastParserHandler</a> ()=default</td></tr>
+<tr class="separator:ad6418d52a1b4b952fe8b4b1d636b1864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62797cf7875ab649bb97212dbfb3ffe3"><td class="memItemLeft" align="right" valign="top">virtual const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blast_parser_handler.html#a62797cf7875ab649bb97212dbfb3ffe3">convert</a> (const std::string &amp;reference)=0</td></tr>
+<tr class="memdesc:a62797cf7875ab649bb97212dbfb3ffe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">BLAST結果ファイルの2カラム目の参照側IDをそれに紐づく別のIDに変換  <a href="class_blast_parser_handler.html#a62797cf7875ab649bb97212dbfb3ffe3">[詳解]</a><br /></td></tr>
+<tr class="separator:a62797cf7875ab649bb97212dbfb3ffe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ceb5e9cf779feb9d7dbd7f9652ba888"><td class="memItemLeft" align="right" valign="top">virtual const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blast_parser_handler.html#a2ceb5e9cf779feb9d7dbd7f9652ba888">valueFormatter</a> (const std::string &amp;bquery, const std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;queryToRefVec)=0</td></tr>
+<tr class="memdesc:a2ceb5e9cf779feb9d7dbd7f9652ba888"><td class="mdescLeft">&#160;</td><td class="mdescRight">BLAST結果ファイルの1レコードを利用して行う具体的な処理内容  <a href="class_blast_parser_handler.html#a2ceb5e9cf779feb9d7dbd7f9652ba888">[詳解]</a><br /></td></tr>
+<tr class="separator:a2ceb5e9cf779feb9d7dbd7f9652ba888"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac058faf05fb6558ec403f40c992d5175"><td class="memItemLeft" align="right" valign="top">virtual const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blast_parser_handler.html#ac058faf05fb6558ec403f40c992d5175">outformat</a> (const std::string &amp;bquery, const std::unordered_map&lt; std::string, float &gt; &amp;refcounter)=0</td></tr>
+<tr class="memdesc:ac058faf05fb6558ec403f40c992d5175"><td class="mdescLeft">&#160;</td><td class="mdescRight">出力フォーマットを決定する  <a href="class_blast_parser_handler.html#ac058faf05fb6558ec403f40c992d5175">[詳解]</a><br /></td></tr>
+<tr class="separator:ac058faf05fb6558ec403f40c992d5175"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>BLAST結果ファイルを解析する際に利用できるハンドラ </p>
+<p>BLAST結果ファイルを読み込む際、以下の3つのハンドラを設定することができる</p><ol type="1">
+<li>BLAST結果ファイルの2カラム目の参照側IDをそれに紐づく別のIDに変換</li>
+<li>BLAST結果ファイルの1レコードを利用して行う具体的な処理内容</li>
+<li>出力フォーマット </li>
+</ol>
+</div><h2 class="groupheader">構築子と解体子</h2>
+<a id="a4337f9508bf8d73eca584bdd14d2b521"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4337f9508bf8d73eca584bdd14d2b521">&#9670;&nbsp;</a></span>BlastParserHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">BlastParserHandler::BlastParserHandler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6418d52a1b4b952fe8b4b1d636b1864"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6418d52a1b4b952fe8b4b1d636b1864">&#9670;&nbsp;</a></span>~BlastParserHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual BlastParserHandler::~BlastParserHandler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">関数詳解</h2>
+<a id="a62797cf7875ab649bb97212dbfb3ffe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62797cf7875ab649bb97212dbfb3ffe3">&#9670;&nbsp;</a></span>convert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const std::string&amp; BlastParserHandler::convert </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>reference</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>BLAST結果ファイルの2カラム目の参照側IDをそれに紐づく別のIDに変換 </p>
+<p>このハンドラを実装する場合はそのメンバ変数に変換に使用するマップをコンストラクタで渡す必要がある </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[reference]</td><td>変換したいID </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p><a class="el" href="class_blast_parser_pt2_imple.html#a57592944d999e40ab39ea223634080b2">BlastParserPt2Imple</a>, <a class="el" href="class_blast_parser_pt1_imple.html#a582c0f407bad8126f23d1b21b019d23a">BlastParserPt1Imple</a>で実装されています。</p>
+
+</div>
+</div>
+<a id="ac058faf05fb6558ec403f40c992d5175"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac058faf05fb6558ec403f40c992d5175">&#9670;&nbsp;</a></span>outformat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const std::string BlastParserHandler::outformat </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>bquery</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unordered_map&lt; std::string, float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>refcounter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>出力フォーマットを決定する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[bquery]</td><td>BLAST結果ファイルの第1カラム </td></tr>
+    <tr><td class="paramname">[refcounter]</td><td>bqueryに対する値 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p><a class="el" href="class_blast_parser_pt2_imple.html#a344552e7523fd4bb116760200d1b660e">BlastParserPt2Imple</a>, <a class="el" href="class_blast_parser_pt1_imple.html#a478b3799898c9466c981cf9a6caf2e23">BlastParserPt1Imple</a>で実装されています。</p>
+
+</div>
+</div>
+<a id="a2ceb5e9cf779feb9d7dbd7f9652ba888"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ceb5e9cf779feb9d7dbd7f9652ba888">&#9670;&nbsp;</a></span>valueFormatter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const std::string BlastParserHandler::valueFormatter </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>bquery</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>queryToRefVec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>BLAST結果ファイルの1レコードを利用して行う具体的な処理内容 </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[bquery]</td><td>BLAST結果ファイルの第一カラム </td></tr>
+    <tr><td class="paramname">[queryToRefVec]</td><td>BLAST結果ファイルの1レコード </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p><a class="el" href="class_blast_parser_pt2_imple.html#aa1fcec3e8e62fd5e065b18424990ee37">BlastParserPt2Imple</a>, <a class="el" href="class_blast_parser_pt1_imple.html#a5bdaabba2c49907da194e56b9f0d678f">BlastParserPt1Imple</a>で実装されています。</p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>BioInfoLibrary/<a class="el" href="_blast_parser_8h_source.html">BlastParser.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="class_blast_parser_handler.html">BlastParserHandler</a></li>
+    <li class="footer">構築: <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
+  </ul>
+</div>
+</body>
+</html>

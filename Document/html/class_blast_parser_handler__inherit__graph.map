@@ -1,0 +1,5 @@
+<map id="BlastParserHandler" name="BlastParserHandler">
+<area shape="rect" id="node1" title="BLAST結果ファイルを解析する際に利用できるハンドラ" alt="" coords="91,5,226,32"/>
+<area shape="rect" id="node2" href="$class_blast_parser_pt1_imple.html" title="blast結果ファイルの参照側を変換してその値をカウントアップして出力" alt="" coords="5,80,147,107"/>
+<area shape="rect" id="node3" href="$class_blast_parser_pt2_imple.html" title=" " alt="" coords="171,80,312,107"/>
+</map>

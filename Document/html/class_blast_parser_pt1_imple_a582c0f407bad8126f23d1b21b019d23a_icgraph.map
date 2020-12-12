@@ -1,0 +1,4 @@
+<map id="BlastParserPt1Imple::convert" name="BlastParserPt1Imple::convert">
+<area shape="rect" id="node1" title="BLAST結果ファイルの2カラム目の参照側IDをそれに紐づく別のIDに変換" alt="" coords="195,5,336,47"/>
+<area shape="rect" id="node2" href="$class_blast_parser_pt1_imple.html#a5bdaabba2c49907da194e56b9f0d678f" title="BLAST結果ファイルの1レコードを利用して行う具体的な処理内容" alt="" coords="5,5,147,47"/>
+</map>

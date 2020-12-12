@@ -17,7 +17,7 @@ namespace fs = std::filesystem;
 /**
  * @brief     Pajekアプリケーションで利用するファイルの解析
  * 
- * @detail    Pajekアプリケーションでは拡張子.netのファイルを出力として利用する．
+ * @details   Pajekアプリケーションでは拡張子.netのファイルを出力として利用する．
  *            このクラスではそのファイルを解析してその内容を保管するためのPajek
  *            オブジェクトに変換する．
  */
@@ -31,7 +31,8 @@ public:
     /**
      * @brief            PajekParserオブジェクトのコンストラクタ
      * @param[infile]    読み込むファイル（拡張子.net)
-     * @detail           読み込みたい.netファイルのパスをセット
+     * @param[ilabelptr] ラベルで使用するハンドラ
+     * @details           読み込みたい.netファイルのパスをセット
      */
     PajekParser(
         const fs::path infile,
@@ -163,7 +164,7 @@ public:
 
     /**
 　　 * @brief     Verticesクラスのコンストラクタ
-　　 * @detail    .netファイルにおける各Nodeの定義部分
+　　 * @details    .netファイルにおける各Nodeの定義部分
 　　 */
     explicit Vertices(std::shared_ptr<std::vector<std::shared_ptr<Node> > > nodeElements);
 
@@ -176,7 +177,7 @@ public:
     }
 
     /**
-    * @detail 部分オブジェクトnodeElemensの参照を返す．
+    * @details 部分オブジェクトnodeElemensの参照を返す．
     *         ただし、変更不可とする．変更はこのオブジェクトの
     *         メンバ関数で行うこととする．
     */
@@ -230,7 +231,7 @@ public:
     /**
      * @brief             LabelDoubleのコンストラクタ
      * @param[label]      初期化するためのラベル文字列
-     * @detail            階層ラベルの作成
+     * @details            階層ラベルの作成
      */
     explicit LabelDouble(std::string label);
     ~LabelDouble() {}
@@ -270,7 +271,7 @@ public:
 
     /**
      * @brief     Edgesクラスのコンストラクタ
-     * @detail    .netファイルにおけるNodeの繋がりを示す領域部分
+     * @details   拡張子netのファイルにおいてNodeの繋がりを示す領域部分
      */
     explicit Edges(const std::vector<std::pair<int, int>> mpair);
 
@@ -298,7 +299,7 @@ public:
 
 
 /**
- * @detail 拡張子.net以外のファイルからPajekファイル（.net)
+ * @details 拡張子.net以外のファイルからPajekファイル（.net)
  *         を作成するクラス
  * @note   このオブジェクトを作成する際の第二引数は動的確保した
  *         pointerを渡すこと。
@@ -354,8 +355,9 @@ class Pajek
 public:
     /**
      * @brief         Pajekオブジェクトのコンストラクタ
-     * @param[vt]     全Nodeの定義の集合
-     * @param[egs]    相関のある2つのNodeの集合
+     * @param[pajekLabel] オブジェクトの識別ラベル
+     * @param[vtptr]     全Nodeの定義の集合
+     * @param[egsptr]    相関のある2つのNodeの集合
      */
     inline Pajek(
         std::string pajekLabel,

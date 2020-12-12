@@ -1,0 +1,137 @@
+\hypertarget{class_node}{}\doxysection{Node クラス}
+\label{class_node}\index{Node@{Node}}
+
+
+Verticesの一行分を構成する\+Nodeに関するクラス  
+
+
+
+
+{\ttfamily \#include $<$Pajek\+Helper.\+h$>$}
+
+\doxysubsection*{公開メンバ関数}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_node_a4f49efd403bb846533afaa53fdfc8806}{Node}} (const int nodeid, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_label_interface}{Label\+Interface}} $>$ ilabel)
+\begin{DoxyCompactList}\small\item\em Nodeクラスのコンストラクタ \end{DoxyCompactList}\item 
+const std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_label_interface}{Label\+Interface}} $>$ \mbox{\hyperlink{class_node_a66d6399ed71ba5a80511461d5fa4bf15}{get\+Labelptr}} () const
+\item 
+\mbox{\hyperlink{class_node}{Node}} $\ast$ \mbox{\hyperlink{class_node_a52aa6835508f7b311805e7474afaa295}{set\+Position}} (const float x, const float y)
+\begin{DoxyCompactList}\small\item\em 各\+Nodeの座標をセット \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_node}{Node}} $\ast$ \mbox{\hyperlink{class_node_aa086e85c95f7f06f2d61c0b3b2d65559}{set\+Inner\+Color}} (const std\+::string \&icolor)
+\begin{DoxyCompactList}\small\item\em 各\+Nodeの内側の色をセット \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_node}{Node}} $\ast$ \mbox{\hyperlink{class_node_a85da0e660470157721e1cf3ccf68ee49}{set\+Border\+Color}} (const std\+::string \&bcolor)
+\begin{DoxyCompactList}\small\item\em 各\+Nodeの境界線の色をセット \end{DoxyCompactList}\item 
+const std\+::string \mbox{\hyperlink{class_node_aa5cff9378a9b2cc778ecaf13b24d99f2}{get\+Single\+Line}} ()
+\begin{DoxyCompactList}\small\item\em 出力に使用するフォーマット文字列を取得 \end{DoxyCompactList}\item 
+const std\+::string \mbox{\hyperlink{class_node_a18e0fff8926f1dc6b4bb1191df65bb2b}{get\+Single\+Line}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{詳解}
+Verticesの一行分を構成する\+Nodeに関するクラス 
+
+\begin{DoxyNote}{覚え書き}
+各\+Nodeは\+Pajekオブジェクトの部分オブジェクトを 構成する．各\+Nodeは\+Pajekオブジェクトでポインタ として保持され，また複数の\+Pajekオブジェクトで 共有される．したがってメンバ変数のilabelは shared\+\_\+ptrで管理している． 
+\end{DoxyNote}
+
+
+\doxysubsection{構築子と解体子}
+\mbox{\Hypertarget{class_node_a4f49efd403bb846533afaa53fdfc8806}\label{class_node_a4f49efd403bb846533afaa53fdfc8806}} 
+\index{Node@{Node}!Node@{Node}}
+\index{Node@{Node}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}}
+{\footnotesize\ttfamily Node\+::\+Node (\begin{DoxyParamCaption}\item[{const int}]{nodeid,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_label_interface}{Label\+Interface}} $>$}]{ilabel }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Nodeクラスのコンストラクタ 
+
+
+\begin{DoxyParams}{引数}
+{\em \mbox{[}nodeid\mbox{]}} & Nodeの一意の\+ID \\
+\hline
+{\em \mbox{[}ilabel\mbox{]}} & Nodeが保持するラベル \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{関数詳解}
+\mbox{\Hypertarget{class_node_a66d6399ed71ba5a80511461d5fa4bf15}\label{class_node_a66d6399ed71ba5a80511461d5fa4bf15}} 
+\index{Node@{Node}!getLabelptr@{getLabelptr}}
+\index{getLabelptr@{getLabelptr}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{getLabelptr()}{getLabelptr()}}
+{\footnotesize\ttfamily const std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_label_interface}{Label\+Interface}}$>$ Node\+::get\+Labelptr (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_node_aa5cff9378a9b2cc778ecaf13b24d99f2}\label{class_node_aa5cff9378a9b2cc778ecaf13b24d99f2}} 
+\index{Node@{Node}!getSingleLine@{getSingleLine}}
+\index{getSingleLine@{getSingleLine}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{getSingleLine()}{getSingleLine()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily const std\+::string Node\+::get\+Single\+Line (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+出力に使用するフォーマット文字列を取得 
+
+\begin{DoxyReturn}{戻り値}
+.netでの出力に利用する文字列（改行含む） 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_node_a18e0fff8926f1dc6b4bb1191df65bb2b}\label{class_node_a18e0fff8926f1dc6b4bb1191df65bb2b}} 
+\index{Node@{Node}!getSingleLine@{getSingleLine}}
+\index{getSingleLine@{getSingleLine}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{getSingleLine()}{getSingleLine()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily const std\+::string Node\+::get\+Single\+Line (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_node_a85da0e660470157721e1cf3ccf68ee49}\label{class_node_a85da0e660470157721e1cf3ccf68ee49}} 
+\index{Node@{Node}!setBorderColor@{setBorderColor}}
+\index{setBorderColor@{setBorderColor}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{setBorderColor()}{setBorderColor()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_node}{Node}} $\ast$ Node\+::set\+Border\+Color (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{bcolor }\end{DoxyParamCaption})}
+
+
+
+各\+Nodeの境界線の色をセット 
+
+
+\begin{DoxyParams}{引数}
+{\em \mbox{[}bcolor\mbox{]}} & 各\+Nodeを更新する境界線の色 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_node_aa086e85c95f7f06f2d61c0b3b2d65559}\label{class_node_aa086e85c95f7f06f2d61c0b3b2d65559}} 
+\index{Node@{Node}!setInnerColor@{setInnerColor}}
+\index{setInnerColor@{setInnerColor}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{setInnerColor()}{setInnerColor()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_node}{Node}} $\ast$ Node\+::set\+Inner\+Color (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{icolor }\end{DoxyParamCaption})}
+
+
+
+各\+Nodeの内側の色をセット 
+
+
+\begin{DoxyParams}{引数}
+{\em \mbox{[}icolor\mbox{]}} & 各\+Nodeを更新する内側の色 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_node_a52aa6835508f7b311805e7474afaa295}\label{class_node_a52aa6835508f7b311805e7474afaa295}} 
+\index{Node@{Node}!setPosition@{setPosition}}
+\index{setPosition@{setPosition}!Node@{Node}}
+\doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_node}{Node}} $\ast$ Node\+::set\+Position (\begin{DoxyParamCaption}\item[{const float}]{x,  }\item[{const float}]{y }\end{DoxyParamCaption})}
+
+
+
+各\+Nodeの座標をセット 
+
+
+\begin{DoxyParams}{引数}
+{\em \mbox{[}x\mbox{]}} & 各\+Nodeのx座標 \\
+\hline
+{\em \mbox{[}y\mbox{]}} & 各\+Nodeのy座標 \\
+\hline
+\end{DoxyParams}
+
+
+このクラス詳解は次のファイルから抽出されました\+:\begin{DoxyCompactItemize}
+\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8h}{Pajek\+Helper.\+h}}\item 
+Bio\+Info\+Library/\mbox{\hyperlink{_pajek_helper_8cpp}{Pajek\+Helper.\+cpp}}\end{DoxyCompactItemize}

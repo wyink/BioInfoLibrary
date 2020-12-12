@@ -1,0 +1,5 @@
+<map id="クラス階層図" name="クラス階層図">
+<area shape="rect" id="node1" href="$class_blast_parser_handler.html" title="BLAST結果ファイルを解析する際に利用できるハンドラ" alt="" coords="5,31,140,57"/>
+<area shape="rect" id="node2" href="$class_blast_parser_pt1_imple.html" title="blast結果ファイルの参照側を変換してその値をカウントアップして出力" alt="" coords="188,5,329,32"/>
+<area shape="rect" id="node3" href="$class_blast_parser_pt2_imple.html" title=" " alt="" coords="188,56,329,83"/>
+</map>

@@ -70,8 +70,7 @@ public:
     );
 
     /**
-     * @brief   ファイルが存在するかどうか
-     * @note    開けるかどうかも確認される
+     * @brief   ファイルが存在し、開けるかどうかの確認
      */
     static bool isExistFile(const std::string& str) ;
 

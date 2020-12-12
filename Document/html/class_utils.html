@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.20"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BioInfoLibrary: Utils クラス</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">BioInfoLibrary
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.20 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_utils.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-static-methods">静的公開メンバ関数</a> &#124;
+<a href="class_utils-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">Utils クラス</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>汎用的に利用できる関数を集めたクラス  
+ <a href="class_utils.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="_utils_8h_source.html">Utils.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+静的公開メンバ関数</h2></td></tr>
+<tr class="memitem:a33a32b3380717b1e2a6399a255b863d0"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a33a32b3380717b1e2a6399a255b863d0">split</a> (const std::string &amp;line, const char *delimiter)</td></tr>
+<tr class="memdesc:a33a32b3380717b1e2a6399a255b863d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列を分割する  <a href="class_utils.html#a33a32b3380717b1e2a6399a255b863d0">[詳解]</a><br /></td></tr>
+<tr class="separator:a33a32b3380717b1e2a6399a255b863d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c38ef17e3ce4e10274d7713aed97aa7"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a8c38ef17e3ce4e10274d7713aed97aa7">split</a> (const std::string &amp;line, const char *delimiter, const int maxSplitCount)</td></tr>
+<tr class="separator:a8c38ef17e3ce4e10274d7713aed97aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b7f31b229e67bac2a4eb0fa4132c6b6"><td class="memItemLeft" align="right" valign="top">static std::string *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a2b7f31b229e67bac2a4eb0fa4132c6b6">splitf</a> (const std::string &amp;line, const char *delimiter, std::string *arr, const int maxSplitCount)</td></tr>
+<tr class="memdesc:a2b7f31b229e67bac2a4eb0fa4132c6b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">固定長配列のsplitで配列を利用するため大きめのファイルに利用  <a href="class_utils.html#a2b7f31b229e67bac2a4eb0fa4132c6b6">[詳解]</a><br /></td></tr>
+<tr class="separator:a2b7f31b229e67bac2a4eb0fa4132c6b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade1dc2d19feaeee02b6818ddf3825252"><td class="memItemLeft" align="right" valign="top">static std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#ade1dc2d19feaeee02b6818ddf3825252">keyValMakeFromFile</a> (const fs::path &amp;infile, const char *del, std::function&lt; std::vector&lt; std::string &gt; &amp;(std::vector&lt; std::string &gt; &amp;)&gt; func)</td></tr>
+<tr class="memdesc:ade1dc2d19feaeee02b6818ddf3825252"><td class="mdescLeft">&#160;</td><td class="mdescRight">デリミタで区切られた2つのカラムからなるテキストファイル の左側をkey，右側をvalueとするmapに変換して返却する関数 ただし、メンバ関数のfuncを利用することでkey,valueは自由 に変更可能  <a href="class_utils.html#ade1dc2d19feaeee02b6818ddf3825252">[詳解]</a><br /></td></tr>
+<tr class="separator:ade1dc2d19feaeee02b6818ddf3825252"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae82773469cb38b1f0524d08e1bf09699"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#ae82773469cb38b1f0524d08e1bf09699">isExistFile</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:ae82773469cb38b1f0524d08e1bf09699"><td class="mdescLeft">&#160;</td><td class="mdescRight">ファイルが存在し、開けるかどうかの確認  <a href="class_utils.html#ae82773469cb38b1f0524d08e1bf09699">[詳解]</a><br /></td></tr>
+<tr class="separator:ae82773469cb38b1f0524d08e1bf09699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>汎用的に利用できる関数を集めたクラス </p>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="ae82773469cb38b1f0524d08e1bf09699"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae82773469cb38b1f0524d08e1bf09699">&#9670;&nbsp;</a></span>isExistFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Utils::isExistFile </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ファイルが存在し、開けるかどうかの確認 </p>
+
+</div>
+</div>
+<a id="ade1dc2d19feaeee02b6818ddf3825252"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade1dc2d19feaeee02b6818ddf3825252">&#9670;&nbsp;</a></span>keyValMakeFromFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, std::string &gt; Utils::keyValMakeFromFile </td>
+          <td>(</td>
+          <td class="paramtype">const fs::path &amp;&#160;</td>
+          <td class="paramname"><em>infile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>del</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; std::vector&lt; std::string &gt; &amp;(std::vector&lt; std::string &gt; &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>デリミタで区切られた2つのカラムからなるテキストファイル の左側をkey，右側をvalueとするmapに変換して返却する関数 ただし、メンバ関数のfuncを利用することでkey,valueは自由 に変更可能 </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[infile]</td><td>入力ファイル名（パス） </td></tr>
+    <tr><td class="paramname">[del]</td><td>入力ファイル名（パス）に使用されているデリミタ </td></tr>
+    <tr><td class="paramname">[func]</td><td>key,valueを自由に設定して返却するための関数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>作成されたmap </dd></dl>
+<div class="dynheader">
+呼び出し関係図:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_utils_ade1dc2d19feaeee02b6818ddf3825252_cgraph.png" border="0" usemap="#aclass_utils_ade1dc2d19feaeee02b6818ddf3825252_cgraph" alt=""/></div>
+<map name="class_utils_ade1dc2d19feaeee02b6818ddf3825252_cgraph" id="aclass_utils_ade1dc2d19feaeee02b6818ddf3825252_cgraph">
+<area shape="rect" title="デリミタで区切られた2つのカラムからなるテキストファイル の左側をkey，右側をvalueとするmapに変換して返却する関数 ただし、メンバ関数のfuncを利用することでkey,..." alt="" coords="5,5,184,32"/>
+<area shape="rect" href="class_utils.html#a33a32b3380717b1e2a6399a255b863d0" title="文字列を分割する" alt="" coords="232,5,312,32"/>
+</map>
+</div>
+<div class="dynheader">
+被呼び出し関係図:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_utils_ade1dc2d19feaeee02b6818ddf3825252_icgraph.png" border="0" usemap="#aclass_utils_ade1dc2d19feaeee02b6818ddf3825252_icgraph" alt=""/></div>
+<map name="class_utils_ade1dc2d19feaeee02b6818ddf3825252_icgraph" id="aclass_utils_ade1dc2d19feaeee02b6818ddf3825252_icgraph">
+<area shape="rect" title="デリミタで区切られた2つのカラムからなるテキストファイル の左側をkey，右側をvalueとするmapに変換して返却する関数 ただし、メンバ関数のfuncを利用することでkey,..." alt="" coords="209,5,388,32"/>
+<area shape="rect" href="_bio_info_library_8cpp.html#af095a232149097b5605064623a9345ac" title=" " alt="" coords="104,5,161,32"/>
+<area shape="rect" href="_bio_info_library_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,5,56,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a33a32b3380717b1e2a6399a255b863d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33a32b3380717b1e2a6399a255b863d0">&#9670;&nbsp;</a></span>split() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Utils::split </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>delimiter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列を分割する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[line]</td><td>分割対象の文字列 </td></tr>
+    <tr><td class="paramname">[delimiter]</td><td>分割する際に利用するデリミタ </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>分割した文字列の配列 </dd></dl>
+<div class="dynheader">
+被呼び出し関係図:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_utils_a33a32b3380717b1e2a6399a255b863d0_icgraph.png" border="0" usemap="#aclass_utils_a33a32b3380717b1e2a6399a255b863d0_icgraph" alt=""/></div>
+<map name="class_utils_a33a32b3380717b1e2a6399a255b863d0_icgraph" id="aclass_utils_a33a32b3380717b1e2a6399a255b863d0_icgraph">
+<area shape="rect" title="文字列を分割する" alt="" coords="436,157,516,184"/>
+<area shape="rect" href="class_fmeasure_pt1.html#aa8ad22c13d2759a1a57c4cd816875cfa" title=" " alt="" coords="221,5,376,32"/>
+<area shape="rect" href="class_utils.html#ade1dc2d19feaeee02b6818ddf3825252" title="デリミタで区切られた2つのカラムからなるテキストファイル の左側をkey，右側をvalueとするmapに変換して返却する関数 ただし、メンバ関数のfuncを利用することでkey,..." alt="" coords="209,56,388,83"/>
+<area shape="rect" href="_bio_info_library_8cpp.html#af095a232149097b5605064623a9345ac" title=" " alt="" coords="104,81,161,108"/>
+<area shape="rect" href="class_label_double.html#a62f1bb1ee7a9c47a005b4d958a1ae04f" title="LabelDoubleのコンストラクタ" alt="" coords="213,157,385,184"/>
+<area shape="rect" href="class_pajek_parser.html#a1c017dd86b1d6c9e43bf72a133c0bd2b" title=".netファイルをロード" alt="" coords="236,208,361,235"/>
+<area shape="rect" href="class_create_from_text.html#a64e674f7244569012845e5b50b746829" title=" " alt="" coords="228,259,369,285"/>
+<area shape="rect" href="class_blast_parser.html#a77ef17344f91b414f6c3e9728d1cfddd" title="blast結果ファイルの解析開始" alt="" coords="241,309,357,336"/>
+<area shape="rect" href="_bio_info_library_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,81,56,108"/>
+<area shape="rect" href="_bio_info_library_8cpp.html#aeef2fda7329a8a70b9ec3eb4ff3573fc" title=" " alt="" coords="104,259,161,285"/>
+<area shape="rect" href="_bio_info_library_8cpp.html#ae5753c4462d45b523fc6910ae5d05072" title=" " alt="" coords="104,309,161,336"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8c38ef17e3ce4e10274d7713aed97aa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c38ef17e3ce4e10274d7713aed97aa7">&#9670;&nbsp;</a></span>split() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Utils::split </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>delimiter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>maxSplitCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2b7f31b229e67bac2a4eb0fa4132c6b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b7f31b229e67bac2a4eb0fa4132c6b6">&#9670;&nbsp;</a></span>splitf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string * Utils::splitf </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>delimiter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramname"><em>arr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>maxSplitCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>固定長配列のsplitで配列を利用するため大きめのファイルに利用 </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">[line]</td><td>分割対象の文字列 </td></tr>
+    <tr><td class="paramname">[delimiter]</td><td>分割する際に利用するデリミタ </td></tr>
+    <tr><td class="paramname">[arr]</td><td>文字列を格納するための配列 </td></tr>
+    <tr><td class="paramname">[maxSplitCount]</td><td>最大分割数 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>BioInfoLibrary/<a class="el" href="_utils_8h_source.html">Utils.h</a></li>
+<li>BioInfoLibrary/<a class="el" href="_utils_8cpp.html">Utils.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="class_utils.html">Utils</a></li>
+    <li class="footer">構築: <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.20"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BioInfoLibrary: BioInfoLibrary/Utils.h ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">BioInfoLibrary
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.20 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'検索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('_utils_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">Utils.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_utils_8h.html">[詳解]</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef UTILS_H_</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define UTILS_H_</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;filesystem&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>fs = std::filesystem;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="class_utils.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_utils.html">Utils</a></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">inline</span> <a class="code" href="class_utils.html">Utils</a>() {};</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::string&gt; <a class="code" href="class_utils.html#a33a32b3380717b1e2a6399a255b863d0">split</a>(</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">const</span> std::string&amp; line, </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* delimiter</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    );</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::string&gt; <a class="code" href="class_utils.html#a33a32b3380717b1e2a6399a255b863d0">split</a>(</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">const</span> std::string&amp; line,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* delimiter,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> maxSplitCount</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    );</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">static</span> std::string* <a class="code" href="class_utils.html#a2b7f31b229e67bac2a4eb0fa4132c6b6">splitf</a>(</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keyword">const</span> std::string&amp; line,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* delimiter,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        std::string* arr,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> maxSplitCount</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    );</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">static</span> std::unordered_map&lt;std::string, std::string&gt; <a class="code" href="class_utils.html#ade1dc2d19feaeee02b6818ddf3825252">keyValMakeFromFile</a>(</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keyword">const</span> fs::path&amp; infile,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* del,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        std::function&lt;std::vector&lt;std::string&gt;&amp;(std::vector&lt;std::string&gt;&amp;)&gt; func</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    );</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_utils.html#ae82773469cb38b1f0524d08e1bf09699">isExistFile</a>(<span class="keyword">const</span> std::string&amp; str) ;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;};</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif // !UTILS_H_</span></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<div class="ttc" id="aclass_utils_html"><div class="ttname"><a href="class_utils.html">Utils</a></div><div class="ttdoc">汎用的に利用できる関数を集めたクラス</div><div class="ttdef"><b>Definition:</b> Utils.h:19</div></div>
+<div class="ttc" id="aclass_utils_html_ae82773469cb38b1f0524d08e1bf09699"><div class="ttname"><a href="class_utils.html#ae82773469cb38b1f0524d08e1bf09699">Utils::isExistFile</a></div><div class="ttdeci">static bool isExistFile(const std::string &amp;str)</div><div class="ttdoc">ファイルが存在し、開けるかどうかの確認</div><div class="ttdef"><b>Definition:</b> Utils.cpp:77</div></div>
+<div class="ttc" id="a_utils_8h_html"><div class="ttname"><a href="_utils_8h.html">Utils.h</a></div></div>
+<div class="ttc" id="aclass_utils_html_ade1dc2d19feaeee02b6818ddf3825252"><div class="ttname"><a href="class_utils.html#ade1dc2d19feaeee02b6818ddf3825252">Utils::keyValMakeFromFile</a></div><div class="ttdeci">static std::unordered_map&lt; std::string, std::string &gt; keyValMakeFromFile(const fs::path &amp;infile, const char *del, std::function&lt; std::vector&lt; std::string &gt; &amp;(std::vector&lt; std::string &gt; &amp;)&gt; func)</div><div class="ttdoc">デリミタで区切られた2つのカラムからなるテキストファイル の左側をkey，右側をvalueとするmapに変換して返却する関数 ただし、メンバ関数のfuncを利用することでkey,...</div><div class="ttdef"><b>Definition:</b> Utils.cpp:58</div></div>
+<div class="ttc" id="aclass_utils_html_a2b7f31b229e67bac2a4eb0fa4132c6b6"><div class="ttname"><a href="class_utils.html#a2b7f31b229e67bac2a4eb0fa4132c6b6">Utils::splitf</a></div><div class="ttdeci">static std::string * splitf(const std::string &amp;line, const char *delimiter, std::string *arr, const int maxSplitCount)</div><div class="ttdoc">固定長配列のsplitで配列を利用するため大きめのファイルに利用</div><div class="ttdef"><b>Definition:</b> Utils.cpp:39</div></div>
+<div class="ttc" id="aclass_utils_html_a33a32b3380717b1e2a6399a255b863d0"><div class="ttname"><a href="class_utils.html#a33a32b3380717b1e2a6399a255b863d0">Utils::split</a></div><div class="ttdeci">static std::vector&lt; std::string &gt; split(const std::string &amp;line, const char *delimiter)</div><div class="ttdoc">文字列を分割する</div><div class="ttdef"><b>Definition:</b> Utils.cpp:4</div></div>
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_a71324646ddea3f1de9557c82fb2c07e.html">BioInfoLibrary</a></li><li class="navelem"><a class="el" href="_utils_8h.html">Utils.h</a></li>
+    <li class="footer">構築: <a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -17,7 +17,7 @@ namespace fs = std::filesystem;
 
 
 /*
-* @detail fmeasureを計算するクラスの入出力を規定するインタフェース
+* @brief fmeasureを計算するクラスの入出力を規定するインタフェース
 *         
 */
 class FmeasureHandler {
@@ -28,6 +28,7 @@ public:
 
 	/*
 	* @brief 入力ファイルに依存する処理
+	* @details
 	*        map[idA]={idA:count,idB:count,...} の形式に
 	*        変換する
 	* @param[path] 入力ファイル/入力ディレクトリ
@@ -37,8 +38,8 @@ public:
 
 	/*
 	* @brief 出力に利用するフォーマット部分を規定
-	* @param[fmeasureMap] 鍵にはf-measureを計算した組合せ，
-	*                     値にその値を格納
+	* @param[fmeasureMap] 鍵にはf-measureを計算した組合せ、値にその値を格納
+	*                     
 	* @param[out] 出力ファイル名
 	*/
 	virtual void outformat(
@@ -49,18 +50,19 @@ public:
 };
 
 /**
-* @brief 入力ファイル形式例 ：strainA
+* @details 入力ファイル形式例 ：strainA
 *                           　>abc123.1 strainA:1,strainD:3,strainC:2
 *                           　>abc124.2 strainA:1,strainD:4
 *                             上記の形式4ファイル(strainA~strainD)
 * 
-*        出力ファイル形式例 : strainA\tstrainB f-measure value
+*        出力ファイル形式例 : strainA/strainB f-measure value
 */
 
 class FmeasurePt1 :public FmeasureHandler{
 public:
 	/*
 	* @brief あるidと自身を含むすべてのidとの関連値の集計方法
+	* @details
 	*        example:
 	*        
 	*        strainA,strainB,strainC,straindDの4つのidが存在
@@ -97,7 +99,7 @@ public:
 	) :cuway(cuway){}
 
 	/**
-	* @detail 入力ファイルが以下の時に対応
+	* @details 入力ファイルが以下の時に対応
 	* 
 	*  ・それぞれのファイルがidに対応しており1行目にそのid名の記述あり
 	*  ・該当ファイルのidと他のidに対する値の記述が一行ごとに以下のよう
@@ -120,19 +122,19 @@ public:
 	*  -----------------------------------------
 	* 
 	* @param[indir] 全てのidのファイル(id_A~id_D)が存在するディレクトリ
-	* @return {id_A:{id_A:fma,~id_D:fmd},...id_D:{id_A:fma,~id_D:fmd}}
+	* @return {id_A:{id_A:fma,～id_D:fmd},...id_D:{id_A:fma,～id_D:fmd}}
 	*/
 	std::unordered_map<std::string, std::unordered_map<std::string, int> > 
 		informat(const fs::path& indir) override;
 
 	/**
-	* @brief idA\tidB f-measure valueで出力
+	* @brief idA,idB,f-measure valueで出力
 	* @param[fmeasureMap] タグと対応するf-measure値の連想配列。出力するため、mapを使用
-	* @param[out] 出力ファイルパス
+	* @param[outfile] 出力ファイルパス
 	*/
 	void outformat(
 		const std::map<std::string,float>& fmeasureMap,
-		fs::path out
+		fs::path outfile
 	) override;
 
 private:

@@ -10,7 +10,6 @@
 
 /**
  * @brief 各種フォーマットの変換に関わるクラス
- * @detail 
  */
 class FaaToFasta
 {
@@ -23,7 +22,7 @@ private:
 public:
 	/**
 	 * @brief 複数行のfaaをFastaファイルに変換
-	 * @detail このコンストラクタは以下の基準処理のみをになう．
+	 * @details このコンストラクタは以下の基準処理のみをになう．
 	 *         必要に応じてメンバーを変更することで以下の処理を変更できる
 	 * 
 	 * 　　　　Example.
@@ -44,7 +43,7 @@ public:
 	/**
 	 * @brief  特定のidの行のみにフィルタリングするための関数
 	 * @return 自身の参照を返す
-	 * @detail この関数をsetすることで必要なIDと不必要なIDを選別する
+	 * @details この関数をsetすることで必要なIDと不必要なIDを選別する
 	 *         ことができる。設定ナシの場合はすべてのIDを出力する．
 	 */
 	FaaToFasta& setIdFilterCall(std::function<bool(std::string)> fileter);
