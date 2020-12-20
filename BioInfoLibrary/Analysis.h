@@ -18,7 +18,8 @@ namespace fs = std::filesystem;
 
 /*
 * @brief fmeasureを計算するクラスの入出力を規定するインタフェース
-*         
+* @detail f-measureを計算する時に必要な「入力ファイル書式」
+*         「出力ファイル書式」のインタフェースを規定する
 */
 class IFmeasure {
 public:
@@ -50,6 +51,7 @@ public:
 };
 
 /**
+* @brief 指定の入力形式からf-measureを計算する
 * @details 入力ファイル形式例 ：strainA
 *                           　>abc123.1 strainA:1,strainD:3,strainC:2
 *                           　>abc124.2 strainA:1,strainD:4
@@ -92,6 +94,7 @@ public:
 	};
 
 	/**
+	* @brief コンストラクタ
 	* @param[cuway] 集計方法をオブジェクト生成時に選択
 	*/
 	FmeasurePt1(
@@ -99,6 +102,7 @@ public:
 	) :cuway(cuway){}
 
 	/**
+	* @brief 
 	* @details 入力ファイルが以下の時に対応
 	* 
 	*  ・それぞれのファイルがidに対応しており1行目にそのid名の記述あり
