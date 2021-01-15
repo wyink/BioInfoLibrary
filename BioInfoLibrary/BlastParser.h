@@ -168,7 +168,11 @@ public:
 	
 };
 
-
+/**
+* @brief BLAST結果ファイルの読み込むを実行するクラス
+* @details このクラスにはBLAST結果ファイルをどのように解析するかを指定するための
+*         ハンドラを必要とする。
+*/
 class BlastParser
 {
 private:

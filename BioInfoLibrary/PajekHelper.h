@@ -14,15 +14,14 @@
 
 namespace fs = std::filesystem;
 
+class Pajek;
+class LabelInterface;
 /**
  * @brief     Pajekアプリケーションで利用するファイルの解析
- * 
  * @details   Pajekアプリケーションでは拡張子.netのファイルを出力として利用する．
  *            このクラスではそのファイルを解析してその内容を保管するためのPajek
  *            オブジェクトに変換する．
  */
-class Pajek;
-class LabelInterface;
 class PajekParser {
     const fs::path infile;
     std::unique_ptr<LabelInterface> ilabelptr;
@@ -49,7 +48,7 @@ public:
 
 
 /**
-* @brief 一意の文字列ラベルを示すインタフェース
+* @brief Pajekファイルの一意の文字列ラベルを示すインタフェース
 */
 class LabelInterface {
 public:
@@ -87,12 +86,11 @@ public:
 
 
 /**
-* @brief Verticesの一行分を構成するNodeに関するクラス
-* @note 各NodeはPajekオブジェクトの部分オブジェクトを
-*       構成する．各NodeはPajekオブジェクトでポインタ
-*       として保持され，また複数のPajekオブジェクトで
-*       共有される．したがってメンバ変数のilabelは
-*       shared_ptrで管理している．
+* @brief PajekファイルのVerticesの一行分を構成するNodeに関するクラス
+* @attention 各NodeはPajekオブジェクトの部分オブジェクトを構成する． \n
+*            各NodeはPajekオブジェクトでポインタとして保持され，     \n
+*            また複数のPajekオブジェクトで共有される．               \n
+*            したがってメンバ変数のilabelはshared_ptrで管理している．\n      
 */
 class Node
 {
@@ -193,6 +191,9 @@ public:
     void setColor(const std::string& color);
 };
 
+/**
+* @brief Pajekファイルの一意のラベルを扱うクラス
+*/
 class LabelSingle :public LabelInterface {
 private:
     std::string label;
@@ -216,7 +217,7 @@ public:
 };
 
 /**
- * @brief "project/sample"などの階層ラベルを扱うクラス
+ * @brief Pajekファイルの階層ラベル("upperGroup/lowerGroup")を扱うクラス
  */
 class LabelDouble:public LabelInterface {
 private:
@@ -260,7 +261,7 @@ public:
 
 
 /**
-* @brief 相関のある2つのノードの集合を扱うクラス
+* @brief Pajekファイルの相関のある2つのノードの集合を扱うクラス
 */
 class Edges
 {
@@ -299,9 +300,9 @@ public:
 
 
 /**
- * @details 拡張子.net以外のファイルからPajekファイル（.net)
- *         を作成するクラス
- * @note   このオブジェクトを作成する際の第二引数は動的確保した
+ * @brief 拡張子.net以外のファイルからPajekファイル（.net)
+ *        を作成するクラス
+ * @attention   このオブジェクトを作成する際の第二引数は動的確保した
  *         pointerを渡すこと。
  */
 class CreateFromText {
