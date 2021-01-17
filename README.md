@@ -4,8 +4,8 @@ BioInfoLibrary
 BioInfoLibrary
 Tools and library for bioinformatic analysis
 
-[こちら](https://wyink.github.io/BioInfoLibDoc/annotated.html)にライブラリの内容をドキュメント形式で詳説しています．
-内容については順次、更新していく予定です。
+[こちら](https://wyink.github.io/BioInfoLibDoc/annotated.html)にライブラリの内容をドキュメント形式で詳説しています．リンク先のドキュメントは[Doxygen](https://www.doxygen.nl/index.html)（version 1.8.20）で作成しました。ライブラリの内容については順次更新していく予定です。</br>
+
 
 ## CONTENT
 - [Blast Analysys](#blast-analysys)
@@ -30,21 +30,37 @@ BLASTとはNational Center for Biotecnology Informationが提供しているBasi
 ### 概要
 
 1. UML図
-2. クラス・インタフェースの役割
-   - [BlastParser](#blastparser)
+2. クラス・インタフェース<sup>[1](#sup1)</sup>の役割
+   - [IBlastParser](#iblastparser)
    - [BlastParserPt1Imple](#blastparserpt1imple)
    - [BlastParserPt2Imple](#blastparserpt2imple)
+   - [BlastParser](#blastparser)
+   
 * * * 
-#### UML図
-Blastの出力ファイルを利用して行う解析で利用するクラス・インタフェースの関係性をUML図で示しています。
+#### 1. UML図
+Blastの出力ファイルを利用して行う解析で利用するクラス・インタフェース<sup>[1](#sup1)</sup>の関係性をUML図で示しています。
+ここではデータと処理内容を具体的に示しています。実際は変数・メソッドであり、こちらに関してはドキュメントの参照ください。
 
-![BlastParserのUML図](https://github.com/wyink/BioInfoLibrary/blob/master/BioInfoLibrary/Picture/BlastParser.png)
+![BlastParserのUML図](https://github.com/wyink/BioInfoLibrary/blob/master/BioInfoLibrary/Picture/BlastParser.png) </br>
 
-#### BlastParser
-[Documentはこちら](https://wyink.github.io/BioInfoLibDoc/class_blast_parser.html) </br>
+</br>
 
-#### BlastParserPt1Imple
-[Documentはこちら](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt1_imple.html) </br>
+#### 2. クラス・インタフェース<sup>[1](#sup1)</sup>の役割
+</br>
+
+<a id="iblastparser"></a>
+#### [IBlastParser](https://wyink.github.io/BioInfoLibDoc/class_i_blast_parser.html) </br>
+***
+BlastParserPt1ImpleとBlastParPt2Impleのインタフェース<sup>[1](#sup1)</sup>であり、結果データの具体的な処理内容を規定する
+ 
+</br>
+
+
+
+<a id="blastparserpt1imple"></a>
+#### [BlastParserPt1Imple](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt1_imple.html) </br>
+***
+
 
 Blast結果ファイルのクエリーと参照およびその参照が属するのtaxidが以下に示すような組合せである場合について考える。
 #### 入力例
@@ -71,7 +87,10 @@ QueryA 2
 123:2,234:1																				
 ```
 
+</br>
+
 #### BlastParserPt2Imple
+* * *
 [Documentはこちら](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt2_imple.html) </br>
 各クエリに対してヒットした参照のスコア群を保持する。しかし、同一クエリに対して「同一の参照に複数ヒット」かつ「そのアライメント領域が重複しない場合」は加算したスコアを保持して各クエリが保持するスコア群を一定値で区切って出力する。以下にその例を示す。
  
@@ -93,5 +112,13 @@ QueryA 2
   | :---:  | --: | --: | --: | --: | --: | --: | ----: |
   | QueryA |   0 |   1 |  1  |  0  | 0   |  0  | 	0  |
   | QueryB | ... | ... | ... | ... | ... | ... |   ... |
- 
 
+<a id="blastparser"></a>
+
+#### [BlastParser](https://wyink.github.io/BioInfoLibDoc/class_blast_parser.html) </br>
+***
+
+<a id="sup1"></a>
+
+脚注
+1 : C++ではインタフェースという機能はありませんが、純粋仮想関数のみで構成されるクラスを「インタフェース」と呼ぶこととします。
