@@ -34,7 +34,9 @@ BLASTとはNational Center for Biotecnology Informationが提供しているBasi
    - [BlastParser](#blastparser)
    - [BlastParserPt1Imple](#blastparserpt1imple)
    - [BlastParserPt2Imple](#blastparserpt2imple)
-
+* * * 
+#### UML図
+Blastの出力ファイルを利用して行う解析で利用するクラス・インタフェースの関係性をUML図で示しています。
 
 ![BlastParserのUML図](https://github.com/wyink/BioInfoLibrary/blob/master/BioInfoLibrary/Picture/BlastParser.png)
 
