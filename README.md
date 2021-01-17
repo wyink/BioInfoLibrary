@@ -13,8 +13,10 @@ Tools and library for bioinformatic analysis
 * * *
 
 ## Blast Analysys
+
+### 背景
 **BLAST出力ファイルを解析することで特定の用途向けのデータ抽出を可能とする**</br>
-BLASTとはNational Center for Biotecnology Information　が提供しているBasic Local Alignment Search Toolの略語である。これはユーザーが指定した塩基配列もしくはアミノ酸配列とデータベース中の配列を比較し、有意に類似していると判定した塩基配列もしくはアミノ酸配列を導き出すことができる。様々な出力方法があるが、ここではタブ区切りのテキスト出力ファイルについて行う。このようにして得られたデータには類似度のみではなく、どの配列領域が類似していると判定されたのか、類似度の妥当性などの情報が含まれている。また、その配列と紐づく分類群情報を利用することで解析の幅は広がる。例えば自身が有する配列Aは配列Bに最も有意に類似すると判定されたが、この配列BはB'属のB''種であることから配列AはB'属のB''種である可能性が高い、というような使い方である。これはDNAバーコーディングと呼ばれる手法である。大規模な出力データを利用する場合に以下で示すようなプログラムを利用して解析することが可能である。
+BLASTとはNational Center for Biotecnology Informationが提供しているBasic Local Alignment Search Toolの略語です。これはユーザーが指定した塩基配列もしくはアミノ酸配列とデータベース中の配列を比較し、有意に類似していると判定した塩基配列もしくはアミノ酸配列を導き出すことができます。様々な出力方法を指定することができますが、本プログラムでは結果をタブ区切りのテキストで出力した場合についてのみ扱います。このようにして得られたデータには類似度のみではなく、どの配列領域が類似していると判定されたのか、類似度の妥当性などの情報が含まれています。また、その配列と紐づく分類群情報を利用することで解析の幅は広がります。例えば自身が有する配列Aは配列Bに最も有意に類似すると判定されたが、この配列BはB'属のB''種であることから配列AはB'属のB''種である可能性が高い、というような使い方です。これはDNAバーコーディングと呼ばれる手法です。大規模な出力データを利用する場合に以下で示すようなプログラムを利用して解析することが可能です。
 
 **Blast出力ファイルの一例**
 
@@ -25,7 +27,42 @@ BLASTとはNational Center for Biotecnology Information　が提供しているB
 | AB000302.1 | AAB01117.1 | 93.798 | 129 | 8 | 0 | 154 | 282 | 1 | 129 | 1.34e-50 | 198 |
 | AB000302.1 | AAD00317.1 | 93.798 | 129 | 8 | 0 | 154 | 282 | 1 | 129 | 4.81e-50 | 196 |
 
-* * * 
+### 概要
+1. [BlastParser](#blastparser)
+2. [BlastParserPt1Imple](blastparserpt1imple)
+3. [BlastParserPt2Imple](blastparserpt2imple)
+
+
 ![BlastParserのUML図](https://github.com/wyink/BioInfoLibrary/blob/master/BioInfoLibrary/Picture/BlastParser.png)
 
+#### BlastParser
+[Document](https://wyink.github.io/BioInfoLibDoc/class_blast_parser.html) </br>
+
+#### BlastParserPt1Imple
+[Document](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt1_imple.html) </br>
+
+#### [BlastParserPt2Imple](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt2_imple.html) </br>
+
+* * *
+各クエリに対してヒットした参照のスコア群を保持する。しかし、同一クエリに対して「同一の参照に複数ヒット」かつ「そのアライメント領域が重複しない場合」は加算したスコアを保持して各クエリが保持するスコア群を一定値で区切って出力する。以下にその例を示す。
+ 
+
+- #### 入力例
+
+同一クエリ・同一参照に対して参照のアライメントが重複しない場合
+|  Query   | Reference   | RefAlignStart | RefAlignEnd | Score |
+| :------: | :---------: | ------------: | ----------: |  ---: |
+| QueryA   | Reference1  | 	1            | 150	       |   190 |
+| QueryA   | Reference1  | 	160          | 180	       |    30 |
+| QueryA   | Reference2  | 	1            | 190	       |   300 |
+| QueryB   | ...         | ...	         | ...	       |   ... |
+
+- #### 出力例
+
+重複しないため190と30を加算して出力
+  | score  | 100 | 200 | 300 | 400 | 500 | ... | n\*100 |
+  | :---:  | --: | --: | --: | --: | --: | --: | ----: |
+  | QueryA |   0 |   1 |  1  |  0  | 0   |  0  | 	0  |
+  | QueryB | ... | ... | ... | ... | ... | ... |   ... |
+ 
 
