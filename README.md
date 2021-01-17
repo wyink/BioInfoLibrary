@@ -4,9 +4,9 @@ BioInfoLibrary
 BioInfoLibrary
 Tools and library for bioinformatic analysis
 
-‚±‚¿‚ç‚Éƒ‰ƒCƒuƒ‰ƒŠ‚Ì“à—e‚ğƒhƒLƒ…ƒƒ“ƒgŒ`®‚ÅÚà‚µ‚Ä‚¢‚Ü‚·D
+ã“ã¡ã‚‰ã«ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®å†…å®¹ã‚’ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå½¢å¼ã§è©³èª¬ã—ã¦ã„ã¾ã™ï¼
 https://wyink.github.io/BioInfoLibDoc/annotated.html
 
-![BlastParser‚ÌUML}](https://github.com/wyink/BioInfoLibrary/Picture/BlastParser.png)
+![BlastParserã®UMLå›³](https://github.com/wyink/BioInfoLibrary/blob/master/BioInfoLibrary/Picture/BlastParser.png)
 
 
