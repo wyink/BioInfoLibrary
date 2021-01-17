@@ -82,31 +82,34 @@ public:
 };
 
 /**
- * @brief blast結果ファイルの参照をtaxidに変換し、各クエリに対してこのカウントを出力する処理を行う
+ * @brief Blast結果ファイルの参照をtaxidに変換し、各クエリに対してこのカウントを出力する処理を行う
  * @details
- *         Example : Blast結果ファイルのクエリーと参照およびその参照が属するのtaxidが  \n
- *                   以下に示すような組合せである場合について考える。				   \n
- * 																					   \n
- *                 　Query  Reference  taxid										   \n
- *                 　========================										   \n
- *                 　QueryA   RefA      123							   				   \n
- *                 　QueryA   RefA      123					    					   \n
- *                 　QueryA   RefB      234							   				   \n
- *                 　QueryA   RefD      123								   			   \n
- *                 													   				   \n
- *                 1. QueryA,QueryBをそれぞれ対応するtaxidに変換				   	   \n
- *                 2. 同じid(RefA)は2度登場するが、このような重複はカウントしない 	   \n
- *                 3. RefA,RefDは属するtaxidが同じであるためカウントアップ	   		   \n
- *                 4. 変換後のtaxidの数も出力する。					   				   \n
- *                 5. 出力は以下を参照												   \n
- *																					   \n
- *                 QueryAは「2」種類のtaxidどどれかに所属する可能性があり、			   \n
- *                 それは123もしくは234である。しかし、QueryAは123に属する2つの異なる  \n
- *                 配列にトップヒットしている。										   \n
- *                 ------------------------						   					   \n
- *                  QueryA 2											   			   \n
- *                  123:2,234:1									    				   \n
- *                 ------------------------						   					   \n
+ *                Blast結果ファイルのクエリーと参照およびその参照が属するのtaxidが以下に示すような組合せである場合について考える。
+ *					
+ *                ### 入力例
+ *                   Blast結果ファイルを抜粋してテーブルで表示
+ *					|  Query   |  Reference  | taxid  |									
+ *					| :------: | :---------: | -----: |									
+ *					| QueryA   |	RefA     | 123	  |									
+ *					| QueryA   |	RefA     | 123	  |									
+ *					| QueryA   |	RefB     | 234	  |									
+ *					| QueryA   |	RefD     | 123	  |									
+ *					
+ *                  ________________________________________________________________
+ *					1. QueryA,QueryBをそれぞれ対応するtaxidに変換						
+ *					2. 同じid(RefA)は2度登場するが、このような重複はカウントしない		
+ *					3. RefA,RefDは属するtaxidが同じであるためカウントアップ				
+ *					4. 変換後のtaxidの数も出力する。									
+ *					5. 出力は以下を参照													
+ *					________________________________________________________________
+ *
+ *			     ### 出力例
+ *                 QueryAは「2」種類のtaxid(123,234)のどれかに所属する可能性が示されている。
+ *                 注意点として、QueryAは123に属する2つの異なる配列にトップヒットしている。
+ *				   ____________															
+ *				   QueryA 2	                  														
+ *				   123:2,234:1																				
+ *				   ____________														
  */
 class BlastParserPt1Imple : public IBlastParser {
 private:
@@ -122,7 +125,7 @@ public:
 	}
 
 	const std::string valueFormatter(
-		const std::string& bquery, 
+		const std::string& bquery,
 		const std::vector<std::vector<std::string> >& queryToRefVec
 	) override;
 
@@ -136,28 +139,28 @@ public:
 };
 
 /**
-* @brief blast結果ファイルより、各クエリに対する参照のスコア分布を出力する
-* @details 各クエリに対してヒットした参照のスコア群を保持する。しかし、同一クエリに対して「同一の		\n	
-*          参照に複数ヒット」かつ「そのアライメント領域が重複しない場合」は加算したスコアを保持         \n
-*          そうして各クエリが保持するスコア群を一定値で区切って出力する。								\n
-* 																										\n
-* 　　　　 Example :Blast結果ファイル（一部のカラムを抜粋加工）が以下のようになった場合					\n
-* 																										\n
-*                       <<入力>>　同一クエリ・同一参照に対して参照のアライメントが重複しない場合		\n
-*                       <<出力>>  重複しないため190と30を加算して出力する。								\n
-* 																										\n
-*                　　　　入力例																		    \n
-*                　　　　   Query   Reference   ReferenceAlignmemtStart  ReferenceAlignmentEnd  Score	\n
-*                　　　　   ==========================================================================	\n
-* 　　　　       　　　　   query1  reference1          1                        150              190	\n
-* 　　　　       　　　　   query1  reference1         160                       180               30	\n
-* 　　　　       　　　　   query1  reference2          1                        190              300	\n
-*                　　　　   query2  ....																\n
-* 				 　　　　																				\n
-*                　　　　出力例																		    \n
-*                　　　　    score  100 200 300 400 500 ... n*100										\n
-*                　　　  　  query1   0   1   1   0   0 ... 		                                    \n
-*                            query2  ...
+ * @brief Blast結果ファイルより、各クエリに対する参照のスコア分布を出力する
+ * @details
+ *          各クエリに対してヒットした参照のスコア群を保持する。しかし、同一クエリに対して「同一の
+ *          参照に複数ヒット」かつ「そのアライメント領域が重複しない場合」は加算したスコアを保持
+ *          そうして各クエリが保持するスコア群を一定値で区切って出力する。以下にその例を示す。
+ *              ### 入力例
+ *                  同一クエリ・同一参照に対して参照のアライメントが重複しない場合
+ *
+ * 					|  Query   | Reference   | RefAlignStart | RefAlignEnd | Score |
+ *					| :------: | :---------: | ------------: | ----------: |  ---: |
+ *					| QueryA   | Reference1  | 	1            | 150	       |   190 |
+ *					| QueryA   | Reference1  | 	160          | 180	       |    30 |
+ *					| QueryA   | Reference2  | 	1            | 190	       |   300 |
+ *					| QueryB   | ...         | ...	         | ...	       |   ... |
+ *
+ *              ### 出力例
+ *                  重複しないため190と30を加算して出力
+ *                    | score  | 100 | 200 | 300 | 400 | 500 | ... | n*100 |
+ *                    | :---:  | --: | --: | --: | --: | --: | --: | ----: |
+ *                    | QueryA |   0 |   1 |  1  |  0  | 0   |  0  | 	0  |
+ *                    | QueryB | ... | ... | ... | ... | ... | ... |   ... |
+ * 
 */
 class BlastParserPt2Imple : public IBlastParser {
 private :
