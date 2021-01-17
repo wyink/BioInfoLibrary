@@ -28,26 +28,53 @@ BLASTとはNational Center for Biotecnology Informationが提供しているBasi
 | AB000302.1 | AAD00317.1 | 93.798 | 129 | 8 | 0 | 154 | 282 | 1 | 129 | 4.81e-50 | 196 |
 
 ### 概要
-1. [BlastParser](#blastparser)
-2. [BlastParserPt1Imple](#blastparserpt1imple)
-3. [BlastParserPt2Imple](#blastparserpt2imple)
+
+1. UML図
+2. クラス・インタフェースの役割
+   - [BlastParser](#blastparser)
+   - [BlastParserPt1Imple](#blastparserpt1imple)
+   - [BlastParserPt2Imple](#blastparserpt2imple)
 
 
 ![BlastParserのUML図](https://github.com/wyink/BioInfoLibrary/blob/master/BioInfoLibrary/Picture/BlastParser.png)
 
 #### BlastParser
-[Document](https://wyink.github.io/BioInfoLibDoc/class_blast_parser.html) </br>
+[Documentはこちら](https://wyink.github.io/BioInfoLibDoc/class_blast_parser.html) </br>
 
 #### BlastParserPt1Imple
-[Document](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt1_imple.html) </br>
+[Documentはこちら](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt1_imple.html) </br>
 
-#### [BlastParserPt2Imple](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt2_imple.html) </br>
+Blast結果ファイルのクエリーと参照およびその参照が属するのtaxidが以下に示すような組合せである場合について考える。
+#### 入力例
+Blast結果ファイルを抜粋してテーブルで表示
+|  Query   |  Reference  | taxid  |									
+| :------: | :---------: | -----: |									
+| QueryA   |	RefA     | 123	  |									
+| QueryA   |	RefA     | 123	  |									
+| QueryA   |	RefB     | 234	  |									
+| QueryA   |	RefD     | 123	  |									
 
-* * *
+- QueryA,QueryBをそれぞれ対応するtaxidに変換						
+-  同じid(RefA)は2度登場するが、このような重複はカウントしない		
+- RefA,RefDは属するtaxidが同じであるためカウントアップ				
+- 変換後のtaxidの数も出力する。									
+											
+
+#### 出力例
+QueryAは「2」種類のtaxid(123,234)のどれかに所属する可能性が示されている。
+注意点として、QueryAは123に属する2つの異なる配列にトップヒットしている。
+
+```													
+QueryA 2	                  														
+123:2,234:1																				
+```
+
+#### BlastParserPt2Imple
+[Documentはこちら](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt2_imple.html) </br>
 各クエリに対してヒットした参照のスコア群を保持する。しかし、同一クエリに対して「同一の参照に複数ヒット」かつ「そのアライメント領域が重複しない場合」は加算したスコアを保持して各クエリが保持するスコア群を一定値で区切って出力する。以下にその例を示す。
  
 
-- #### 入力例
+#### 入力例
 
 同一クエリ・同一参照に対して参照のアライメントが重複しない場合
 |  Query   | Reference   | RefAlignStart | RefAlignEnd | Score |
@@ -57,7 +84,7 @@ BLASTとはNational Center for Biotecnology Informationが提供しているBasi
 | QueryA   | Reference2  | 	1            | 190	       |   300 |
 | QueryB   | ...         | ...	         | ...	       |   ... |
 
-- #### 出力例
+#### 出力例
 
 重複しないため190と30を加算して出力
   | score  | 100 | 200 | 300 | 400 | 500 | ... | n\*100 |
