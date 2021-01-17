@@ -29,8 +29,8 @@ BLASTとはNational Center for Biotecnology Informationが提供しているBasi
 
 ### 概要
 1. [BlastParser](#blastparser)
-2. [BlastParserPt1Imple](blastparserpt1imple)
-3. [BlastParserPt2Imple](blastparserpt2imple)
+2. [BlastParserPt1Imple](#blastparserpt1imple)
+3. [BlastParserPt2Imple](#blastparserpt2imple)
 
 
 ![BlastParserのUML図](https://github.com/wyink/BioInfoLibrary/blob/master/BioInfoLibrary/Picture/BlastParser.png)
