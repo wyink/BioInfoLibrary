@@ -15,7 +15,7 @@
 namespace fs = std::filesystem;
 
 class Pajek;
-class LabelInterface;
+class ILabel;
 /**
  * @brief     Pajekアプリケーションで利用するファイルの解析
  * @details   Pajekアプリケーションでは拡張子.netのファイルを出力として利用する．
@@ -24,7 +24,7 @@ class LabelInterface;
  */
 class PajekParser {
     const fs::path infile;
-    std::unique_ptr<LabelInterface> ilabelptr;
+    std::unique_ptr<ILabel> ilabelptr;
 
 public:
     /**
@@ -35,7 +35,7 @@ public:
      */
     PajekParser(
         const fs::path infile,
-        std::unique_ptr<LabelInterface> ilabelptr
+        std::unique_ptr<ILabel> ilabelptr
     );
 
     /**
@@ -50,10 +50,10 @@ public:
 /**
 * @brief Pajekファイルの一意の文字列ラベルを示すインタフェース
 */
-class LabelInterface {
+class ILabel {
 public:
 
-    LabelInterface() = default;
+    ILabel() = default;
 
     /**
      * @brief     label文字列を取得
@@ -73,13 +73,13 @@ public:
      */
     virtual void setLabel(const std::string label) = 0;
 
-    virtual ~LabelInterface() = default;
+    virtual ~ILabel() = default;
 
     /**
      * @brief オブジェクトのコピーを作成
      *        メモリを動的に確保している．
      */
-    virtual LabelInterface* clone(const std::string label) = 0;
+    virtual ILabel* clone(const std::string label) = 0;
 
 };
 
@@ -96,7 +96,7 @@ class Node
 {
 private:
     int nodeid;
-    std::shared_ptr<LabelInterface> ilabel;
+    std::shared_ptr<ILabel> ilabel;
     float x;
     float y;
     std::string icolor; //空文字列で初期化
@@ -108,12 +108,12 @@ public:
      * @param[nodeid]    Nodeの一意のID
      * @param[ilabel]     Nodeが保持するラベル
      */
-    Node(const int nodeid, std::shared_ptr<LabelInterface> ilabel) :
+    Node(const int nodeid, std::shared_ptr<ILabel> ilabel) :
         nodeid(nodeid), ilabel(ilabel),
         x(-1), y(-1) {}
             
 
-    inline const std::shared_ptr<LabelInterface> getLabelptr() const {
+    inline const std::shared_ptr<ILabel> getLabelptr() const {
         return ilabel;
     }
 
@@ -194,7 +194,7 @@ public:
 /**
 * @brief Pajekファイルの一意のラベルを扱うクラス
 */
-class LabelSingle :public LabelInterface {
+class LabelSingle :public ILabel {
 private:
     std::string label;
     LabelSingle(const LabelSingle& ld) {}//コピーコンストラクタ
@@ -219,7 +219,7 @@ public:
 /**
  * @brief Pajekファイルの階層ラベル("upperGroup/lowerGroup")を扱うクラス
  */
-class LabelDouble:public LabelInterface {
+class LabelDouble:public ILabel {
 private:
     std::string label;
     std::string upLabel;
@@ -292,9 +292,6 @@ public:
 
     std::string getOutput()const ;
 
-    /**
-     * @brief copy constructor;
-     */
 };
 
 
@@ -308,7 +305,7 @@ public:
 class CreateFromText {
 private:
     const fs::path infile; //.net以外の入力ファイル
-    std::unique_ptr<LabelInterface> m_ilabel; //Label文字列のふるまいを規定
+    std::unique_ptr<ILabel> m_ilabel; //Label文字列のふるまいを規定
     std::function<std::shared_ptr<Node>(std::shared_ptr<Node>)> addproperty; //Nodeクラスのカスタマイズ
 
     /**
@@ -328,7 +325,7 @@ public:
      */
     explicit inline CreateFromText(
         const fs::path infile,
-        std::unique_ptr<LabelInterface> m_ilabel,
+        std::unique_ptr<ILabel> m_ilabel,
         std::function<std::shared_ptr<Node>(std::shared_ptr<Node>)> addproperty
     ):infile(infile),m_ilabel(std::move(m_ilabel)),addproperty(addproperty) {};
 

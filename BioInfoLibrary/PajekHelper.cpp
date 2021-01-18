@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include <utility>
 
-PajekParser::PajekParser(const fs::path infile, std::unique_ptr<LabelInterface> ilabelptr) :
+PajekParser::PajekParser(const fs::path infile, std::unique_ptr<ILabel> ilabelptr) :
     infile(infile),ilabelptr(std::move(ilabelptr)){
     if (!fs::exists(infile)) {
         throw "No such file!\n";
@@ -43,8 +43,8 @@ Pajek PajekParser::load() {
         //!Todo パラメータを持たないフォーマット対応
         //Nodeオブジェクト構築に必要なパラメータ
         const int nodeid = std::stoi(oneNode[0]);         /**< 各Nodeの一意のID    */
-        LabelInterface* ilabel_ = ilabelptr->clone(oneNode[1]);
-        std::shared_ptr<LabelInterface> label(ilabel_);    /**< 各Nodeのラベル　    */
+        ILabel* ilabel_ = ilabelptr->clone(oneNode[1]);
+        std::shared_ptr<ILabel> label(ilabel_);    /**< 各Nodeのラベル　    */
         float x = std::stof(oneNode[2]);                  /**< 各Nodeのx座標       */
         float y = std::stof(oneNode[3]);                  /**< 各Nodeのy座標       */
         std::string icolor = oneNode[4];                  /**< 各Nodeの内側の色    */
@@ -268,8 +268,8 @@ const std::vector<std::unique_ptr<Pajek> > CreateFromText::run() {
     std::map<std::string, int> idLabelMap;
     for (const auto& id : allIdSet) {
         ++nodeid;
-        LabelInterface* ilabelptr_ = m_ilabel->clone(id);
-        std::shared_ptr<LabelInterface> ilabelptr(ilabelptr_);
+        ILabel* ilabelptr_ = m_ilabel->clone(id);
+        std::shared_ptr<ILabel> ilabelptr(ilabelptr_);
         std::shared_ptr<Node> nodeptr = std::make_shared<Node>(nodeid, ilabelptr);
         nodeptr = addproperty(std::move(nodeptr));
 
