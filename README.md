@@ -20,8 +20,8 @@ Tools and library for bioinformatic analysis
 - [背景と目的](#background1)
 - [参考情報](#supinfo1)
 - [概要](#summary1)
-    * UML図による概観の説明
-    * 各クラス・インタフェース<sup>[1](#sup1)</sup>の役割
+    * [UML図による概要](#uml1)
+    * [各クラス・インタフェースの役割](#role1)
 	   - [ILabel](#ilabel)
 	   - [LabelSingle](#labelsingle)
 	   - [LabelDouble](#labeldouble)
@@ -53,7 +53,7 @@ Pajekファイルの構成例
 
 <a id="summary1"></a>
 ### 概要
-
+<a id="uml1"></a>
 #### 1. UML図による概要
 Blastの出力ファイルを利用して行う解析で利用するクラス・インタフェース<sup>[1](#sup1)</sup>の関係性をUML図で示しています。
 ここではデータと処理内容を具体的に示しています。実際は変数・メソッドであり、こちらに関してはドキュメントをご参照ください。
@@ -62,7 +62,44 @@ Blastの出力ファイルを利用して行う解析で利用するクラス・
 
 </br>
 
+<a id="role1"></a>
 #### 2. 各クラス・インタフェース<sup>[1](#sup1)</sup>の役割
+
+<a id="ilabel"></a>
+#### ILabel [[Document]](https://wyink.github.io/BioInfoLibDoc/class_i_label.html) </br>
+Pajekファイルの一意の文字列ラベルを示すインタフェース
+
+<a id="labelsingle"></a>
+#### LabelSingle [[Document]](https://wyink.github.io/BioInfoLibDoc/class_label_single.html) </br>
+Pajekファイルの一意のラベルを扱うクラス
+
+<a id="labeldouble"></a>
+#### LabelDoubl [[Document]](https://wyink.github.io/BioInfoLibDoc/class_label_double.html) </br>
+Pajekファイルの階層ラベル("upperGroup/lowerGroup")を扱うクラス
+
+<a id="node"></a>
+#### Node [[Document]](https://wyink.github.io/BioInfoLibDoc/class_node.html) </br>
+PajekファイルのVerticesの一行分を構成するNodeに関するクラス
+
+<a id="vertices"></a>
+#### Vertices [[Document]](https://wyink.github.io/BioInfoLibDoc/class_vertices.html) </br>
+Pajekの.netファイルを構成する各Nodeの定義
+
+<a id="edges"></a>
+#### Edges [[Document]](https://wyink.github.io/BioInfoLibDoc/class_edges.html) </br>
+Pajekファイルの相関のある2つのノードの集合を扱うクラス
+
+<a id="pajek"></a>
+#### Pajek [[Document]](https://wyink.github.io/BioInfoLibDoc/class_pajek.html) </br>
+Pajekファイルの要素(Vertices,Edges)を保持するオブジェクト
+
+<a id="pajekparser"></a>
+#### PajekParser [[Document]](https://wyink.github.io/BioInfoLibDoc/class_pajek_parser.html) </br>
+Pajekアプリケーションで利用するファイルの解析
+
+<a id="createfromtext"></a>
+#### CreateFromText [[Document]](https://wyink.github.io/BioInfoLibDoc/class_create_from_text.html) </br>
+拡張子.net以外のファイルからPajekファイル（.net) を作成するクラス
 
 </br>
 
@@ -71,11 +108,11 @@ Blastの出力ファイルを利用して行う解析で利用するクラス・
 
 ## Blast Analysis
 - [背景](#background2)
-- [目的](#purpose)
+- [目的](#purpose2)
 - [参考情報](#supinfo2)
 - [概要](#summary2)
-    * UML図による概要
-    * 各クラス・インタフェース<sup>[1](#sup1)</sup>の役割
+    * [UML図による概要](#uml2)
+    * [各クラス・インタフェースの役割](#role2)
 	   - [IBlastParser](#iblastparser)
 	   - [BlastParserPt1Imple](#blastparserpt1imple)
 	   - [BlastParserPt2Imple](#blastparserpt2imple)
@@ -89,7 +126,7 @@ BLASTとはNational Center for Biotechnology Informationが提供しているBas
 ### 目的
 BLAST出力ファイルを解析して分類群情報と紐づけを行う。（主にDNAバーコーディング向け）
 
-<a id="supinfo"></a>
+<a id="supinfo2"></a>
 ### 参考情報
 Blast出力ファイルの一例
 
@@ -102,15 +139,7 @@ Blast出力ファイルの一例
 
 <a id="summary2"></a>
 ### 概要
-
-1. UML図による概要
-2. 各クラス・インタフェース<sup>[1](#sup1)</sup>の役割
-   - [IBlastParser](#iblastparser)
-   - [BlastParserPt1Imple](#blastparserpt1imple)
-   - [BlastParserPt2Imple](#blastparserpt2imple)
-   - [BlastParser](#blastparser)
-  　
-
+<a id="uml2"></a>
 #### 1. UML図による概要
 Blastの出力ファイルを利用して行う解析で利用するクラス・インタフェース<sup>[1](#sup1)</sup>の関係性をUML図で示しています。
 ここではデータと処理内容を具体的に示しています。実際は変数・メソッドであり、こちらに関してはドキュメントをご参照ください。
@@ -119,6 +148,7 @@ Blastの出力ファイルを利用して行う解析で利用するクラス・
 
 </br>
 
+<a id="role2"></a>
 #### 2. クラス・インタフェース<sup>[1](#sup1)</sup>の役割
 </br>
 
@@ -126,70 +156,17 @@ Blastの出力ファイルを利用して行う解析で利用するクラス・
 #### IBlastParser   [[Document]](https://wyink.github.io/BioInfoLibDoc/class_i_blast_parser.html) </br>
 BlastParserPt1ImpleとBlastParPt2Impleのインタフェース<sup>[1](#sup1)</sup>であり、結果データの具体的な処理内容を規定します。
  
-</br>
-
-
-
 <a id="blastparserpt1imple"></a>
 #### BlastParserPt1Imple [[Document]](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt1_imple.html) </br>
-
-Blast結果ファイルのクエリーと参照およびその参照が属するtaxidが以下に示すような組合せである場合について考えます。
-#### 入力例
-Blast結果ファイルを抜粋してテーブルで表示
-|  Query   |  Reference  | taxid  |									
-| :------: | :---------: | -----: |									
-| QueryA   |	RefA     | 123	  |									
-| QueryA   |	RefA     | 123	  |									
-| QueryA   |	RefB     | 234	  |									
-| QueryA   |	RefD     | 123	  |									
-
-- QueryA,QueryBをそれぞれ対応するtaxidに変換						
--  同じid(RefA)は2度登場するが、このような重複はカウントしません		
-- RefA,RefDは属するtaxidが同じであるためカウントアップ				
-- 変換後のtaxidの数も出力します。									
-											
-
-#### 出力例
-QueryAは「2」種類のtaxid(123,234)のどれかに所属する可能性が示されています。
-注意点として、QueryAは123に属する2つの異なる配列にトップヒットしています。
-
-```													
-QueryA 2
-123:2,234:1
-```
-
-</br>
+Blast結果ファイルのクエリーと参照およびその参照が属するtaxidを対応付けます。[[詳解]](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt1_imple.html#details)
 
 <a id="blastparserpt2imple"></a>
 #### BlastParserPt2Imple [[Document]](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt2_imple.html) </br>
-
-各クエリに対してヒットした参照のスコア群を保持します。しかし、同一クエリに対して「同一の参照に複数ヒット」かつ「そのアライメント領域が重複しない場合」はスコアを加算します。次のクエリの読み込みが始まった段階で、各クエリが保持するスコア群を一定値で区切って出力します。以下にその例を示します。
- 
-
-#### 入力例
-
-同一クエリ・同一参照に対して参照のアライメントが重複しない場合
-|  Query   | Reference   | RefAlignStart | RefAlignEnd | Score |
-| :------: | :---------: | ------------: | ----------: |  ---: |
-| QueryA   | Reference1  | 	1            | 150	       |   190 |
-| QueryA   | Reference1  | 	160          | 180	       |    30 |
-| QueryA   | Reference2  | 	1            | 190	       |   300 |
-| QueryB   | ...         | ...	         | ...	       |   ... |
-
-#### 出力例
-
-重複しないため190と30を加算して出力します。
-  | score  | 100 | 200 | 300 | 400 | 500 | ... | n\*100 |
-  | :---:  | --: | --: | --: | --: | --: | --: | ----: |
-  | QueryA |   0 |   1 |  1  |  0  | 0   |  0  | 	0  |
-  | QueryB | ... | ... | ... | ... | ... | ... |   ... |
+各クエリに対してヒットした参照のスコア（群）を対応付けます。[[詳解]](https://wyink.github.io/BioInfoLibDoc/class_blast_parser_pt2_imple.html#details)
 
 <a id="blastparser"></a>
-
 #### BlastParser [[Document]](https://wyink.github.io/BioInfoLibDoc/class_blast_parser.html) </br>
-
 IBlastParserクラスを実現したBlastParserPt1ImpleもしくはBlastParserPt2Impleをハンドラとして必要とします。Blast出力ファイルの解析処理はこのハンドラに依存します。このクラスはBlast出力ファイルの入力、解析結果の出力フォーマット、およびその出力に関する基本的なメソッドを保持しています。
-
 
 </br>
 <a id="sup1"></a>
