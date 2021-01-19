@@ -74,7 +74,7 @@ Pajekファイルの一意の文字列ラベルを示すインタフェース
 Pajekファイルの一意のラベルを扱うクラス
 
 <a id="labeldouble"></a>
-#### LabelDoubl [[Document]](https://wyink.github.io/BioInfoLibDoc/class_label_double.html) </br>
+#### LabelDouble [[Document]](https://wyink.github.io/BioInfoLibDoc/class_label_double.html) </br>
 Pajekファイルの階層ラベル("upperGroup/lowerGroup")を扱うクラス
 
 <a id="node"></a>
