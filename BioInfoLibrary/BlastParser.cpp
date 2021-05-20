@@ -35,6 +35,7 @@ void BlastParser::run(const fs::path& outfile, const std::string& header) {
 		if (query == bquery) {
 			//queryが同一のものはすべて回収
 			//blastで参照側が整列して出力される保証がないため
+			//纏めて処理をおこなう。
 
 			queryToRefVec.emplace_back(vec);
 
@@ -326,6 +327,43 @@ const std::string BlastParserPt2Imple::outformat(const std::string& bquery, cons
 	return (returnLine + "\n");
 }
 
+const std::string BlastParserPt2ex::outformat(const std::string& bquery, const std::unordered_map<std::string, float>& scoreMap) {
+	
+	//スコアを降順に並べ替える
+	//vectorに変換してsort
+	std::vector < std::pair<std::string, float>> elems(scoreMap.begin(), scoreMap.end());
+	std::sort(
+		elems.begin(),
+		elems.end(),
+		[](const std::pair<std::string,float>& p1,const std::pair<std::string,float>& p2) {
+			return p1.second > p2.second;
+		}
+	);
 
+	//最大値から100以上離れている部分を見つけ出し、その時点で返却
+	float bScore = 0.0f;
+	float tmp = 0.0f;
+	bool isStart = true;
+	std::vector<std::string> queHitOverVector;/*同一クエリに対する参照IDリストのうち、スコア間が100以上開かない*/
+	for (auto iter = elems.begin(); iter != elems.end();++iter) {
+		tmp = bScore - (iter->second);
+		if ( tmp > 100.0f) {
+			if (isStart) {
+				isStart = false;
+				bScore = iter->second;
+			}
+			else {
+				break;
+			}
+		}
+		queHitOverVector.push_back(iter->first);
+		bScore = iter->second;
+	}
 
-
+	//返却文の成形(json形式）
+	std::string returnLine;
+	for (auto iter = queHitOverVector.begin(); iter != queHitOverVector.end(); ++iter) {
+		returnLine += bquery + "\t" + (*iter) + "\n";
+	}
+	return returnLine;
+}

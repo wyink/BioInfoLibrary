@@ -113,6 +113,7 @@ public:
  */
 class BlastParserPt1Imple : public IBlastParser {
 private:
+	//変換用のマップ（ex. 参照ID＝＞taxonomyId）
 	std::unordered_map<std::string, std::string> queRef;
 
 public:
@@ -120,16 +121,30 @@ public:
 		:queRef(queRef) {}
 
 
+	/**
+	* @brief BLAST結果ファイルの2カラム目の参照側IDをそれに紐づく別のIDに変換
+	* @details このハンドラを実装する場合はそのメンバ変数に変換に使用するマップをコンストラクタで渡す必要がある
+	* @param[reference] 変換したいID
+	*/
 	inline const std::string& convert(const std::string& reference) override {
 		return queRef.at(reference);
 	}
 
+	/**
+	* @brief BLAST結果ファイルの1レコードを利用して行う具体的な処理内容
+	* @param[bquery] BLAST結果ファイルの第一カラム
+	* @param[queryToRefVec] BLAST結果ファイルの1レコード
+	*/
 	const std::string valueFormatter(
 		const std::string& bquery,
 		const std::vector<std::vector<std::string> >& queryToRefVec
 	) override;
 
-
+	/**
+	* @brief 出力フォーマットを決定する
+	* @param[bquery] BLAST結果ファイルの第1カラム
+	* @param[refcounter] bqueryに対する値
+	*/
 	 const std::string outformat(
 		const std::string& bquery,
 		const std::unordered_map<std::string, float>& refcounter
@@ -174,23 +189,57 @@ private :
 public:
 	explicit BlastParserPt2Imple(const std::unordered_map<std::string, std::string>& queRef)
 		:queRef(queRef) {}
+	
+	//変換が必要ない場合
+	explicit BlastParserPt2Imple()
+		:queRef{ std::make_pair("","") } {}
 
+	/**
+	* @brief BLAST結果ファイルの2カラム目の参照側IDをそれに紐づく別のIDに変換
+	* @details このハンドラを実装する場合はそのメンバ変数に変換に使用するマップをコンストラクタで渡す必要がある
+	* @param[reference] 変換したいID
+	*/
 	inline const std::string& convert(const std::string& reference) override {
 		return queRef.at(reference);
 	}
 
+	/**
+	* @brief BLAST結果ファイルの1レコードを利用して行う具体的な処理内容
+	* @param[bquery] BLAST結果ファイルの第一カラム
+	* @param[queryToRefVec] 同一クエリのBLAST結果ファイルの1レコードのベクタ
+	*/
 	const std::string valueFormatter(
 		const std::string& bquery,
 		const std::vector<std::vector<std::string> >& queryToRefVec
 	) override;
 
-
+	/**
+	* @brief 出力フォーマットを決定する
+	* @param[bquery] BLAST結果ファイルの第1カラム
+	* @param[scoreMap] bqueryに対する値
+	*/
 	const std::string outformat(
 		const std::string& bquery,
 		const std::unordered_map<std::string, float>& scoreMap
 	) override;
 
+};
+
+/*
+* @brief 同一クエリに対して相同性検索でヒットした参照ID群において、
+*        スコアが100より離れる場合は出力しない。
+*        同一クエリ・同一参照に対する相同性検索のスコアの加算方式は親クラスの方式をそのまま継承
+*/
+class BlastParserPt2ex :public BlastParserPt2Imple {
+public:
+	explicit BlastParserPt2ex(){} //親クラスのデフォルトコンストラクタ呼び出し後に構築
+
+	const std::string outformat(
+		const std::string& bquery,
+		const std::unordered_map<std::string, float>& scoreMap
+	) override;
 	
+
 };
 
 /**

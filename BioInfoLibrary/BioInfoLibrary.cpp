@@ -17,6 +17,11 @@ void main1();
 * Blastの結果からAccessionIDの情報を種情報に変換してフォーマットを
 * 整理して出力する
 */
+/*BlastPrserPt1Impleハンドラを利用する今回の場合は同一クエリ・同一参照に対して
+* の複数箇所ヒットを考慮しない。そのため、複数個所にヒットしているものがある
+* 場合、カウントが増える。しかし、今回の場合は同一タンパク質のあるなしを比較するため、
+* この重複カウントに意味はない。
+*/
 void main2();
 
 /* TestCase3
@@ -30,16 +35,40 @@ void main3();
 void main4();
 
 /* TestCase5
-* blast結果ファイルからスコアを100刻みでヒストグラム化する
+* blast結果ファイルからスコアを100/50刻みでヒストグラム化する
 * また、結果ファイルのアライメント箇所は重複しない場合には加算
 * 
 */
 void main5();
 
+/*TestCase6
+* 最も高いクエリからスコアが100離れている場合に関しては省く処理を行う。
+*/
+void main6();
+
+
 int main() {
 
-    main2();
+    main6();
+
 }
+
+void main6() {
+
+    //入力ファイル
+    const fs::path infile = "D:/perflingens/4_blast/result/GCA_000009685.1_ASM968v1.fasta_re.txt";
+    
+    //BLAST結果ファイル解析用コンストラクタ生成
+    BlastParser bp(infile, std::make_shared<BlastParserPt2ex>());
+
+    //BLAST結果ファイル解析
+    std::string outTxt = "D:/perflingens/output.txt";
+    std::string header = "クエリID\t参照ID（同一クエリにヒットした参照IDリストを降順に並べた際にスコア間隔が100以下のもの）";
+    bp.run( outTxt, header);
+
+}
+
+
 
 void main1() {
     std::string faafile = "D:/perflingens/2_protein/GCA_000009685.1_ASM968v1_protein.faa";
@@ -91,7 +120,7 @@ void main2() {
     std::smatch sm;
     std::shared_ptr<BlastParserPt1Imple> bpi = std::make_shared<BlastParserPt1Imple>(ac_st_map);
     for (const fs::directory_entry& x : fs::directory_iterator("G:/perflingens/4_blast/result/")) {
-        outfile = "G:/perflingens/4_blast/analyzedAgain2" / x.path().filename();
+        outfile = "G:/perflingens/4_blast/analyzedAgain" / x.path().filename();
         std::cout << outfile << "\n";
 
         //入力ファイル名をstrainIDに変換して出力ファイルのheaderとして出力
@@ -142,8 +171,8 @@ void main5() {
         std::make_pair("reference", "no-change")
     };
 
-    const fs::path infile = "G:/perflingens/test2.txt";
+    const fs::path infile = "D:/perflingens/4_blast/result/GCA_000009685.1_ASM968v1.fasta_re.txt";
     BlastParser bp(infile, std::make_shared<BlastParserPt2Imple>(queref));
-    bp.run("G:/perflingens/output.txt", "histgram");
+    bp.run("D:/perflingens/output.txt", "histgram");
 
 }
