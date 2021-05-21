@@ -37,8 +37,10 @@ void main3(const fs::path& inEnddir,const fs::path& filename);
 
 /* TestCase4
 * F-measureの結果からPajek形式のファイルを作成
+* @param[filename] F-measureの計算結果ファイル名；
+* @param[outDir]   pajek結果ファイルの出力先ディレクトリ名；
 */
-void main4();
+void main4(const fs::path& filename, const fs::path& outDir);
 
 /* TestCase5
 * blast結果ファイルからスコアを100/50刻みでヒストグラム化する
@@ -57,11 +59,12 @@ int main() {
     //main1();
     //main2("result","analyzedAgain");
     //main3("analyzedAgain","f-measure.txt");
-    //main4();
+    //main4("f-measure.txt","9_pajek");
     //main5();
     //main6();
     //main2("result2","analyzedAgain2");
-    main3("analyzedAgain2","f-measure2.txt");
+    //main3("analyzedAgain2","f-measure2.txt");
+    main4("f-measure2.txt","9_pajek2");
 
 }
 
@@ -166,8 +169,8 @@ void main3(const fs::path& inEndDir,const fs::path& filename) {
     fm.run();
 }
 
-void main4() {
-    fs::path infile = COMMON_DIR / "new_resources/f-measure.txt"; /**< 入力ファイル */
+void main4(const fs::path& filename, const fs::path& outDir) {
+    fs::path infile = COMMON_DIR / "new_resources" / filename; /**< 入力ファイル */
 
     CreateFromText cft(
         infile,
@@ -180,7 +183,7 @@ void main4() {
 
     std::vector<std::unique_ptr<Pajek> >  pvec = cft.run();
     for (auto iter = pvec.begin(); iter != pvec.end(); ++iter) {
-        fs::path outfile = COMMON_DIR / "9_pajek_new";
+        fs::path outfile = COMMON_DIR / outDir;
         outfile /= (*iter)->getPajekLbel() + ".net"; //string to fs::path
         (*iter)->output(outfile);
     }
