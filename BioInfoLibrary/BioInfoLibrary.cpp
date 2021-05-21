@@ -55,16 +55,23 @@ int main() {
 
 void main6() {
 
-    //入力ファイル
-    const fs::path infile = "D:/perflingens/4_blast/result/GCA_000009685.1_ASM968v1.fasta_re.txt";
-    
-    //BLAST結果ファイル解析用コンストラクタ生成
-    BlastParser bp(infile, std::make_shared<BlastParserPt2ex>());
+    const fs::path inDir = "D:/perflingens/4_blast/";   /*入力と出力で共通のディレクトリ*/
+    std::string fileId;                                 /*ファイル識別子*/
 
-    //BLAST結果ファイル解析
-    std::string outTxt = "D:/perflingens/output.txt";
-    std::string header = "クエリID\t参照ID（同一クエリにヒットした参照IDリストを降順に並べた際にスコア間隔が100以下のもの）";
-    bp.run( outTxt, header);
+    for (const fs::directory_entry& x : fs::directory_iterator(inDir/"result/")) {
+
+        //BLAST結果ファイル解析用コンストラクタ生成
+        fs::path infile = x.path();
+        BlastParser bp(infile, std::make_shared<BlastParserPt2ex>());
+
+        //BLAST結果ファイル解析
+        fileId = x.path().filename().string();
+        fs::path outTxt = inDir / "result2" / fileId;
+        std::string header = "クエリID\t参照ID（同一クエリにヒットした参照IDリストを降順に並べた際にスコア間隔が100以下のもの）";
+        bp.run(outTxt, header);
+
+    }
+
 
 }
 
