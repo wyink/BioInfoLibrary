@@ -6,6 +6,7 @@
 #include "BioInfoLibrary.h"
 
 namespace fs = std::filesystem;
+const fs::path COMMON_DIR = "D:/perflingens";
 
 /* TestCase1
 * Faa形式のファイルをFasta形式に変換
@@ -20,14 +21,19 @@ void main1();
 * の複数箇所ヒットを考慮しない。そのため、複数個所にヒットしているものがある
 * 場合、カウントが増える。しかし、今回の場合は同一タンパク質のあるなしを比較するため、
 * この重複カウントに意味はない。
+* 
+* @param[inEndDir] 最終階層の入力ディレクトリ名
+* @param[outEndDir] 最終階層の出力ディレクトリ名
 */
-void main2(const std::string& inEndDir,const std::string& outEndDir);
+void main2(const fs::path& inEndDir,const fs::path& outEndDir);
 
 
 /* TestCase3
 * F-measureを計算して指定のフォーマットで出力
+* @param[inEnddir] 最終階層の入力ディレクトリ名
+* @param[filename] 出力ファイル名
 */
-void main3();
+void main3(const fs::path& inEnddir,const fs::path& filename);
 
 /* TestCase4
 * F-measureの結果からPajek形式のファイルを作成
@@ -50,17 +56,18 @@ void main6();
 int main() {
     //main1();
     //main2("result","analyzedAgain");
-    //main3();
+    //main3("analyzedAgain","f-measure.txt");
     //main4();
     //main5();
-    main6();
+    //main6();
     //main2("result2","analyzedAgain2");
+    main3("analyzedAgain2","f-measure2.txt");
 
 }
 
 void main6() {
 
-    const fs::path inDir = "D:/perflingens/4_blast/";   /*入力と出力で共通のディレクトリ*/
+    const fs::path inDir = COMMON_DIR / "4_blast";   /*入力と出力で共通のディレクトリ*/
     std::string fileId;                                 /*ファイル識別子*/
 
     for (const fs::directory_entry& x : fs::directory_iterator(inDir/"result/")) {
@@ -83,8 +90,8 @@ void main6() {
 
 
 void main1() {
-    std::string faafile = "D:/perflingens/2_protein/GCA_000009685.1_ASM968v1_protein.faa";
-    std::string out = "D:/perflingens/otameshi.fasta";
+    fs::path faafile = COMMON_DIR / "2_protein/GCA_000009685.1_ASM968v1_protein.faa";
+    fs::path out = COMMON_DIR / "out.fasta";
 
     FaaToFasta fta(faafile, out);
     fta.setIdFilterCall(
@@ -101,11 +108,11 @@ void main1() {
         .run();
 }
 
-void main2(const std::string& inEndDir,const std::string& outEndDir) {
+void main2(const fs::path& inEndDir,const fs::path& outEndDir) {
     //各fastaファイルのAccessionIDとstrainIDの対応mapの作成
     std::unordered_map<std::string, std::string> ac_st_map = Utils::keyValMakeFromFile(
-        "D:/perflingens/new_resources/5_prid_strain.txt",/**< 入力ファイル */
-        "\t",                                            /**< 入力ファイルに使用されているデリミタ */
+        COMMON_DIR / "new_resources/05_prid_strain.txt", /**< 入力ファイル */
+        "\t",                                           /**< 入力ファイルに使用されているデリミタ */
         [](std::vector<std::string>& vec)->std::vector<std::string>& {
             vec[0] = vec[0].substr(1);/** 先頭文字の'>'は省く。vec[1]（値）は変更しない */
             return vec;
@@ -114,8 +121,8 @@ void main2(const std::string& inEndDir,const std::string& outEndDir) {
 
     //ファイル名（パス）とstrainIDの対応mapの作成
     std::unordered_map<std::string, std::string> fpath_stid_map = Utils::keyValMakeFromFile(
-        "D:/perflingens/resources/prokaryotes_changed.txt", /**< 入力ファイル */
-        "\t",                                               /**< 入力ファイルに使用されているデリミタ */
+        COMMON_DIR / "resources/prokaryotes_changed.txt", /**< 入力ファイル */
+        "\t",                                             /**< 入力ファイルに使用されているデリミタ */
         [](std::vector<std::string>& vec)->std::vector<std::string>& {
             vec[0] = Utils::split(vec[14], "/").back(); /**< ファイル名（パス）*/
             vec[1] = vec[2];                            /**< strainID */
@@ -130,7 +137,7 @@ void main2(const std::string& inEndDir,const std::string& outEndDir) {
     std::string outTxtHeader;
     std::regex re{ "(.+).fasta_re.txt$" };
     std::smatch sm;
-    fs::path commonDir = "D:/perflingens/4_blast";
+    fs::path commonDir = COMMON_DIR / "4_blast";
     std::shared_ptr<BlastParserPt1Imple> bpi = std::make_shared<BlastParserPt1Imple>(ac_st_map);
     for (const fs::directory_entry& x : fs::directory_iterator(commonDir /inEndDir)) {
         outfile = commonDir/outEndDir/ x.path().filename();
@@ -146,11 +153,13 @@ void main2(const std::string& inEndDir,const std::string& outEndDir) {
 
 }
 
-void main3() {
+void main3(const fs::path& inEndDir,const fs::path& filename) {
 
+    fs::path commonDir = COMMON_DIR / "4_blast/";      /**< 入力ディレクトリ */
+    fs::path outfile = COMMON_DIR / "new_resources" / filename; /**< 出力ファイル */
     Fmeasure fm(
-        "D:/perflingens/4_blast/analyzedAgain", /**< 入力ディレクトリ */
-        "D:/perflingens/out.txt",               /**< 出力ファイル */
+        commonDir /inEndDir,
+        outfile,
         std::make_unique<FmeasurePt1>(FmeasurePt1::CountUpWay::Exist)
     );
 
@@ -158,8 +167,7 @@ void main3() {
 }
 
 void main4() {
-    fs::path dir = "D:/perflingens";
-    fs::path infile = dir / "new_resources/f-measure.txt"; /**< 入力ファイル */
+    fs::path infile = COMMON_DIR / "new_resources/f-measure.txt"; /**< 入力ファイル */
 
     CreateFromText cft(
         infile,
@@ -172,7 +180,7 @@ void main4() {
 
     std::vector<std::unique_ptr<Pajek> >  pvec = cft.run();
     for (auto iter = pvec.begin(); iter != pvec.end(); ++iter) {
-        fs::path outfile = dir / "9_pajek_new";
+        fs::path outfile = COMMON_DIR / "9_pajek_new";
         outfile /= (*iter)->getPajekLbel() + ".net"; //string to fs::path
         (*iter)->output(outfile);
     }
@@ -184,8 +192,8 @@ void main5() {
         std::make_pair("reference", "no-change")
     };
 
-    const fs::path infile = "D:/perflingens/4_blast/result/GCA_000009685.1_ASM968v1.fasta_re.txt";
+    const fs::path infile = COMMON_DIR / "4_blast/result/GCA_000009685.1_ASM968v1.fasta_re.txt";
     BlastParser bp(infile, std::make_shared<BlastParserPt2Imple>(queref));
-    bp.run("D:/perflingens/output.txt", "histgram");
+    bp.run(COMMON_DIR / "new_resources/output.txt", "histgram");
 
 }

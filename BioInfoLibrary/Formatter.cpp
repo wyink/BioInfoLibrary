@@ -1,7 +1,8 @@
 #include "Formatter.h"
 
 
-FaaToFasta::FaaToFasta(std::string infile, std::string out):
+
+FaaToFasta::FaaToFasta(const fs::path& infile, const fs::path& out):
 	infile(infile),
 	out(out),
 	re("(^>[A-Z]+?\\d+?\\.\\d)") ,

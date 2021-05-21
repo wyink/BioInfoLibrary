@@ -4,9 +4,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <regex>
 #include <functional>
 
+
+
+namespace fs = std::filesystem;
 
 /**
  * @brief 各種フォーマットの変換に関わるクラス
@@ -14,8 +18,8 @@
 class FaaToFasta
 {
 private:
-	const std::string infile; /**< 入力ファイル名 */
-	const std::string out; /**< 出力ファイル名 */
+	const fs::path infile; /**< 入力ファイル名 */
+	const fs::path out; /**< 出力ファイル名 */
 	std::regex re; /**< idに利用する文字列を決定するための正規表現 */
 	std::function<bool(std::string)> filter ; /** 特定のidの行のみを選択するための関数 */
 
@@ -32,7 +36,7 @@ public:
 	 *         ・>ABC1234.1をIDに利用する．
 	 *         ・ID以降の情報をフィルターとして利用しない．
 	 */
-	FaaToFasta(std::string infile, std::string out);
+	FaaToFasta(const fs::path& infile, const fs::path& out);
 
 	/**
 	 * @brief idに利用する文字列を決定するための正規表現を変更
