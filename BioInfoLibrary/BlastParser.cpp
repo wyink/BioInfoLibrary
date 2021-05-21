@@ -343,18 +343,11 @@ const std::string BlastParserPt2ex::outformat(const std::string& bquery, const s
 	//最大値から100以上離れている部分を見つけ出し、その時点で返却
 	float bScore = 0.0f;
 	float tmp = 0.0f;
-	bool isStart = true;
 	std::vector<std::string> queHitOverVector;/*同一クエリに対する参照IDリストのうち、スコア間が100以上開かない*/
 	for (auto iter = elems.begin(); iter != elems.end();++iter) {
 		tmp = bScore - (iter->second);
 		if ( tmp > 100.0f) {
-			if (isStart) {
-				isStart = false;
-				bScore = iter->second;
-			}
-			else {
-				break;
-			}
+			break;
 		}
 		queHitOverVector.push_back(iter->first);
 		bScore = iter->second;
