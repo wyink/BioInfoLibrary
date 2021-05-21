@@ -263,7 +263,7 @@ public:
 	/**
 	* @brief blast結果ファイルの解析開始
 	*/
-	void run(const fs::path& outfile, const std::string& header);
+	void run(const fs::path& outfile, const std::string& outTxtHeader,bool isHeader=false);
 };
 
 #endif // !BLASTPARSER_H_

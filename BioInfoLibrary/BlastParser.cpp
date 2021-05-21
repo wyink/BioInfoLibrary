@@ -6,7 +6,7 @@ BlastParser::BlastParser(const fs::path& infile, std::shared_ptr<IBlastParser> b
 	infile(infile), bph(std::move(bph)){}
 
 
-void BlastParser::run(const fs::path& outfile, const std::string& header) {
+void BlastParser::run(const fs::path& outfile, const std::string& outTxtHeader,bool isHeader) {
 	std::ifstream in{ infile };
 	if (!in.is_open()) {
 		std::cout << "Can't open the file!" << std::endl;
@@ -18,6 +18,11 @@ void BlastParser::run(const fs::path& outfile, const std::string& header) {
 	std::vector<std::vector<std::string> > queryToRefVec;
 	std::string query;
 	std::string bquery;
+
+	if (isHeader) {
+		//ヘッダはスキップ
+		std::getline(in, line);
+	}
 	
 	//一行目で行う処理
 	std::getline(in, line);
@@ -27,7 +32,9 @@ void BlastParser::run(const fs::path& outfile, const std::string& header) {
 	
 	//2行目以降で行う処理
 	std::ofstream out(outfile);
-	out << header << "\n";
+	if (!outTxtHeader.empty()) {
+		out << outTxtHeader << "\n";
+	}
 	while (std::getline(in, line)) {
 		vec = Utils::split(line, "\t");
 		query = vec[0];

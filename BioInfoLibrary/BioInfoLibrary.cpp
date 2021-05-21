@@ -14,15 +14,15 @@ namespace fs = std::filesystem;
 void main1();
 
 /* TestCase2
-* Blastの結果からAccessionIDの情報を種情報に変換してフォーマットを
+* Blastの結果からAccessionIDの情報を株情報に変換してフォーマットを
 * 整理して出力する
-*/
-/*BlastPrserPt1Impleハンドラを利用する今回の場合は同一クエリ・同一参照に対して
+* BlastPrserPt1Impleハンドラを利用する今回の場合は同一クエリ・同一参照に対して
 * の複数箇所ヒットを考慮しない。そのため、複数個所にヒットしているものがある
 * 場合、カウントが増える。しかし、今回の場合は同一タンパク質のあるなしを比較するため、
 * この重複カウントに意味はない。
 */
-void main2();
+void main2(const std::string& inEndDir,const std::string& outEndDir);
+
 
 /* TestCase3
 * F-measureを計算して指定のフォーマットで出力
@@ -48,8 +48,13 @@ void main6();
 
 
 int main() {
-
+    //main1();
+    //main2("result","analyzedAgain");
+    //main3();
+    //main4();
+    //main5();
     main6();
+    //main2("result2","analyzedAgain2");
 
 }
 
@@ -67,8 +72,8 @@ void main6() {
         //BLAST結果ファイル解析
         fileId = x.path().filename().string();
         fs::path outTxt = inDir / "result2" / fileId;
-        std::string header = "クエリID\t参照ID（同一クエリにヒットした参照IDリストを降順に並べた際にスコア間隔が100以下のもの）";
-        bp.run(outTxt, header);
+        const std::string outTxtHeader = "";
+        bp.run(outTxt,outTxtHeader);
 
     }
 
@@ -96,10 +101,10 @@ void main1() {
         .run();
 }
 
-void main2() {
+void main2(const std::string& inEndDir,const std::string& outEndDir) {
     //各fastaファイルのAccessionIDとstrainIDの対応mapの作成
     std::unordered_map<std::string, std::string> ac_st_map = Utils::keyValMakeFromFile(
-        "G:/perflingens/new_resources/5_prid_strain.txt",/**< 入力ファイル */
+        "D:/perflingens/new_resources/5_prid_strain.txt",/**< 入力ファイル */
         "\t",                                            /**< 入力ファイルに使用されているデリミタ */
         [](std::vector<std::string>& vec)->std::vector<std::string>& {
             vec[0] = vec[0].substr(1);/** 先頭文字の'>'は省く。vec[1]（値）は変更しない */
@@ -109,7 +114,7 @@ void main2() {
 
     //ファイル名（パス）とstrainIDの対応mapの作成
     std::unordered_map<std::string, std::string> fpath_stid_map = Utils::keyValMakeFromFile(
-        "G:/perflingens/resources/prokaryotes_changed.txt", /**< 入力ファイル */
+        "D:/perflingens/resources/prokaryotes_changed.txt", /**< 入力ファイル */
         "\t",                                               /**< 入力ファイルに使用されているデリミタ */
         [](std::vector<std::string>& vec)->std::vector<std::string>& {
             vec[0] = Utils::split(vec[14], "/").back(); /**< ファイル名（パス）*/
@@ -122,20 +127,21 @@ void main2() {
     //各ファイルの1行目にはそのファイルが所属するstrainIDを出力
     fs::path outfile;
     std::string filename;
-    std::string header;
+    std::string outTxtHeader;
     std::regex re{ "(.+).fasta_re.txt$" };
     std::smatch sm;
+    fs::path commonDir = "D:/perflingens/4_blast";
     std::shared_ptr<BlastParserPt1Imple> bpi = std::make_shared<BlastParserPt1Imple>(ac_st_map);
-    for (const fs::directory_entry& x : fs::directory_iterator("G:/perflingens/4_blast/result/")) {
-        outfile = "G:/perflingens/4_blast/analyzedAgain" / x.path().filename();
+    for (const fs::directory_entry& x : fs::directory_iterator(commonDir /inEndDir)) {
+        outfile = commonDir/outEndDir/ x.path().filename();
         std::cout << outfile << "\n";
 
         //入力ファイル名をstrainIDに変換して出力ファイルのheaderとして出力
         filename = x.path().filename().string();
         regex_match(filename, sm, re);
-        header = fpath_stid_map.at(sm.str(1));
-        std::cout << header << std::endl;
-        std::make_unique<BlastParser>(x.path(), bpi)->run(outfile, header);
+        outTxtHeader = fpath_stid_map.at(sm.str(1));
+        std::cout << outTxtHeader << std::endl;
+        std::make_unique<BlastParser>(x.path(), bpi)->run(outfile, outTxtHeader);
     }
 
 }
@@ -143,8 +149,8 @@ void main2() {
 void main3() {
 
     Fmeasure fm(
-        "G:/perflingens/4_blast/analyzedAgain", /**< 入力ディレクトリ */
-        "G:/perflingens/out.txt",               /**< 出力ファイル */
+        "D:/perflingens/4_blast/analyzedAgain", /**< 入力ディレクトリ */
+        "D:/perflingens/out.txt",               /**< 出力ファイル */
         std::make_unique<FmeasurePt1>(FmeasurePt1::CountUpWay::Exist)
     );
 
