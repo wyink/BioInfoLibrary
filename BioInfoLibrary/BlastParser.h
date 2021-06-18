@@ -153,6 +153,47 @@ public:
 
 };
 
+/*
+* @brief　クエリごとに参照idを変換して加算することに加えて、加算後値が0の場合も変換後idにその旨を登録する
+*         また、変換後のidの出力順を指定することが可能
+* 
+　@note
+	keyVecに登録する要素は上位クラスで与えたqueRefの値として登録されていなければならない
+
+*/
+class BlastParserPt1Ex : public BlastParserPt1Imple {
+private :
+	/*固定キーをもつ*/
+	const std::vector<std::string> keyVec;
+
+public:
+	//コンストラクタは上位クラスに委譲
+	explicit BlastParserPt1Ex(const std::unordered_map<std::string, std::string> queRef,std::vector<std::string> keyVec)
+		:BlastParserPt1Imple(queRef), keyVec(keyVec){}
+
+	/**
+	* @brief BLAST結果ファイルの1レコードを利用して行う具体的な処理内容
+	* @param[bquery] BLAST結果ファイルの第一カラム
+	* @param[queryToRefVec] BLAST結果ファイルの1レコード
+	*/
+	const std::string valueFormatter(
+		const std::string& bquery,
+		const std::vector<std::vector<std::string> >& queryToRefVec
+	);
+	 
+	/**
+	* @brief 出力フォーマットを決定する
+	* @param[bquery] BLAST結果ファイルの第1カラム
+	* @param[refcounter] bqueryに対する値
+	*/
+	const std::string outformat(
+		const std::string& bquery,
+		const std::unordered_map<std::string, float>& refcounter
+	) override;
+
+
+};
+
 /**
  * @brief Blast結果ファイルより、各クエリに対する参照のスコア分布を出力する
  * @details

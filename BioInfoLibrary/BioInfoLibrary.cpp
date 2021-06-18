@@ -54,6 +54,15 @@ void main5();
 */
 void main6();
 
+/*case7
+*各株(strain)をクエリ、コンティグ群をdbとしてblastを実施した結果ファイル
+* から各コンティグにおいて各株のタンパク質がどれほどの割合で含まれるか
+* を計算するための中間ファイル作成
+* 
+*/
+void main7();
+
+
 
 int main() {
     //main1();
@@ -64,9 +73,51 @@ int main() {
     //main6();
     //main2("result2","analyzedAgain2");
     //main3("analyzedAgain2","f-measure2.txt");
-    main4("f-measure2.txt","9_pajek2");
+    //main4("f-measure2.txt","9_pajek2");
+    main7();
 
 }
+
+void main7() {
+    //各コンティグのIDとそれぞれのIDを対応させる
+    std::unordered_map<std::string, std::string> queRef;
+    for (const fs::directory_entry& x : fs::directory_iterator(COMMON_DIR / "resources/cpile_contig/")) {
+        fs::path infile = x.path();
+        std::string filename = infile.filename().string();
+        std::vector tmp = Utils::split(filename, " ", 1);
+        std::string contigKey = tmp[0];
+
+        //ファイルの読み出し
+        std::ifstream in{ infile };
+        std::string line;
+        while (std::getline(in, line)) {
+            if (line[0] == '>') {
+               line = line.substr(1); //'>'以降を抽出
+               queRef[line] = contigKey;
+            }
+        }
+    }
+
+
+    //blast結果ファイル解析
+    //blastファイル解析用のハンドラを作成
+    std::string fileId;
+    std::vector<std::string> contigs = { "M1", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12" };
+
+    const std::string outTxtHeader = "Query\tM1\tM3\tM4\tM5\tM6\tM7\tM8\tM9\tM10\tM11\tM12";
+
+    for (const fs::directory_entry& x : fs::directory_iterator(COMMON_DIR / "6/result/")) {
+        fs::path infile = x.path();
+        BlastParser bp(infile, std::make_shared<BlastParserPt1Ex>(queRef,contigs));
+
+        //結果をファイルに出力
+        fileId = x.path().filename().string();
+        fs::path outTxt = COMMON_DIR / "6/analyzed" / fileId;
+        bp.run(outTxt, outTxtHeader);
+
+    }
+}
+
 
 void main6() {
 

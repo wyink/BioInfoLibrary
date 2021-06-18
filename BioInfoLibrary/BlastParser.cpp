@@ -98,6 +98,58 @@ const std::string BlastParserPt1Imple::outformat(const std::string& bquery, cons
 	return ret;
 }
 
+const std::string BlastParserPt1Ex::valueFormatter(const std::string& bquery, const std::vector<std::vector<std::string> >& queryToRefVec) {
+	std::unordered_map <std::string, float> refcounter; /**< keyは参照を変換後のid valはその存在数 */
+	std::string refid; /**< 参照を変換後に使用するid*/
+
+	//上位クラスと同様に変換後のid数を加算
+	for (auto ref : queryToRefVec) {
+
+		refid = convert(ref[1]);
+		++refcounter[refid];
+
+	}
+
+	//変換後のidは固定されている。
+	//加算されなかったものは0として登録
+	for (auto refid:keyVec) {
+		if (refcounter.count(refid) == 0) {
+			refcounter[refid] = 0;
+		}
+	}
+
+	return outformat(bquery, refcounter);
+
+}
+
+const std::string BlastParserPt1Ex::outformat(const std::string& bquery, const std::unordered_map<std::string, float>& refcounter) {
+	std::stringstream outtext;
+
+	//クエリを第一カラムに出力
+	outtext << bquery << "\t";
+
+	/*
+	//辞書順に変更する
+	std::map<std::string, float> refcounterMap;
+	for (auto iter = refcounter.begin(); iter != refcounter.end(); ++iter) {
+		refcounterMap[iter->first] = iter->second;
+	}
+	*/
+
+	//2カラム目以降を出力
+	//keyVecで指定した順に出力
+	for (std::string key:keyVec) {
+
+		outtext << std::to_string(int(refcounter.at(key))) << "\t";
+	}
+	
+	std::string ret = outtext.str();
+	ret.pop_back();
+	ret += "\n";
+
+	return ret;
+
+}
 
 const std::unordered_map<std::string, float>& BlastParserPt2Imple::refAlignDup3More(
 	std::unordered_map<std::string, float>& scoreMap, std::vector<std::vector<std::string> >& requireRescore){
